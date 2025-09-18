@@ -8,6 +8,9 @@ DANIEL ANDRES GALVIS MARIN
 
 DARWIN OSWALDO MERCHAN DURAN
 
+
+
+
 DESCRIPCIÓN DEL PROYECTO
 
 El proyecto consiste en el desarrollo de un sitio web de gestión para campeonatos de artes marciales, orientado a mejorar la organización, el registro de información y la transparencia en los resultados. La plataforma permitirá a los administradores configurar categorías, modalidades y parámetros del torneo, mientras que los titulares (entrenadores) podrán registrar a sus competidores en el sistema de manera estructurada.
