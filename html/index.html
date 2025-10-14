@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DIDA MARTIALS — Sitio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">DM</div>
+        <div>
+          <div style="font-weight:800">DIDA MARTIALS</div>
+          <div style="font-size:12px;color:var(--muted)">Escuela de artes marciales</div>
+        </div>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#about">Sobre</a></li>
+          <li><a href="#classes">Clases</a></li>
+          <li><a href="#instructors">Instructores</a></li>
+          <li><a href="#contact">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div style="display:flex;align-items:center;gap:12px">
+        <a class="cta" href="#signup">Inscribirse</a>
+        <div class="hamburger" id="hambBtn">☰</div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#about">Sobre</a>
+        <a href="#classes">Clases</a>
+        <a href="#instructors">Instructores</a>
+        <a href="#contact">Contacto</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <h1>Entrena con los mejores — domina mente y cuerpo</h1>
+        <p class="muted">Programas para todas las edades: desde iniciación hasta competición. Horarios flexibles y entrenadores certificados.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#classes" style="background:var(--accent);color:white">Ver clases</a>
+          <a class="btn outline" href="#contact">Contactar</a>
+        </div>
+
+        <div style="margin-top:24px;display:flex;gap:12px">
+          <div class="card">
+            <div style="font-weight:700;font-size:20px">+120</div>
+            <div class="muted">Alumnos activos</div>
+          </div>
+          <div class="card">
+            <div style="font-weight:700;font-size:20px">8</div>
+            <div class="muted">Años de experiencia</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-card card">
+        <div class="media" aria-hidden="true"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:700">Clase destacada</div>
+            <div class="muted">Combate avanzado • Lun, Mie, Vie — 6:30pm</div>
+          </div>
+          <a class="btn" href="#signup" style="background:rgba(255,255,255,0.06);color:var(--accent);font-weight:800">Reservar</a>
+        </div>
+      </aside>
+    </section>
+
+    <section id="about">
+      <h2>Sobre DIDA MARTIALS</h2>
+      <p class="muted">Somos una academia dedicada a formar deportistas integrales. Nuestra metodología combina técnica, condición física y disciplina mental.</p>
+    </section>
+
+    <section id="classes">
+      <h2>Clases</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Iniciación</h3>
+          <p class="muted">Para quienes empiezan. Enfoque en postura, fundamentos y defensa personal.</p>
+        </div>
+        <div class="card">
+          <h3>Intermedio</h3>
+          <p class="muted">Técnica, sparring controlado y acondicionamiento físico.</p>
+        </div>
+        <div class="card">
+          <h3>Competición</h3>
+          <p class="muted">Preparación para torneos, estrategia y resistencia.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="instructors">
+      <h2>Instructores</h2>
+      <div class="grid">
+        <div class="instructor card">
+          <img src="instr1.jpg" alt="Instructor 1">
+          <h3>Maestro Juan Pérez</h3>
+          <div class="muted">8º Dan — Entrenador principal</div>
+        </div>
+        <div class="instructor card">
+          <img src="instr2.jpg" alt="Instructor 2">
+          <h3>Lic. María Gómez</h3>
+          <div class="muted">Preparadora física</div>
+        </div>
+        <div class="instructor card">
+          <img src="instr3.jpg" alt="Instructor 3">
+          <h3>Coach Luis Ramírez</h3>
+          <div class="muted">Técnica y sparring</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="big-cta card">
+        <div>
+          <div style="font-weight:800">¿Listo para comenzar?</div>
+          <div class="muted">Prueba una clase gratis — cupos limitados</div>
+        </div>
+        <div>
+          <a class="btn" href="#signup" style="background:var(--accent);color:white">Reservar ahora</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contacto</h2>
+      <div class="card contact">
+        <div>
+          <p class="muted">Dirección: Calle Falsa 123 • Ciudad</p>
+          <p class="muted">Tel: +57 300 000 0000</p>
+          <p class="muted">Email: contacto@didamartials.example</p>
+        </div>
+        <form onsubmit="event.preventDefault();alert('Formulario simulado: enviar datos al servidor');">
+          <label class="muted">Nombre</label>
+          <input required>
+          <label class="muted">Correo</label>
+          <input required type="email">
+          <button class="btn" style="background:var(--accent);color:white">Enviar</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div class="footer-row">
+      <div>© DIDA MARTIALS — Todos los derechos reservados</div>
+      <div class="muted">Síguenos en redes</div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const hamb = document.getElementById('hambBtn');
+    const menu = document.getElementById('mobileMenu');
+    hamb && hamb.addEventListener('click', ()=> menu.classList.toggle('show'))
+  </script>
+</body>
+</html>
