@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/CSS/style_inicio_sesion.css">
+    <link rel="icon" href="/IMGS/logo didamartials.png" type="image/x-icon">
+    <title>DIDA MARTIALS | Inicio de sesión</title>
+</head>
+<body>
+    <section class="principal">
+        <div class="formulario">
+            <a class="img_header" href="index.html"><img src="/IMGS/logo didamartials NEGRO.png" width="120"></a>
+            <h2 class="club_nosotros">Inicio de Sesión</h2>
+            <form id="loginform" action="/validar" method="post">
+                <!-- Campo de texto para el usuario -->
+                <input type="email" id="email" name="email" class="input" placeholder="Ingrese su correo" required>
+                
+                <!-- Campo de texto para la contraseña -->
+                <input type="password" id="password" name="password" class="input" placeholder="Ingrese su contraseña" required>
+    
+                <!-- Botón para enviar el formulario -->
+                <button type="submit">Ingresar</button>
+                
+            </form>
+            <p class="pregunta">¿No tienes una cuenta?</p>
+            <a class="text-links" href="registro.html">Regístrate</a>
+        </div>
+    
+        <div class="fondo"><img id="img_fondo" src="/IMGS/FondoInicioSesion.jpg" alt=""></div>
+    </section>
+    <div id="customAlert">
+        <p name="alertMessage" id="alertMessage">Contraseña o correo incorrecto</p>
+        <button id="cerrar" onclick="closeAlert()">Cerrar</button>
+    </div>
+    
+
+    <!-- Script para limpiar campos al cargar la página y redirigir al enviar -->
+    <script src="./js/inicio-alerta.js">
+    </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+/* ===== VARIABLES DE ESTILO ===== */
+:root {
+  --bg-dark: #111213;
+  --brand: #d32f2f;
+  --muted: #ccc;
+  --muted-2: #e0e0e0;
+  --card-bg: #fafafa;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  --radius: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== RESETEO Y GENERALES ===== */
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+  background-color: #f4f4f4;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.principal {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+}
+
+.club_nosotros {
+  padding-bottom: 5%;
+}
+
+/* ===== SECCIÓN DEL FORMULARIO ===== */
+.formulario {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 4rem 2rem 6rem;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.club_nosotros {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--brand);
+  text-align: center;
+  margin: 1.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===== FORMULARIO DE LOGIN ===== */
+#loginform {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 360px;
+}
+
+/* ===== CAMPOS DE ENTRADA ===== */
+.input {
+  line-height: 28px;
+  border: 2px solid transparent;
+  border-bottom: 2px solid var(--muted);
+  padding: 0.4rem 0.5rem;
+  outline: none;
+  background-color: transparent;
+  color: #111;
+  font-size: 0.95rem;
+  transition: 0.3s ease;
+}
+
+.input:focus,
+.input:hover {
+  border-color: var(--brand);
+  border-radius: 6px;
+}
+
+.input::placeholder {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.input:focus::placeholder {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* ===== ENLACES DE TEXTO ===== */
+.text-links {
+  color: var(--brand);
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.text-links:hover {
+  color: #b71c1c;
+}
+
+/* ===== BOTÓN DE INICIO DE SESIÓN ===== */
+button {
+  width: 100%;
+  height: 48px;
+  background-color: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 1rem;
+  margin-top: 2rem;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+  box-shadow: var(--shadow);
+}
+
+button:hover {
+  background-color: #b71c1c;
+  transform: translateY(-2px);
+}
+
+/* ===== IMAGEN DE FONDO ===== */
+.fondo {
+  flex: 0 0 60%;
+  background-image: url("/IMGS/FondoInicioSesion.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
+}
+
+#img_fondo {
+  display: none;
+}
+
+/* ===== ALERTA PERSONALIZADA ===== */
+#customAlert {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 24px;
+  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.6);
+  border-radius: 10px;
+  z-index: 1000;
+  text-align: center;
+}
+
+#alertMessage {
+  margin: 0;
+  font-size: 1rem;
+  color: #111;
+  font-weight: 500;
+}
+
+#cerrar {
+  margin-top: 12px;
+  padding: 6px 14px;
+  background-color: var(--brand);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+#cerrar:hover {
+  background-color: #b71c1c;
+}
+
+/* ===== RESPONSIVIDAD ===== */
+@media screen and (max-width: 992px) {
+  body {
+    overflow: auto;
+    height: 100vh;
+  }
+
+  .principal {
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+  }
+
+  .formulario {
+    flex: 1;
+    width: 100%;
+    height: 100vh;
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+  }
+
+  .fondo {
+    display: none; /* Se oculta el fondo en móviles */
+  }
+
+  button {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .club_nosotros {
+    font-size: 1.4rem;
+  }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+.input:focus,
+button:focus,
+.text-links:focus {
+  outline: 3px solid rgba(211, 47, 47, 0.25);
+  outline-offset: 2px;
+}
