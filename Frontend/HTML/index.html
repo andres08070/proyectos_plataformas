@@ -1,57 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIDA MARTIALS | Sistema de Gestión de Campeonatos</title>
-    <link rel="stylesheet" href="/CSS/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIDA MARTIALS | Sistema de Gestión de Campeonatos</title>
+  <link rel="stylesheet" href="/CSS/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="/IMGS/logo didamartials.png" type="image/x-icon">
 </head>
 <body>
   <main>
     <header>
-        <div class="logo">
-            <a class="" href="index.html"><img href="index.html" src="/IMGS/logo didamartials.png" width="120"></a>
-            <h1>DIDA <span>MARTIALS</span></h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Campeonatos</a></li>
-                <li><a href="#">Puntuaciones</a></li>
-                <li><a href="#">Usuarios</a></li>
+      <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--bg-dark);">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <img src="/IMGS/logo didamartials.png" alt="Logo DIDA" width="80" class="me-2">
+            <h1 class="m-0 fs-4 text-white">DIDA <span style="color: var(--brand); font-weight: 700;">MARTIALS</span></h1>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuDida" aria-controls="menuDida" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse justify-content-end" id="menuDida">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Campeonatos</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Soporte</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Inciar Sesión</a></li>
             </ul>
-        </nav>
+          </div>
+        </div>
+      </nav>
     </header>
 
     <section class="hero">
-        <h2>Bienvenido a DIDA MARTIALS</h2>
-        <p>
-            Plataforma digital que permite gestionar campeonatos de artes marciales de manera ágil, precisa y eficiente. 
-            Los jueces pueden registrar puntuaciones en tiempo real, los titulares administrar competidores y 
-            los organizadores obtener resultados oficiales al instante.
-        </p>
-        <a href="#" class="btn">Ingresar al Sistema</a>
+      <h2>Bienvenido a DIDA MARTIALS</h2>
+      <p>
+        Plataforma digital que permite gestionar campeonatos de artes marciales de manera ágil, precisa y eficiente. 
+        Los jueces pueden registrar puntuaciones en tiempo real, los titulares administrar competidores y 
+        los organizadores obtener resultados oficiales al instante.
+      </p>
     </section>
 
     <section class="features">
-        <div class="card">
-            <h3>Administración de Campeonatos</h3>
-            <p>Permite crear, configurar y gestionar todos los torneos y sus modalidades desde un mismo lugar.</p>
-        </div>
-        <div class="card">
-            <h3>Control de Puntuaciones</h3>
-            <p>Registra y actualiza las calificaciones de los competidores en tiempo real, garantizando transparencia.</p>
-        </div>
-        <div class="card">
-            <h3>Reportes y Resultados</h3>
-            <p>Genera automáticamente tablas, posiciones y reportes oficiales del evento.</p>
-        </div>
+      <div class="card">
+        <h3>Administración de Campeonatos</h3>
+        <p>Permite crear, configurar y gestionar todos los torneos y sus modalidades desde un mismo lugar.</p>
+      </div>
+      <div class="card">
+        <h3>Control de Puntuaciones</h3>
+        <p>Registra y actualiza las calificaciones de los competidores en tiempo real, garantizando transparencia.</p>
+      </div>
+      <div class="card">
+        <h3>Reportes y Resultados</h3>
+        <p>Genera automáticamente tablas, posiciones y reportes oficiales del evento.</p>
+      </div>
     </section>
   </main>
-    
-    <footer>
-        <p>© 2025 DIDA MARTIALS - Sistema de Gestión de Campeonatos</p>
-    </footer>
+
+  <footer>
+    <p>© 2025 DIDA MARTIALS - Sistema de Gestión de Campeonatos</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
