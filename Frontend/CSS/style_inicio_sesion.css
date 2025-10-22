@@ -31,9 +31,14 @@ body {
 /* ===== CONTENEDOR PRINCIPAL ===== */
 .principal {
   display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100vh;
-  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
 
 .club_nosotros {
@@ -42,14 +47,12 @@ body {
 
 /* ===== SECCIÓN DEL FORMULARIO ===== */
 .formulario {
-  flex: 0 0 40%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 4rem 2rem 6rem;
-  box-sizing: border-box;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 3rem 4rem;
+  border-radius: 10px;
+  text-align: center;
+  z-index: 3;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .club_nosotros {
@@ -135,19 +138,29 @@ button:hover {
   transform: translateY(-2px);
 }
 
-/* ===== IMAGEN DE FONDO ===== */
-.fondo {
-  flex: 0 0 60%;
-  background-image: url("/IMGS/FondoInicioSesion.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 0;
-  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
+.pregunta {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 0rem;
+  color: #333;
 }
 
-#img_fondo {
-  display: none;
+/* ===== FONDO CON CARRUSEL ===== */
+.fondo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  filter: brightness(0.6);
 }
 
 /* ===== ALERTA PERSONALIZADA ===== */
@@ -193,28 +206,34 @@ button:hover {
   body {
     overflow: auto;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .principal {
     flex-direction: column;
-    height: 100vh;
+    height: auto;
     width: 100%;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
   }
 
   .formulario {
-    flex: 1;
-    width: 100%;
-    height: 100vh;
-    padding: 3rem 2rem;
+    width: 90%;
+    max-width: 400px;
+    padding: 2.5rem 2rem;
+    background-color: rgba(255, 255, 255, 0.95);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
+    margin: auto;
   }
 
   .fondo {
-    display: none; /* Se oculta el fondo en móviles */
+    display: none; /* Se oculta el carrusel en móviles */
   }
 
   button {

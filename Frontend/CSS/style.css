@@ -89,11 +89,17 @@
     color: var(--brand) !important;
     background-color: transparent;
     transition: all 0.3s ease;
+    
   }
 
   .navbar-nav .nav-item:last-child .nav-link:hover {
     background-color: var(--brand);
     color: #fff !important;
+  }
+
+  .nav-item{
+    margin-left: 5px;
+    margin-right: 5px;
   }
 
   /* 🔹 Icono hamburguesa personalizado */
