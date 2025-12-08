@@ -41,7 +41,6 @@ public class Controlador {
     @PostMapping("/registrar")
     public String registrar(@RequestParam int NumeroDocumento, 
                             @RequestParam String nombre, 
-                            @RequestParam int edad, 
                             @RequestParam String sexo, 
                             @RequestParam String Nacionalidad, 
                             @RequestParam String correo,
