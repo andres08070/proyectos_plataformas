@@ -1,10 +1,10 @@
-package com.cr.proyecto;
+package com.cr.Ejemplo1;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ProyectoApplicationTests {
+class Ejemplo1ApplicationTests {
 
 	@Test
 	void contextLoads() {
