@@ -39,8 +39,16 @@ public class Controlador {
     }
 
     @PostMapping("/registrar")
-    public String registrar(@RequestParam String nombre,@RequestParam String correo,Model model) {
+    public String registrar(@RequestParam int NumeroDocumento, 
+                            @RequestParam String nombre, 
+                            @RequestParam int edad, 
+                            @RequestParam String sexo, 
+                            @RequestParam String Nacionalidad, 
+                            @RequestParam String correo,
+                            @RequestParam String contraseña,
+                            @RequestParam String Confirmar,Model model) {
 
+        
         // Generar código de verificación
         String codigo = generarCodigo();
 
@@ -53,9 +61,14 @@ public class Controlador {
         emailService.enviarCodigo(correo, codigo);
 
         // Enviar mensaje a una página donde se ingresa el código
-        model.addAttribute("msg", "Se envió un código a: " + correo);
-
-        return "verificar";  // Página donde el usuario escribirá el código
+        
+        if (contraseña.equals(Confirmar)){
+            System.out.println("bien");
+            model.addAttribute("msg", "Se envió un código a: " + correo);
+            return "verificar";
+        }
+        model.addAttribute("msg","Contraseña incorrecta");
+        return "registro";
     }
     @PostMapping("/verificar")
     public String verificarCodigo(@RequestParam String codigoIngresado, Model model) {

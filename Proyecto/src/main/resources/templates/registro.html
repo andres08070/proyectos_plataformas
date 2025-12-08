@@ -10,19 +10,47 @@
 
     <form action="/registrar" method="post">
         <label>Numero de documento:</label><br>
-        <input type="text" name="Numero de documento" required><br><br>
+        <input type="number" name="NumeroDocumento" required><br><br>
         
         <label>Nombre completo:</label><br>
         <input type="text" name="nombre" required><br><br>
         
         <label>Edad:</label><br>
-        <input type="text" name="edad" required><br><br>
+        <input type="number" name="edad" required><br><br>
         
-        <label>Sexo:</label><br>
-        <input type="text" name="sexo" required><br><br>
-        
+        <label for="frutas">Sexo:</label>
+        <select name="sexo">
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+        </select><br><br>
+
         <label>Nacionalidad:</label><br>
-        <input type="text" name="nacionalidad" required><br><br>
+        <select name="Nacionalidad">
+            <option value="argentina">Argentina</option>
+            <option value="bolivia">Bolivia</option>
+            <option value="brasil">Brasil</option>
+            <option value="chile">Chile</option>
+            <option value="colombia">Colombia</option>
+            <option value="ecuador">Ecuador</option>
+            <option value="guyana">Guyana</option>
+            <option value="paraguay">Paraguay</option>
+            <option value="peru">Perú</option>
+            <option value="surinam">Surinam</option>
+            <option value="uruguay">Uruguay</option>
+            <option value="venezuela">Venezuela</option>
+            <option value="belice">Belice</option>
+            <option value="costa_rica">Costa Rica</option>
+            <option value="el_salvador">El Salvador</option>
+            <option value="guatemala">Guatemala</option>
+            <option value="honduras">Honduras</option>
+            <option value="nicaragua">Nicaragua</option>
+            <option value="panama">Panamá</option>
+            <option value="cuba">Cuba</option>
+            <option value="republica_dominicana">República Dominicana</option>
+            <option value="haiti">Haití</option>
+            <option value="puerto_rico">Puerto Rico</option>
+        </select><br><br>
+
         
         <label>Correo:</label><br>
         <input type="email" name="correo" required><br><br>
@@ -35,6 +63,6 @@
         <button type="submit">Registrar</button>
 
     </form>
-
+    <p th:text="${msg}"></p>
 </body>
 </html>
