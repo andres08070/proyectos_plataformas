@@ -15,14 +15,15 @@
         <label>Nombre completo:</label><br>
         <input type="text" name="nombre" required><br><br>
         
-        <label for="frutas">Sexo:</label>
-        <select name="sexo">
-            <option value="Masculino">Masculino</option>
+        <label for="frutas">Sexo:</label><br>
+        <select name="sexo" required>
+            <option value="" disabled selected>-- Seleccione el sexo--</option>
             <option value="Femenino">Femenino</option>
         </select><br><br>
 
         <label>Nacionalidad:</label><br>
-        <select name="Nacionalidad">
+        <select name="Nacionalidad" required>
+            <option value="" disabled selected>-- Seleccione una nacionalidad --</option>
             <option value="argentina">Argentina</option>
             <option value="bolivia">Bolivia</option>
             <option value="brasil">Brasil</option>
@@ -46,17 +47,30 @@
             <option value="republica_dominicana">República Dominicana</option>
             <option value="haiti">Haití</option>
             <option value="puerto_rico">Puerto Rico</option>
-        </select><br><br>
+        </select>
+        <br><br>
+
 
         
         <label>Correo:</label><br>
         <input type="email" name="correo" required><br><br>
         
-        <label>Contraseña:</label><br>
-        <input type="text" name="contraseña" required><br><br>
+       <label>Contraseña:</label><br>
+        <input type="password" 
+               name="contraseña" 
+               required
+               minlength="8"
+               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.,;:])[A-Za-z\\d@$!%*?&.,;:]{8,}$"
+               title="Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.">
+        <br><br>
         
-        <label>Confirmar contraseña:</label><br>
-        <input type="text" name="Confirmar" required><br><br>
+        <label>Confirmar Contraseña:</label><br>
+        <input type="password" 
+               name="Confirmar" 
+               required
+               minlength="8"
+               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.,;:])[A-Za-z\\d@$!%*?&.,;:]{8,}$"
+               title="Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo."><br><br>
         <button type="submit">Registrar</button>
 
     </form>

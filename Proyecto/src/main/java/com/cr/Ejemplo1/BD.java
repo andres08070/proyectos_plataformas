@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * @author andre
  */
 public class BD {
-    static String url ="jdbc:mysql://localhost:3306/bd_estudiantes";
+    static String url ="jdbc:mysql://localhost:3306/campeonatos";
     static String user ="root";
     static String pass ="";
     public static Connection conexion(){
