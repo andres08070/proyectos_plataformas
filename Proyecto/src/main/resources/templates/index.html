@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Didamartials - Sistema de Gestión de Campeonatos</title>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
+    <link rel="stylesheet" th:href="@{/index.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hero-section">
+        <div class="hero-overlay">
+
+            <div class="hero-content">
+                <div class="logo-wrapper">
+                <div class="logo-bg">
+                    <img th:src="@{/imgs/logo2.png}" alt="Logo Didamartials" class="logo-img">
+                </div>
+                <h1>Didamartials</h1>
+            </div>
+
+                <p class="hero-subtitle">
+                    Sistema integral de gestión y organización de campeonatos de artes marciales
+                </p>
+
+                <div class="hero-buttons">
+                    <a th:href="@{/registro}" class="btn-hero btn-white">Crear Cuenta</a>
+                    <a th:href="@{/login}" class="btn-hero btn-red">Iniciar Sesión</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== FEATURES SECTION ==================== -->
+    <section class="features-section">
+        <div class="content-wrapper">
+            <h2>Todo lo que necesitas para organizar tus campeonatos</h2>
+            <p class="section-description">
+                Una plataforma completa diseñada para entrenadores, competidores y jueces que facilita la gestión de torneos de artes marciales de principio a fin
+            </p>
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+                    <div class="card-icon icon-red"><i class="fas fa-trophy"></i></div>
+                    <h3>Gestión de Campeonatos</h3>
+                    <p>Crea y administra campeonatos fácilmente. Define fechas, ubicaciones y configuraciones específicas.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-icon icon-blue"><i class="fas fa-users"></i></div>
+                    <h3>Registro de Competidores</h3>
+                    <p>Inscribe competidores detallando cinturón, modalidades, peso, género y edad.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-icon icon-green"><i class="fas fa-filter"></i></div>
+                    <h3>Categorización Automática</h3>
+                    <p>Separación automática por peso, edad, modalidad, género y rango.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-icon icon-purple"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Sistema de Calificación</h3>
+                    <p>Panel para jueces con promedios calculados en tiempo real.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-icon icon-yellow"><i class="fas fa-medal"></i></div>
+                    <h3>Podio y Resultados</h3>
+                    <p>Visualiza ganadores con puntuaciones individuales y promedios finales.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-icon icon-orange"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Roles Diferenciados</h3>
+                    <p>Acceso personalizado para entrenadores, competidores y jueces.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MODALITIES SECTION ==================== -->
+    <section class="modalities-section">
+        <div class="content-wrapper">
+            <h2>Modalidades Soportadas</h2>
+            <p class="section-description">
+                Gestiona diferentes categorías de artes marciales según las necesidades del campeonato
+            </p>
+
+            <div class="modalities-grid">
+
+                <!-- Combates -->
+                <div class="modality-card">
+                    <img th:src="@{/imgs/modalidades/combates.jpg}" alt="Combates" class="modality-img">
+                    <h4>Combates</h4>
+                </div>
+
+                <!-- Figuras / Katas -->
+                <div class="modality-card">
+                    <img th:src="@{/imgs/modalidades/figuras.jpg}" alt="Figuras y Katas" class="modality-img">
+                    <h4>Figuras / Katas</h4>
+                </div>
+
+                <!-- Saltos -->
+                <div class="modality-card">
+                    <img th:src="@{/imgs/modalidades/saltos.jpg}" alt="Saltos" class="modality-img">
+                    <h4>Saltos</h4>
+                </div>
+
+                <!-- Defensa Personal -->
+                <div class="modality-card">
+                    <img th:src="@{/imgs/modalidades/defensa.jpg}" alt="Defensa Personal" class="modality-img">
+                    <h4>Defensa Personal</h4>
+                </div>
+
+                <!-- Demostraciones / Exhibiciones -->
+                <div class="modality-card">
+                    <img th:src="@{/imgs/modalidades/demostraciones.jpg}" alt="Demostraciones" class="modality-img">
+                    <h4>Demostraciones / Exhibiciones</h4>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="cta-footer">
+        <div class="content-wrapper">
+            <p class="cta-text">¿Listo para organizar tu próximo campeonato?</p>
+            <p class="cta-slogan">
+                Únete a Didamartials y simplifica la gestión de tus torneos de artes marciales
+            </p>
+
+            <div class="cta-buttons">
+                <a th:href="@{/registro}" class="btn-cta btn-white-border">Comenzar Ahora</a>
+                <a th:href="@{/login}" class="btn-cta btn-red-filled">Ya tengo cuenta</a>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            © 2025 Didamartials - Sistema de gestión de campeonatos de artes marciales
+        </div>
+    </footer>
+
+</body>
+</html>

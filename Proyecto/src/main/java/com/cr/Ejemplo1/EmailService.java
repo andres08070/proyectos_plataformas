@@ -22,11 +22,25 @@ public class EmailService {
     public void enviarCodigo(String correo, String codigo) {
 
         SimpleMailMessage mensaje = new SimpleMailMessage();
+        
+        // Asunto claro e informativo
         mensaje.setTo(correo);
-        mensaje.setSubject("Código de verificación");
-        mensaje.setText("Tu código de verificación es: " + codigo);
+        mensaje.setSubject("Verificación de cuenta - DidaMartials");
+        
+        // Construcción del cuerpo del mensaje con formato profesional
+        String cuerpoMensaje = "¡Bienvenido a DidaMartials!\n\n" +
+                "Gracias por registrarte en nuestra plataforma de gestión de artes marciales.\n" +
+                "Para completar tu registro y verificar tu identidad, por favor utiliza el siguiente código de seguridad:\n\n" +
+                "--------------------------------\n" +
+                "   CÓDIGO: " + codigo + "\n" +
+                "--------------------------------\n\n" +
+                "Si no has solicitado este código, por favor ignora este mensaje o contacta a soporte.\n\n" +
+                "Atentamente,\n" +
+                "El equipo de DidaMartials\n" +
+                "Administración y Seguridad";
+
+        mensaje.setText(cuerpoMensaje);
 
         mailSender.send(mensaje);
     }
 }
-

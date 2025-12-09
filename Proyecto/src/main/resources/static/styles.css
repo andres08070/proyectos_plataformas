@@ -1,0 +1,267 @@
+/* Variables de Colores */
+:root {
+    --color-principal: #2c3e50;
+    --color-fondo: #ecf0f1;
+    
+    /* Rojo Oscuro del logo "DIDA" */
+    --color-acento: #8B0000; 
+    
+    /* Rojo de alerta y enlace: #e74c3c */
+    --color-alerta: #e74c3c;
+    
+    --color-card: #ffffff;
+    --color-borde: #bdc3c7;
+}
+
+/* ========================================================
+--- Estilos Globales & Centrado Total (Escritorio) ---
+======================================================== 
+*/
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--color-fondo);
+    
+    /* CENTRADO PERFECTO: Vertical y Horizontal */
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center;    /* Centra verticalmente */
+    min-height: 100vh;      /* Ocupa toda la altura de la vista */
+    
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Tarjeta Principal */
+.container {
+    background-color: var(--color-card);
+    padding: 30px 40px; 
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    
+    /* Dimensiones responsivas para el centrado */
+    width: 90%; 
+    max-width: 450px; 
+    
+    text-align: center;
+    box-sizing: border-box; 
+    position: relative; 
+}
+
+/* --- LOGO Y FLECHA DE NAVEGACIÓN --- */
+.header {
+    position: relative; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Estilo para el ícono de la flecha de retroceso */
+.header a[title="Volver al inicio"] {
+    position: absolute;
+    left: 0; /* Lo alinea a la izquierda del .container */
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-principal);
+    /* Ajuste para que no esté pegado al borde del padding */
+    left: -10px; 
+}
+
+/* Si quieres que la flecha sea roja al pasar el mouse (hover): */
+.header a:hover {
+    color: var(--color-alerta) !important; 
+}
+
+.logo-img {
+    width: 140px;       
+    height: auto;       
+    display: block;
+    margin: 0 auto 10px auto; 
+}
+
+.header h2 { 
+    color: var(--color-principal); 
+    font-weight: 300; 
+    margin-top: 5px; 
+    font-size: 1.3rem; 
+}
+
+/* --- Formulario --- */
+.form-group { text-align: left; margin-bottom: 15px; }
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-principal);
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px; 
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: var(--color-acento);
+    background-color: #fff;
+    outline: none;
+}
+
+/* --- DROPDOWN PERSONALIZADO --- */
+.custom-dropdown { position: relative; width: 100%; }
+.custom-dropdown select { 
+    display: none !important; 
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute;
+    z-index: -1;
+}
+
+.dropdown-selected {
+    background-color: #f9f9f9;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    color: #555; /* Color inicial (placeholder) */
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.dropdown-selected:hover { background-color: #fff; border-color: #999; }
+.custom-dropdown.active .dropdown-selected { border-color: var(--color-acento); background-color: #fff; }
+
+.dropdown-options {
+    position: absolute;
+    top: 105%;
+    left: 0; right: 0;
+    background-color: #fff;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+    z-index: 1000; 
+    display: none;
+    max-height: 250px; 
+    overflow-y: auto;
+}
+
+.custom-dropdown.active .dropdown-options { display: block; }
+
+.dropdown-options li {
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: var(--color-principal);
+    font-size: 0.95rem;
+    border-bottom: 1px solid #f0f0f0; 
+}
+.dropdown-options li:last-child { border-bottom: none; }
+
+.dropdown-options li:hover { background-color: #f0f0f0; color: var(--color-acento); }
+.dropdown-options li.selected { background-color: var(--color-acento); color: #fff; }
+
+/* --- ESTILO DE LA FLECHA (MEJORADO) --- */
+.fa-chevron-down {
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), color 0.3s;
+    font-size: 0.8rem;
+    color: #95a5a6; 
+    pointer-events: none; 
+}
+
+.dropdown-selected:hover .fa-chevron-down {
+    color: var(--color-principal); 
+}
+
+.custom-dropdown.active .fa-chevron-down {
+    transform: rotate(180deg);
+    color: var(--color-acento); 
+}
+
+/* --- BOTONES --- */
+.btn-submit {
+    background-color: #000000; 
+    color: #fff;
+    border: none;
+    padding: 14px; 
+    width: 100%;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover { 
+    background-color: #333333; 
+}
+
+/* Estilo para los enlaces de "Regístrate/Inicia Sesión aquí" */
+a[style*="color: #e74c3c"] {
+    color: var(--color-alerta) !important;
+}
+
+
+small { display: block; margin-top: 5px; font-size: 0.75rem; color: #7f8c8d; }
+
+/* ========================================================
+    ESTILO PARA INPUTS NUMÉRICOS (Quitar flechas)
+    ======================================================== */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+
+/* ========================================================
+    RESPONSIVE: Ajustes para Móviles (Ancho < 600px)
+======================================================== 
+*/
+@media (max-width: 600px) {
+    
+    /* 1. Fondo de la pantalla blanco */
+    body {
+        background-color: var(--color-card); 
+        padding: 0;
+    }
+
+    .container {
+        /* Eliminamos sombras y bordes */
+        box-shadow: none;
+        border-radius: 0;
+        
+        /* Ajustamos rellenos */
+        padding: 20px; 
+        width: 100%; 
+        max-width: 100%;
+        
+        /* 2. CORRECCIÓN CLAVE para el centrado vertical:
+           Permitimos que el contenedor sea tan alto como su contenido (auto)
+           y confiamos en el Flexbox del BODY para centrarlo. */
+        min-height: auto; 
+    }
+
+    .logo-img {
+        width: 130px; 
+        margin-top: 10px;
+    }
+}
