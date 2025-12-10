@@ -4,6 +4,7 @@
  */
 package com.cr.Ejemplo1.controladores;
 
+
 import com.cr.Ejemplo1.BD;
 import com.cr.Ejemplo1.EmailService;
 import com.cr.Ejemplo1.usuarios;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller 
 public class ControladorRegistro {
     
-    // CAMBIO IMPORTANTE: Ahora la ruta es "/registro", ya no "/"
-    @GetMapping("/registro")
-    public String mostrarFormulario(){
-        return "registro";
-    }
-
+    ArrayList <usuarios> usuario = new ArrayList();
     @Autowired
     private EmailService emailService;
 
@@ -38,80 +35,64 @@ public class ControladorRegistro {
     }
 
     @PostMapping("/registrar")
-    public String registrar(@RequestParam int NumeroDocumento, 
-                            @RequestParam String nombre, 
+    public String registrar(@RequestParam int ID_documento, 
+                            @RequestParam String nombreC, 
                             @RequestParam String sexo, 
-                            @RequestParam String Nacionalidad,
-                            @RequestParam int edad, 
+                            @RequestParam String nacionalidad, 
                             @RequestParam String correo,
                             @RequestParam String contraseña,
-                            @RequestParam String Confirmar, Model model) {
+                            @RequestParam String Confirmar,Model model) {
         
-        // 1. Verificar contraseñas
-        if (!contraseña.equals(Confirmar)){
-            model.addAttribute("msg","La contraseña no coincide");
-            return "registro";
-        }
-
-        // 2. SEGURIDAD: INTENTO DE CREAR EL USUARIO (VALIDACIÓN JAVA)
-        usuarios usuarioTemporal;
-        try {
-            usuarioTemporal = new usuarios(NumeroDocumento, nombre, "Sin Rango", edad, contraseña, correo, sexo, Nacionalidad);
-        
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("msg", "Error de validación: " + e.getMessage());
-            return "registro"; 
-        }
-
-        // 3. Verificar si existe en BD
         String verificarBD = "SELECT COUNT(*) FROM usuarios WHERE ID_documento = ?";
         
+        String codigo = generarCodigo();
+        session.setAttribute("nombre", nombreC);
+        session.setAttribute("correo", correo);
+        session.setAttribute("codigo", codigo);
+        emailService.enviarCodigo(correo, codigo);
+        
         try (Connection con = BD.conexion();
-             PreparedStatement verificar = con.prepareStatement(verificarBD)) {
+        PreparedStatement verificar = con.prepareStatement(verificarBD)) {
 
-                verificar.setInt(1, NumeroDocumento);                
+               // Verificar si el ID ya existe
+                verificar.setInt(1,ID_documento);               
                 var rs = verificar.executeQuery();
                 if (rs.next() && rs.getInt(1) > 0) {
                     model.addAttribute("msg", "Numero de documento ya registrado");
                     return "registro";
                 }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            model.addAttribute("msg", "Error con la BD");
-            return "registro";
+                } catch (SQLException e) {
+               e.printStackTrace();
+               model.addAttribute("msg", "Error con la BD");
+               return "registro";
+           }
+        
+
+        if (contraseña.equals(Confirmar)){
+            usuario.add(new usuarios(ID_documento,nombreC,null,0,contraseña,correo,sexo,nacionalidad));
+            model.addAttribute("msg", "Se envió un código a: " + correo);
+            return "verificar";
         }
-        
-        // 4. Si pasó la validación y la BD, generamos código y guardamos en sesión
-        String codigo = generarCodigo();
-        
-        session.setAttribute("usuarioTemporal", usuarioTemporal); 
-        session.setAttribute("codigo", codigo);
-        session.setAttribute("correo", correo); 
-        
-        emailService.enviarCodigo(correo, codigo);
-        
-        model.addAttribute("msg", "Se envió un código a: " + correo);
-        return "verificar";
+        model.addAttribute("msg","La contraseña no coincide");
+        return "registro";
     }
+    
     
     
     @PostMapping("/verificar")
     public String verificarCodigo(@RequestParam String codigoIngresado, Model model) {
 
         String codigoCorrecto = (String) session.getAttribute("codigo");
-        usuarios e = (usuarios) session.getAttribute("usuarioTemporal"); 
 
-        if (codigoCorrecto == null || e == null) {
-            model.addAttribute("msg", "La sesión ha expirado. Regístrate de nuevo.");
-            return "registro";
-        }
+        String insertarBD = "INSERT INTO usuarios (ID_documento, nombreC, cinturon_rango, edad, contraseña,correo, sexo, nacionalidad) "+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         if (codigoIngresado.equals(codigoCorrecto)) {
-            
-            String insertarBD = "INSERT INTO usuarios (ID_documento, nombreC, cinturon_rango, edad, contraseña,correo, sexo, nacionalidad) "+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
             try (Connection con = BD.conexion();
                  PreparedStatement insertar = con.prepareStatement(insertarBD)) {
+
+                // Solo toma un usuario (según tu intención)
+                usuarios e = usuario.get(0);
 
                 insertar.setInt(1, e.getID_documento());
                 insertar.setString(2, e.getNombreC());
@@ -130,18 +111,14 @@ public class ControladorRegistro {
                 return "verificar";
             }
 
-            // LIMPIEZA DE SESIÓN
-            session.removeAttribute("codigo");
-            session.removeAttribute("usuarioTemporal");
-            
-            // Opcional: Auto-login al registrarse (guardar nombre en sesión)
-            session.setAttribute("usuarioLogueado", e.getNombreC());
-            
             model.addAttribute("msg", "Registro verificado e ingresado exitosamente.");
+            usuario.clear();
             return "inicio";
         }
 
         model.addAttribute("msg", "Código incorrecto.");
         return "verificar";
     }
+
+
 }

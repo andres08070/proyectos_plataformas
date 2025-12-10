@@ -34,7 +34,10 @@ public class ControladorPrincipal {
     public String mostrarLogin() {
         return "inicioSesion"; // Debe coincidir con el nombre de tu archivo HTML de login
     }
-    
+        @GetMapping("/registro")
+    public String mostrarFormulario(){
+        return "registro";
+    }
     // 3. Lógica para procesar el Inicio de Sesión
     @PostMapping("/iniciarSesion")
     public String procesarLogin(@RequestParam String correo, 

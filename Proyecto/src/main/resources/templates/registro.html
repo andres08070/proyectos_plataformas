@@ -31,7 +31,7 @@
             <div class="form-group">
                 <label>Número de documento:</label>
                 <input type="number" 
-                       name="NumeroDocumento" 
+                       name="ID_documento" 
                        id="docInput"
                        required 
                        oninput="if(this.value.length > 15) this.value = this.value.slice(0, 15);"
@@ -42,7 +42,7 @@
             
             <div class="form-group">
                 <label>Nombre completo:</label>
-                <input type="text" name="nombre" required placeholder="Tu nombre">
+                <input type="text" name="nombreC" required placeholder="Tu nombre">
             </div>
             
             <div class="form-group">
@@ -64,7 +64,7 @@
             <div class="form-group">
                 <label>Nacionalidad:</label>
                 <div class="custom-dropdown">
-                    <select name="Nacionalidad" required>
+                    <select name="nacionalidad" required>
                         <option value="" disabled selected> Seleccione una nacionalidad </option>
                         <option value="alemania">Alemania</option>
                         <option value="argentina">Argentina</option>
@@ -113,7 +113,7 @@
             <div class="form-group">
                 <label>Contraseña:</label>
                 <input type="password" 
-                       id="password"
+                       id="contraseña"
                        name="contraseña" 
                        required 
                        minlength="8"
@@ -126,7 +126,7 @@
             <div class="form-group">
                 <label>Confirmar Contraseña:</label>
                 <input type="password" 
-                       id="confirm_password" 
+                       id="Confirmar" 
                        name="Confirmar" 
                        required
                        placeholder="Repite tu contraseña"
