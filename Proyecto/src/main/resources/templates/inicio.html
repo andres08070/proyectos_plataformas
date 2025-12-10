@@ -1,15 +1,103 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Inicio</title>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Didamartials</title>
+    
+    <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/dashboard.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
-    <div class="container">
-        <p th:text="${msg}"></p>
-        <h1>Bienvenido</h1>
-        <a href="/CrearCampeonato">Crear campeonato</a>
-    </div>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a th:href="@{/inicio}" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="nav-logo">
+                <span class="brand-text">DidaMartials</span>
+            </a>
+        </div>
+
+        <div class="nav-user">
+            <div class="user-info">
+                <span class="user-name" th:text="${session.usuarioLogueado} ?: 'Bienvenido'">Usuario</span>
+                <span class="user-role">Miembro Activo</span>
+            </div>
+            
+            <a th:href="@{/logout}" class="btn-logout" title="Cerrar Sesión">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        
+        <header class="welcome-header">
+            <h1>Hola, <span th:text="${session.usuarioLogueado} ?: 'Artista Marcial'">Artista Marcial</span></h1>
+            <p>Bienvenido a tu panel de gestión.</p>
+        </header>
+
+        <section class="actions-grid">
+            
+            <div class="action-card">
+                <div class="card-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>Explorar Campeonatos</h3>
+                <p>Busca campeonatos activos. Inscríbete como competidor, postúlate como juez o entrenador.</p>
+                <a href="#" class="btn-action">Ver Campeonatos</a>
+            </div>
+
+            <div class="action-card">
+                <div class="card-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>Mis Campeonatos</h3>
+                <p>Gestiona los torneos donde estás participando.</p>
+                <a href="#" class="btn-action btn-outline">Ver mi Agenda</a>
+            </div>
+
+            <div class="action-card card-create">
+                <div class="card-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3>Organizar Campeonato</h3>
+                <p>Crea un campeonato desde cero y configura las categorías.</p>
+                <a href="#" class="link-action">Crear ahora &rarr;</a>
+            </div>
+
+            <div class="action-card">
+                <div class="card-icon">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <h3>Mis Datos Personales</h3>
+                <p>Gestiona tu foto, datos médicos, contacto de emergencia y club.</p>
+                <a href="#" class="link-action">Editar datos &rarr;</a>
+            </div>
+
+        </section>
+
+        <section class="upcoming-section">
+            <h2>Actividad Reciente</h2>
+            <div class="event-row">
+                <div class="event-date">
+                    <i class="fas fa-user-ninja fa-lg"></i>
+                </div>
+                <div class="event-info">
+                    <h4>Inscrito en: Copa Regional 2025</h4>
+                    <p>Rol: Competidor - Categoría: Cinturón Negro</p>
+                </div>
+                <button class="btn-small">Ver Detalle</button>
+            </div>
+        </section>
+
+    </main>
+
 </body>
 </html>

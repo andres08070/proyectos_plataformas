@@ -1,19 +1,68 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Verificación</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Didamartials - Verificar Cuenta</title>
+    
+    <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <h3>Verificación</h3>
+    <div class="container">
+        
+        <a th:href="@{/}" class="btn-back" title="Volver al inicio" style="position: absolute; left: 20px; color: #555;">
+                <i class="fas fa-arrow-left fa-2x"></i>
+            </a>
+        <header class="header">
+            <a th:href="@{/}" title="Ir a la página principal">
+                <img th:src="@{/imgs/logo2.png}" alt="Logo Didamartials" class="logo-img">
+            </a>
+            
+            <h2>Verificación de Seguridad</h2>
+        </header>
 
-    <form action="/verificar" method="post">
-        <label>Ingresa el código:</label><br>
-        <input type="text" name="codigoIngresado" required><br><br>
+        <div style="text-align: center; margin-bottom: 30px;">
+            <p style="color: #555; margin-bottom: 10px;">Hemos enviado un código de 6 dígitos a tu correo.</p>
+            <p style="font-weight: bold; color: #1a1a1a;" th:text="${session.correo} ?: 'tu correo'"></p>
+        </div>
 
-        <button type="submit">Verificar</button>
-    </form>
-    <p th:text="${msg}"></p>
+        <form action="/verificar" method="post">
+            
+            <div class="form-group" style="text-align: center;">
+                <label for="codigoInput" style="text-align: center;">Ingresa el Código</label>
+                
+                <input type="number" 
+                       name="codigoIngresado" 
+                       id="codigoInput"
+                       class="input-codigo"
+                       placeholder="000000"
+                       maxlength="6"
+                       required
+                       oninput="if(this.value.length > 6) this.value = this.value.slice(0, 6);">
+            </div>
+
+            <button type="submit" class="btn-submit">Verificar Cuenta</button>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <p class="text-small">¿No recibiste el código? 
+                    <a href="#" class="link-reenviar">Reenviar código</a>
+                </p>
+            </div>
+
+        </form>
+        
+        <p th:text="${msg}" 
+           th:style="${msg != null && msg.contains('exitosamente')} ? 'color: #2ecc71; margin-top: 15px;' : 'color: #d32f2f; margin-top: 15px;'">
+        </p>
+    </div>
+
 </body>
 </html>

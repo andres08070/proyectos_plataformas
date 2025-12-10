@@ -6,37 +6,33 @@
     <title>Didamartials - Sistema de Gestión de Campeonatos</title>
 
     <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" th:href="@{/index.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- ==================== HERO SECTION ==================== -->
     <section class="hero-section">
-        <div class="hero-overlay">
-
-            <div class="hero-content">
-                <div class="logo-wrapper">
-                <div class="logo-bg">
-                    <img th:src="@{/imgs/logo2.png}" alt="Logo Didamartials" class="logo-img">
-                </div>
-                <h1>DidaMartials</h1>
+        <div class="hero-content">
+            <div class="logo-wrapper">
+                <img th:src="@{/imgs/logo2.png}" alt="Logo Didamartials" class="logo-img">
             </div>
 
-                <p class="hero-subtitle">
-                    Sistema integral de gestión y organización de campeonatos de artes marciales
-                </p>
+            <p class="hero-subtitle">
+                Sistema integral de gestión y organización de <br>campeonatos de artes marciales
+            </p>
 
-                <div class="hero-buttons">
-                    <a th:href="@{/registro}" class="btn-hero btn-white">Crear Cuenta</a>
-                    <a th:href="@{/login}" class="btn-hero btn-red">Iniciar Sesión</a>
-                </div>
+            <div class="hero-buttons">
+                <a th:href="@{/registro}" class="btn-hero btn-primary">Crear Cuenta</a>
+                <a th:href="@{/login}" class="btn-hero btn-outline-dark">Iniciar Sesión</a>
             </div>
-
         </div>
     </section>
 
-    <!-- ==================== FEATURES SECTION ==================== -->
     <section class="features-section">
         <div class="content-wrapper">
             <h2>Todo lo que necesitas para organizar tus campeonatos</h2>
@@ -86,7 +82,6 @@
         </div>
     </section>
 
-    <!-- ==================== MODALITIES SECTION ==================== -->
     <section class="modalities-section">
         <div class="content-wrapper">
             <h2>Modalidades Soportadas</h2>
@@ -95,43 +90,26 @@
             </p>
 
             <div class="modalities-grid">
-
-                <!-- Combates -->
-                <div class="modality-card">
-                    <img th:src="@{/imgs/modalidades/combates.jpg}" alt="Combates" class="modality-img">
+                <div class="modality-card card-combate">
+                    <img th:src="@{/imgs/combates.jpg}" alt="Combates" class="modality-img">
                     <h4>Combates</h4>
                 </div>
-
-                <!-- Figuras / Katas -->
-                <div class="modality-card">
-                    <img th:src="@{/imgs/modalidades/figuras.jpg}" alt="Figuras y Katas" class="modality-img">
+                <div class="modality-card card-figura">
+                    <img th:src="@{/imgs/figuras.jpg}" alt="Figuras y Katas" class="modality-img">
                     <h4>Figuras / Katas</h4>
                 </div>
-
-                <!-- Saltos -->
-                <div class="modality-card">
-                    <img th:src="@{/imgs/modalidades/saltos.jpg}" alt="Saltos" class="modality-img">
-                    <h4>Saltos</h4>
-                </div>
-
-                <!-- Defensa Personal -->
-                <div class="modality-card">
-                    <img th:src="@{/imgs/modalidades/defensa.jpg}" alt="Defensa Personal" class="modality-img">
+                <div class="modality-card card-defensa">
+                    <img th:src="@{/imgs/defensa.jpg}" alt="Defensa Personal" class="modality-img">
                     <h4>Defensa Personal</h4>
                 </div>
-
-                <!-- Demostraciones / Exhibiciones -->
-                <div class="modality-card">
-                    <img th:src="@{/imgs/modalidades/demostraciones.jpg}" alt="Demostraciones" class="modality-img">
+                <div class="modality-card card-demo">
+                    <img th:src="@{/imgs/demostraciones.jpg}" alt="Demostraciones" class="modality-img">
                     <h4>Demostraciones / Exhibiciones</h4>
                 </div>
-
             </div>
         </div>
     </section>
 
-
-    <!-- ==================== FOOTER ==================== -->
     <footer class="cta-footer">
         <div class="content-wrapper">
             <p class="cta-text">¿Listo para organizar tu próximo campeonato?</p>
