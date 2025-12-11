@@ -8,6 +8,7 @@ package com.cr.Ejemplo1.controladores;
 import com.cr.Ejemplo1.BD;
 import com.cr.Ejemplo1.EmailService;
 import com.cr.Ejemplo1.usuarios;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller 
@@ -33,7 +35,6 @@ public class ControladorRegistro {
     private String generarCodigo() {
         return String.valueOf((int) (Math.random() * 900000) + 100000);
     }
-
     @PostMapping("/registrar")
     public String registrar(@RequestParam int ID_documento, 
                             @RequestParam String nombreC, 
