@@ -260,3 +260,101 @@ input:checked + .slider:before { transform: translateX(18px); }
 }
 .btn-submit-final:hover { background: var(--color-acento-hover); }
 
+/* ... (Tus estilos anteriores de wizard) ... */
+
+/* ESTILOS PARA EL CONSTRUCTOR DE CATEGORÍAS */
+.category-builder {
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+}
+
+.category-builder h5 {
+    margin: 0 0 5px 0;
+    font-size: 0.95rem;
+    color: var(--color-principal);
+    font-weight: 700;
+}
+
+.small-desc {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+/* Input con Botón lateral (+) */
+.input-adder {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.input-adder input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.input-adder button {
+    background: var(--color-principal);
+    color: white;
+    border: none;
+    width: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.input-adder button:hover {
+    background: var(--color-acento);
+}
+
+/* Contenedor de Etiquetas (Tags) */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-item {
+    background: #eee;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #ddd;
+}
+
+.tag-remove {
+    cursor: pointer;
+    color: #999;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.tag-remove:hover {
+    color: var(--color-acento);
+}
+
+/* Estilo para errores de validación */
+.input-error {
+    border-color: var(--color-acento) !important;
+    background-color: #fff5f5;
+}
+
+/* Estilo del Resumen */
+.summary-section {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+.summary-section h4 { color: var(--color-acento); margin-bottom: 5px; }
+.summary-list li { margin-bottom: 5px; color: #555; }
+

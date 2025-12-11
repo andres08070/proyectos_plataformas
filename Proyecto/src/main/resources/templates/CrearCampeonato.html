@@ -2,7 +2,6 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <head th:replace="~{fragments/global :: head(titulo='Crear Campeonato - Didamartials', archivoCss='/dashboard.css')}"></head>
-    
     <link rel="stylesheet" th:href="@{/wizard.css}">
 </head>
 <body>
@@ -15,9 +14,7 @@
             </a>
         </div>
         <div class="nav-user">
-            <a th:href="@{/inicio}" class="btn-logout" title="Cancelar y Salir">
-                <i class="fas fa-times"></i>
-            </a>
+            <a th:href="@{/inicio}" class="btn-logout" title="Cancelar y Salir"><i class="fas fa-times"></i></a>
         </div>
     </nav>
 
@@ -26,22 +23,10 @@
         <div class="wizard-header">
             <h2>Nuevo Campeonato</h2>
             <div class="progress-container">
-                <div class="step active" id="indicator-1">
-                    <div class="step-circle">1</div>
-                    <span class="step-label">General</span>
-                </div>
-                <div class="step" id="indicator-2">
-                    <div class="step-circle">2</div>
-                    <span class="step-label">Modalidades</span>
-                </div>
-                <div class="step" id="indicator-3">
-                    <div class="step-circle">3</div>
-                    <span class="step-label">Logística</span>
-                </div>
-                <div class="step" id="indicator-4">
-                    <div class="step-circle">4</div>
-                    <span class="step-label">Resumen</span>
-                </div>
+                <div class="step active" id="indicator-1"><div class="step-circle">1</div><span class="step-label">General</span></div>
+                <div class="step" id="indicator-2"><div class="step-circle">2</div><span class="step-label">Modalidades</span></div>
+                <div class="step" id="indicator-3"><div class="step-circle">3</div><span class="step-label">Logística</span></div>
+                <div class="step" id="indicator-4"><div class="step-circle">4</div><span class="step-label">Resumen</span></div>
                 <div class="progress-line"></div>
             </div>
         </div>
@@ -49,132 +34,155 @@
         <form th:action="@{/guardar-campeonato}" method="post" class="wizard-form" id="campeonatoForm">
             
             <div class="wizard-step active-step" id="step-1">
-                <h3 class="step-title">Información Básica del Evento</h3>
-                
+                <h3 class="step-title">Información Básica</h3>
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label>Nombre del Campeonato:</label>
-                        <input type="text" name="nombre" placeholder="Ej: Copa Regional Dida 2025" required>
+                        <label>Nombre del Campeonato *</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Ej: Copa Regional Dida 2025" required>
                     </div>
-
                     <div class="form-group">
-                        <label>Fecha de Inicio:</label>
-                        <input type="date" name="fechaInicio" required>
+                        <label>Fecha de Inicio *</label>
+                        <input type="date" id="fechaInicio" name="fechaInicio" required>
                     </div>
-
                     <div class="form-group">
-                        <label>Fecha Fin:</label>
-                        <input type="date" name="fechaFin" required>
+                        <label>Fecha Fin *</label>
+                        <input type="date" id="fechaFin" name="fechaFin" required>
                     </div>
-
                     <div class="form-group full-width">
-                        <label>Ubicación / Sede:</label>
-                        <input type="text" name="ubicacion" placeholder="Ej: Coliseo Mayor, Bogotá" required>
+                        <label>Ubicación / Sede *</label>
+                        <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Coliseo Mayor, Bogotá" required>
                     </div>
                 </div>
-
                 <div class="wizard-footer">
                     <button type="button" class="btn-nav btn-next" onclick="nextStep(2)">Siguiente &rarr;</button>
                 </div>
             </div>
 
             <div class="wizard-step" id="step-2">
-                <h3 class="step-title">Define las Modalidades y Reglas</h3>
-                <p class="step-desc">Selecciona las disciplinas y configura cómo se dividirán las categorías.</p>
+                <h3 class="step-title">Modalidades y Categorías</h3>
+                <p class="step-desc">Activa las modalidades y define sus categorías (Pesos, Cinturones, Edades).</p>
 
                 <div class="modalities-container">
 
                     <label class="modality-card">
-                        <input type="checkbox" name="modalidades" value="COMBATE" class="modality-trigger">
-                        
+                        <input type="checkbox" name="modalidades" value="COMBATE" class="modality-trigger" id="check-combate">
                         <div class="card-header-content">
                             <div class="icon-box icon-red"><i class="fas fa-fist-raised"></i></div>
-                            <div class="text-box">
-                                <h4>Combate (Kumite)</h4>
-                                <p>Competencia de contacto punto a punto.</p>
-                            </div>
+                            <div class="text-box"><h4>Combate (Kumite)</h4><p>Contacto punto a punto.</p></div>
                             <div class="check-indicator"><i class="fas fa-check-circle"></i></div>
                         </div>
-
                         <div class="config-panel">
                             <div class="separator"></div>
-                            <h5>Criterios de División:</h5>
                             
-                            <div class="toggles-grid">
-                                <div class="toggle-item">
-                                    <span>Dividir por Peso</span>
-                                    <label class="switch">
-                                        <input type="checkbox" name="combate_usa_peso" checked>
-                                        <span class="slider round"></span>
-                                    </label>
+                            <div class="category-builder">
+                                <h5>Categorías de Peso (Combate)</h5>
+                                <p class="small-desc">Añade rangos (ej: "50-60kg") o cortes únicos (ej: "-65kg").</p>
+                                <div class="input-adder">
+                                    <input type="text" id="input-peso-combate" placeholder="Ej: -60kg o 55-60kg">
+                                    <button type="button" onclick="addItem('combate', 'peso')"><i class="fas fa-plus"></i></button>
                                 </div>
-                                <div class="toggle-item">
-                                    <span>Dividir por Edad</span>
-                                    <label class="switch">
-                                        <input type="checkbox" name="combate_usa_edad" checked>
-                                        <span class="slider round"></span>
-                                    </label>
+                                <div class="tags-container" id="list-combate-peso"></div>
+                                <input type="hidden" name="combate_pesos_data" id="hidden-combate-peso">
+                            </div>
+
+                            <div class="category-builder">
+                                <h5>Agrupación de Cinturones</h5>
+                                <p class="small-desc">Ej: "Blancos y Amarillos", "Cinturón Negro".</p>
+                                <div class="input-adder">
+                                    <input type="text" id="input-rango-combate" placeholder="Ej: Principiantes (Blanco-Naranja)">
+                                    <button type="button" onclick="addItem('combate', 'rango')"><i class="fas fa-plus"></i></button>
                                 </div>
-                                <div class="toggle-item">
-                                    <span>Dividir por Cinturón</span>
-                                    <label class="switch">
-                                        <input type="checkbox" name="combate_usa_rango" checked>
-                                        <span class="slider round"></span>
-                                    </label>
+                                <div class="tags-container" id="list-combate-rango"></div>
+                                <input type="hidden" name="combate_rangos_data" id="hidden-combate-rango">
+                            </div>
+
+                             <div class="category-builder">
+                                <h5>Rangos de Edad</h5>
+                                <p class="small-desc">Ej: "Infantil (10-12 años)".</p>
+                                <div class="input-adder">
+                                    <input type="text" id="input-edad-combate" placeholder="Ej: Juvenil (15-17)">
+                                    <button type="button" onclick="addItem('combate', 'edad')"><i class="fas fa-plus"></i></button>
                                 </div>
-                                <div class="toggle-item">
-                                    <span>Dividir por Género</span>
-                                    <label class="switch">
-                                        <input type="checkbox" name="combate_usa_genero" checked>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
+                                <div class="tags-container" id="list-combate-edad"></div>
+                                <input type="hidden" name="combate_edades_data" id="hidden-combate-edad">
                             </div>
                         </div>
                     </label>
 
                     <label class="modality-card">
-                        <input type="checkbox" name="modalidades" value="FIGURAS" class="modality-trigger">
-                        
+                        <input type="checkbox" name="modalidades" value="FIGURAS" class="modality-trigger" id="check-figuras">
                         <div class="card-header-content">
                             <div class="icon-box icon-purple"><i class="fas fa-theater-masks"></i></div>
-                            <div class="text-box">
-                                <h4>Figuras (Katas/Poomsae)</h4>
-                                <p>Demostración técnica de formas.</p>
-                            </div>
+                            <div class="text-box"><h4>Figuras (Katas)</h4><p>Formas y técnica.</p></div>
                             <div class="check-indicator"><i class="fas fa-check-circle"></i></div>
                         </div>
-
                         <div class="config-panel">
                             <div class="separator"></div>
-                            <h5>Criterios de División:</h5>
-                            <div class="toggles-grid">
-                                <div class="toggle-item disabled">
-                                    <span style="opacity: 0.5;">Dividir por Peso</span>
-                                    <label class="switch">
-                                        <input type="checkbox" disabled>
-                                        <span class="slider round" style="background-color: #ddd;"></span>
-                                    </label>
+                            <div class="category-builder">
+                                <h5>Agrupación de Cinturones</h5>
+                                <div class="input-adder">
+                                    <input type="text" id="input-rango-figuras" placeholder="Ej: Avanzados">
+                                    <button type="button" onclick="addItem('figuras', 'rango')"><i class="fas fa-plus"></i></button>
                                 </div>
-                                <div class="toggle-item">
-                                    <span>Dividir por Cinturón</span>
-                                    <label class="switch">
-                                        <input type="checkbox" name="figuras_usa_rango" checked>
-                                        <span class="slider round"></span>
-                                    </label>
+                                <div class="tags-container" id="list-figuras-rango"></div>
+                                <input type="hidden" name="figuras_rangos_data" id="hidden-figuras-rango">
+                            </div>
+                             <div class="category-builder">
+                                <h5>Rangos de Edad</h5>
+                                <div class="input-adder">
+                                    <input type="text" id="input-edad-figuras" placeholder="Ej: Senior (+18)">
+                                    <button type="button" onclick="addItem('figuras', 'edad')"><i class="fas fa-plus"></i></button>
                                 </div>
-                                <div class="toggle-item">
-                                    <span>Dividir por Edad</span>
-                                    <label class="switch">
-                                        <input type="checkbox" name="figuras_usa_edad" checked>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
+                                <div class="tags-container" id="list-figuras-edad"></div>
+                                <input type="hidden" name="figuras_edades_data" id="hidden-figuras-edad">
                             </div>
                         </div>
                     </label>
-                    
-                    </div>
+
+                    <label class="modality-card">
+                        <input type="checkbox" name="modalidades" value="DEFENSA" class="modality-trigger" id="check-defensa">
+                        <div class="card-header-content">
+                            <div class="icon-box icon-green" style="background: #e8f5e9; color: #2e7d32;"><i class="fas fa-user-shield"></i></div>
+                            <div class="text-box"><h4>Defensa Personal</h4><p>Simulación y técnica aplicada.</p></div>
+                            <div class="check-indicator"><i class="fas fa-check-circle"></i></div>
+                        </div>
+                        <div class="config-panel">
+                            <div class="separator"></div>
+                            <p class="small-desc">Configura categorías por nivel o edad.</p>
+                             <div class="category-builder">
+                                <h5>Categorías / Niveles</h5>
+                                <div class="input-adder">
+                                    <input type="text" id="input-nivel-defensa" placeholder="Ej: Parejas Mixtas">
+                                    <button type="button" onclick="addItem('defensa', 'nivel')"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="tags-container" id="list-defensa-nivel"></div>
+                                <input type="hidden" name="defensa_niveles_data" id="hidden-defensa-nivel">
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="modality-card">
+                        <input type="checkbox" name="modalidades" value="DEMO" class="modality-trigger" id="check-demo">
+                        <div class="card-header-content">
+                            <div class="icon-box icon-yellow" style="background: #fffde7; color: #fbc02d;"><i class="fas fa-star"></i></div>
+                            <div class="text-box"><h4>Demostraciones / Show</h4><p>Exhibición creativa o acrobática.</p></div>
+                            <div class="check-indicator"><i class="fas fa-check-circle"></i></div>
+                        </div>
+                        <div class="config-panel">
+                            <div class="separator"></div>
+                            <div class="category-builder">
+                                <h5>Categorías de Show</h5>
+                                <div class="input-adder">
+                                    <input type="text" id="input-cat-demo" placeholder="Ej: Show con Armas">
+                                    <button type="button" onclick="addItem('demo', 'cat')"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="tags-container" id="list-demo-cat"></div>
+                                <input type="hidden" name="demo_cats_data" id="hidden-demo-cat">
+                            </div>
+                        </div>
+                    </label>
+
+                </div>
 
                 <div class="wizard-footer">
                     <button type="button" class="btn-nav btn-prev" onclick="prevStep(1)">&larr; Atrás</button>
@@ -183,16 +191,13 @@
             </div>
 
             <div class="wizard-step" id="step-3">
-                <h3 class="step-title">Configuración Logística</h3>
-                <p>Define los recursos disponibles.</p>
-                
+                <h3 class="step-title">Logística</h3>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Número de Áreas (Tatamis):</label>
-                        <input type="number" name="numAreas" value="1" min="1">
+                        <label>Número de Áreas (Tatamis) *</label>
+                        <input type="number" id="numAreas" name="numAreas" value="1" min="1" required>
                     </div>
-                    </div>
-
+                </div>
                 <div class="wizard-footer">
                     <button type="button" class="btn-nav btn-prev" onclick="prevStep(2)">&larr; Atrás</button>
                     <button type="button" class="btn-nav btn-next" onclick="nextStep(4)">Resumen &rarr;</button>
@@ -201,39 +206,19 @@
 
             <div class="wizard-step" id="step-4">
                 <h3 class="step-title">Resumen del Evento</h3>
-                <p>Verifica la información antes de crear el borrador.</p>
+                <p>Verifica la información antes de crear el campeonato.</p>
                 
-                <div class="summary-box">
-                    <p>Por favor confirma que la configuración es correcta.</p>
-                </div>
+                <div id="summary-content" class="summary-box"></div>
 
                 <div class="wizard-footer">
                     <button type="button" class="btn-nav btn-prev" onclick="prevStep(3)">&larr; Atrás</button>
-                    <button type="submit" class="btn-submit-final">Crear Campeonato</button>
+                    <button type="submit" class="btn-submit-final">Confirmar y Crear</button>
                 </div>
             </div>
 
         </form>
     </div>
 
-    <script>
-        function showStep(stepNumber) {
-            // Ocultar todos los pasos
-            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active-step'));
-            // Quitar activo de todos los indicadores
-            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-            
-            // Mostrar paso actual
-            document.getElementById('step-' + stepNumber).classList.add('active-step');
-            
-            // Activar indicadores hasta el paso actual
-            for(let i = 1; i <= stepNumber; i++) {
-                document.getElementById('indicator-' + i).classList.add('active');
-            }
-        }
-
-        function nextStep(step) { showStep(step); }
-        function prevStep(step) { showStep(step); }
-    </script>
+    <script th:src="@{/script.js}"></script>
 </body>
 </html>
