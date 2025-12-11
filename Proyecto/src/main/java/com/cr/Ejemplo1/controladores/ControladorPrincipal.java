@@ -24,9 +24,9 @@ public class ControladorPrincipal {
     private HttpSession session;
 
     // 1. Ruta Raíz: Muestra el index.html con los dos botones
-    @GetMapping("/")
+    @GetMapping("/CrearCampeonato")
     public String inicio() {
-        return "index";
+        return "CrearCampeonato";
     }
 
     // 2. Ruta para mostrar el formulario de Login
