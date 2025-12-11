@@ -1,0 +1,262 @@
+/* ================= WIZARD HEADER ================= */
+.wizard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.wizard-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-principal);
+    margin-bottom: 30px;
+}
+
+/* Barra de Progreso */
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.progress-line {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    z-index: -1;
+}
+
+.step {
+    background: var(--color-fondo);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px; /* Espacio para el label */
+}
+
+.step-circle {
+    width: 35px;
+    height: 35px;
+    background: #e0e0e0;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 8px;
+    transition: 0.3s;
+}
+
+.step-label {
+    font-size: 0.8rem;
+    color: #999;
+    font-weight: 500;
+}
+
+/* Estado Activo del Paso */
+.step.active .step-circle {
+    background: var(--color-acento);
+    box-shadow: 0 0 0 5px rgba(183, 28, 28, 0.1);
+}
+.step.active .step-label {
+    color: var(--color-acento);
+    font-weight: 700;
+}
+
+/* ================= PASOS DEL FORMULARIO ================= */
+.wizard-step {
+    display: none; /* Ocultos por defecto */
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    animation: fadeIn 0.5s ease;
+}
+
+.wizard-step.active-step {
+    display: block; /* Solo el activo se ve */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.step-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--color-principal);
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.step-desc {
+    color: var(--color-texto);
+    margin-bottom: 30px;
+}
+
+/* ================= TARJETAS DE MODALIDAD (ACORDEÓN) ================= */
+.modality-card {
+    display: block;
+    background: #fdfdfd;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden; /* Clave para el acordeón */
+}
+
+/* Ocultamos el checkbox nativo */
+.modality-trigger {
+    display: none;
+}
+
+/* Cabecera de la tarjeta */
+.card-header-content {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.check-indicator {
+    margin-left: auto;
+    font-size: 1.5rem;
+    color: #e0e0e0;
+    transition: 0.3s;
+}
+
+/* ESTADO SELECCIONADO (Cuando el checkbox está checked) */
+.modality-trigger:checked + .card-header-content + .config-panel {
+    max-height: 500px; /* Altura máxima suficiente para el contenido */
+    padding: 0 20px 20px 20px;
+    opacity: 1;
+}
+
+.modality-trigger:checked ~ .card-header-content {
+    background-color: #fff5f5; /* Fondo rojo muy suave */
+}
+
+.modality-card:has(.modality-trigger:checked) {
+    border-color: var(--color-acento);
+    box-shadow: 0 5px 15px rgba(183, 28, 28, 0.1);
+}
+
+.modality-trigger:checked ~ .card-header-content .check-indicator {
+    color: var(--color-acento);
+}
+
+/* PANEL DESPLEGABLE (Oculto por defecto) */
+.config-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+    background-color: #fff5f5; /* Continuación visual del header activo */
+}
+
+.separator {
+    height: 1px;
+    background: rgba(0,0,0,0.05);
+    margin-bottom: 15px;
+}
+
+/* ================= SWITCHES / TOGGLES ================= */
+.toggles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.toggle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+/* Estilo del Switch CSS puro */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+}
+
+.switch input { display: none; }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider { background-color: var(--color-acento); }
+input:checked + .slider:before { transform: translateX(18px); }
+
+/* ================= BOTONES NAVEGACIÓN ================= */
+.wizard-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-nav {
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-prev {
+    background: transparent;
+    border: 2px solid #ccc;
+    color: #666;
+}
+.btn-prev:hover { border-color: #999; color: #333; }
+
+.btn-next {
+    background: var(--color-principal);
+    color: white;
+}
+.btn-next:hover { background: black; }
+
+.btn-submit-final {
+    background: var(--color-acento);
+    color: white;
+    padding: 12px 40px;
+    border-radius: 50px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-submit-final:hover { background: var(--color-acento-hover); }
+
