@@ -59,7 +59,8 @@ public class ControladorPrincipal {
                 // Guardamos datos básicos en sesión para saber quién está conectado
                 session.setAttribute("usuarioLogueado", rs.getString("nombreC"));
                 session.setAttribute("rangoUsuario", rs.getString("cinturon_rango"));
-                
+                session.setAttribute("id", rs.getString("ID_documento"));
+                System.out.println(session.getAttribute("id"));                
                 return "inicio"; // Redirige a la página principal del sistema (dashboard)
             } else {
                 // Login Fallido

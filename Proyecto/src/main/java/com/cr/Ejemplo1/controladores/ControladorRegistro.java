@@ -46,7 +46,8 @@ public class ControladorRegistro {
         String verificarBD = "SELECT COUNT(*) FROM usuarios WHERE ID_documento = ?";
         
         String codigo = generarCodigo();
-        session.setAttribute("nombre", nombreC);
+        session.setAttribute("usuarioLogueado",nombreC);
+        session.setAttribute("id",ID_documento);
         session.setAttribute("correo", correo);
         session.setAttribute("codigo", codigo);
         emailService.enviarCodigo(correo, codigo);
