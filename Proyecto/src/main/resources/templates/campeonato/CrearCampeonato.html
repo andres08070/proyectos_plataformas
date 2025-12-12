@@ -3,6 +3,10 @@
 <head>
     <head th:replace="~{fragments/global :: head(titulo='Crear Campeonato', archivoCss='/css/dashboard.css')}"></head>
     <link rel="stylesheet" th:href="@{/css/wizard.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
 </head>
 <body>
 
@@ -14,9 +18,7 @@
             </a>
         </div>
         <div class="nav-user">
-            <a th:href="@{/inicio}" class="btn-logout" title="Cancelar y volver al Dashboard">
-                <i class="fas fa-times"></i>
-            </a>
+            <a th:href="@{/inicio}" class="btn-logout" title="Cancelar"><i class="fas fa-times"></i></a>
         </div>
     </nav>
 
@@ -44,11 +46,17 @@
                     </div>
                     <div class="form-group">
                         <label>Fecha de Inicio *</label>
-                        <input type="date" id="fechaInicio" name="fechaInicio" required>
+                        <div class="date-input-wrapper">
+                            <input type="text" id="fechaInicio" name="fechaInicio" class="flatpickr-input" placeholder="Seleccionar fecha" required>
+                            <i class="fas fa-calendar-alt date-icon"></i>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Fecha Fin *</label>
-                        <input type="date" id="fechaFin" name="fechaFin" required>
+                        <div class="date-input-wrapper">
+                            <input type="text" id="fechaFin" name="fechaFin" class="flatpickr-input" placeholder="Seleccionar fecha" required>
+                            <i class="fas fa-calendar-alt date-icon"></i>
+                        </div>
                     </div>
                     <div class="form-group full-width">
                         <label>Ubicación / Sede *</label>
@@ -61,206 +69,14 @@
             </div>
 
             <div class="wizard-step" id="step-2">
-                <h3 class="step-title">Configuración de Categorías</h3>
-                <p class="step-desc">Activa los criterios de división para cada modalidad seleccionada.</p>
+                <h3 class="step-title">Configuración de Modalidades</h3>
+                <p class="step-desc">Agrega las disciplinas de tu torneo y configura sus categorías.</p>
 
-                <div class="modalities-container">
+                <div id="modalities-container-dynamic"></div>
 
-                    <label class="modality-card">
-                        <input type="checkbox" name="modalidades" value="COMBATE" class="modality-trigger">
-                        <div class="card-header-content">
-                            <div class="icon-box icon-red"><i class="fas fa-fist-raised"></i></div>
-                            <div class="text-box"><h4>Combate</h4><p>Kumite / Sparring</p></div>
-                            <div class="check-indicator"><i class="fas fa-check-circle"></i></div>
-                        </div>
-                        <div class="config-panel">
-                            <div class="separator"></div>
-                            
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header">
-                                    <span>Dividir por Peso</span>
-                                    <label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label>
-                                </div>
-                                <div class="criteria-body">
-                                    <div class="input-adder">
-                                        <input type="text" id="input-combate-peso" placeholder="Ej: -60kg">
-                                        <button type="button" onclick="addItem('combate', 'peso')"><i class="fas fa-plus"></i></button>
-                                    </div>
-                                    <div class="tags-container" id="list-combate-peso"></div>
-                                    <input type="hidden" name="combate_pesos_data" id="hidden-combate-peso">
-                                </div>
-                            </div>
-
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header">
-                                    <span>Dividir por Cinturón</span>
-                                    <label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label>
-                                </div>
-                                <div class="criteria-body">
-                                    <div class="input-adder">
-                                        <input type="text" id="input-combate-rango" placeholder="Ej: Principiantes">
-                                        <button type="button" onclick="addItem('combate', 'rango')"><i class="fas fa-plus"></i></button>
-                                    </div>
-                                    <div class="tags-container" id="list-combate-rango"></div>
-                                    <input type="hidden" name="combate_rangos_data" id="hidden-combate-rango">
-                                </div>
-                            </div>
-
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header">
-                                    <span>Dividir por Edad</span>
-                                    <label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label>
-                                </div>
-                                <div class="criteria-body">
-                                    <div class="input-adder">
-                                        <input type="text" id="input-combate-edad" placeholder="Ej: 14-15 años">
-                                        <button type="button" onclick="addItem('combate', 'edad')"><i class="fas fa-plus"></i></button>
-                                    </div>
-                                    <div class="tags-container" id="list-combate-edad"></div>
-                                    <input type="hidden" name="combate_edades_data" id="hidden-combate-edad">
-                                </div>
-                            </div>
-
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header">
-                                    <span>Dividir por Género</span>
-                                    <label class="switch"><input type="checkbox" class="toggle-control" onchange="toggleGender('combate', this)"><span class="slider round"></span></label>
-                                </div>
-                                <div class="criteria-body">
-                                    <p class="small-desc">Selecciona el formato de la categoría:</p>
-                                    <select id="select-combate-genero" class="gender-select" name="combate_genero_data">
-                                        <option value="Separado">Masculino y Femenino (Separados)</option>
-                                        <option value="Mixto">Mixto (Compiten juntos)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </label>
-
-                    <label class="modality-card">
-                        <input type="checkbox" name="modalidades" value="FIGURAS" class="modality-trigger">
-                        <div class="card-header-content">
-                            <div class="icon-box icon-purple"><i class="fas fa-theater-masks"></i></div>
-                            <div class="text-box"><h4>Figuras</h4><p>Katas / Formas</p></div>
-                            <div class="check-indicator"><i class="fas fa-check-circle"></i></div>
-                        </div>
-                        <div class="config-panel">
-                            <div class="separator"></div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Peso</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-figuras-peso"><button type="button" onclick="addItem('figuras', 'peso')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-figuras-peso"></div><input type="hidden" name="figuras_pesos_data" id="hidden-figuras-peso">
-                                </div>
-                            </div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Cinturón</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-figuras-rango"><button type="button" onclick="addItem('figuras', 'rango')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-figuras-rango"></div><input type="hidden" name="figuras_rangos_data" id="hidden-figuras-rango">
-                                </div>
-                            </div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Edad</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-figuras-edad"><button type="button" onclick="addItem('figuras', 'edad')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-figuras-edad"></div><input type="hidden" name="figuras_edades_data" id="hidden-figuras-edad">
-                                </div>
-                            </div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Género</span><label class="switch"><input type="checkbox" class="toggle-control" onchange="toggleGender('figuras', this)"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <select id="select-figuras-genero" class="gender-select" name="figuras_genero_data">
-                                        <option value="Separado">Masculino y Femenino</option><option value="Mixto">Mixto</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </label>
-
-                    <label class="modality-card">
-                        <input type="checkbox" name="modalidades" value="DEFENSA" class="modality-trigger">
-                        <div class="card-header-content">
-                            <div class="icon-box icon-green" style="background: #e8f5e9; color: #2e7d32;"><i class="fas fa-user-shield"></i></div>
-                            <div class="text-box"><h4>Defensa Personal</h4><p>Técnica aplicada</p></div>
-                            <div class="check-indicator"><i class="fas fa-check-circle"></i></div>
-                        </div>
-                        <div class="config-panel">
-                            <div class="separator"></div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Peso</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-defensa-peso"><button type="button" onclick="addItem('defensa', 'peso')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-defensa-peso"></div><input type="hidden" name="defensa_pesos_data" id="hidden-defensa-peso">
-                                </div>
-                            </div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Cinturón</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-defensa-rango"><button type="button" onclick="addItem('defensa', 'rango')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-defensa-rango"></div><input type="hidden" name="defensa_rangos_data" id="hidden-defensa-rango">
-                                </div>
-                            </div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Edad</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-defensa-edad"><button type="button" onclick="addItem('defensa', 'edad')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-defensa-edad"></div><input type="hidden" name="defensa_edades_data" id="hidden-defensa-edad">
-                                </div>
-                            </div>
-                             <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Género</span><label class="switch"><input type="checkbox" class="toggle-control" onchange="toggleGender('defensa', this)"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <select id="select-defensa-genero" class="gender-select" name="defensa_genero_data">
-                                        <option value="Separado">Masculino y Femenino</option><option value="Mixto">Mixto</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </label>
-
-                    <label class="modality-card">
-                        <input type="checkbox" name="modalidades" value="DEMO" class="modality-trigger">
-                        <div class="card-header-content">
-                            <div class="icon-box icon-yellow" style="background: #fffde7; color: #fbc02d;"><i class="fas fa-star"></i></div>
-                            <div class="text-box"><h4>Exhibiciones</h4><p>Shows</p></div>
-                            <div class="check-indicator"><i class="fas fa-check-circle"></i></div>
-                        </div>
-                        <div class="config-panel">
-                            <div class="separator"></div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Peso</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-demo-peso"><button type="button" onclick="addItem('demo', 'peso')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-demo-peso"></div><input type="hidden" name="demo_pesos_data" id="hidden-demo-peso">
-                                </div>
-                            </div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Cinturón</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-demo-rango"><button type="button" onclick="addItem('demo', 'rango')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-demo-rango"></div><input type="hidden" name="demo_rangos_data" id="hidden-demo-rango">
-                                </div>
-                            </div>
-                            <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Edad</span><label class="switch"><input type="checkbox" class="toggle-control"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <div class="input-adder"><input type="text" id="input-demo-edad"><button type="button" onclick="addItem('demo', 'edad')"><i class="fas fa-plus"></i></button></div>
-                                    <div class="tags-container" id="list-demo-edad"></div><input type="hidden" name="demo_edades_data" id="hidden-demo-edad">
-                                </div>
-                            </div>
-                             <div class="criteria-wrapper">
-                                <div class="criteria-header"><span>Dividir por Género</span><label class="switch"><input type="checkbox" class="toggle-control" onchange="toggleGender('demo', this)"><span class="slider round"></span></label></div>
-                                <div class="criteria-body">
-                                    <select id="select-demo-genero" class="gender-select" name="demo_genero_data">
-                                        <option value="Separado">Masculino y Femenino</option><option value="Mixto">Mixto</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </label>
-
-                </div>
+                <button type="button" class="btn-add-modality" onclick="addNewModality()">
+                    <i class="fas fa-plus-circle"></i> Agregar Nueva Modalidad
+                </button>
 
                 <div class="wizard-footer">
                     <button type="button" class="btn-nav btn-prev" onclick="prevStep(1)">&larr; Atrás</button>
@@ -273,8 +89,10 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Número de Áreas (Tatamis) *</label>
-                        <p class="small-desc" style="margin-top:-5px; margin-bottom:10px;">Máximo 12 áreas permitidas.</p>
+                        <p class="step-desc" style="font-size:0.8rem; margin-bottom:5px;">Máximo 12 áreas.</p>
+                        
                         <input type="number" id="numAreas" name="numAreas" value="1" min="1" max="12" required 
+                               onkeydown="blockInvalidChars(event)"
                                oninput="if(this.value > 12) this.value = 12; if(this.value < 1) this.value = 1;">
                     </div>
                 </div>
@@ -296,6 +114,10 @@
         </form>
     </div>
     
-    <script th:src="@{/js/script.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+    
+    <script th:src="@{/js/wizard.js}"></script>
 </body>
 </html>
