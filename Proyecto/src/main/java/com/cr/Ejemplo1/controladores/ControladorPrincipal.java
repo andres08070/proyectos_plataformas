@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cr.Ejemplo1.controladores;
 
 import com.cr.Ejemplo1.BD;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
@@ -21,31 +16,56 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ControladorPrincipal {
+    
+    // NOTA: Es mejor dejar el @Autowired de la sesión en el método o usar @RequestScope, 
+    // pero lo mantengo aquí ya que así lo tenías.
     @Autowired
-    private HttpSession session;
+    private HttpSession session; 
 
-    // 1. Ruta Raíz: Muestra el index.html con los dos botones
-    @GetMapping("/CrearCampeonato")
-    public String inicio() {
-        return "CrearCampeonato";
-    }
+    // ==========================================
+    // RUTAS PÚBLICAS (Login y Registro - GET)
+    // ==========================================
 
-    // 2. Ruta para mostrar el formulario de Login
     @GetMapping("/login")
     public String mostrarLogin() {
-        return "inicioSesion"; // Debe coincidir con el nombre de tu archivo HTML de login
+        // Retorna: src/main/resources/templates/auth/inicioSesion.html
+        return "auth/inicioSesion";
     }
-        @GetMapping("/registro")
+    
+    @GetMapping("/registro")
     public String mostrarFormulario(){
-        return "registro";
+        // Retorna: src/main/resources/templates/auth/registro.html
+        return "auth/registro";
     }
-    // 3. Lógica para procesar el Inicio de Sesión
+    
+    // ==========================================
+    // RUTAS PRIVADAS (Protegidas por Interceptor)
+    // ==========================================
+
+    @GetMapping("/CrearCampeonato")
+    public String crearCampeonato() {
+        // El Interceptor ya verificó la sesión y puso Anti-Caché.
+        // Retorna: src/main/resources/templates/campeonato/CrearCampeonato.html
+        return "campeonato/CrearCampeonato"; 
+    }
+    
+    @GetMapping("/inicio")
+    public String inicio() {
+        // El Interceptor ya verificó la sesión y puso Anti-Caché.
+        // Retorna: src/main/resources/templates/dashboard/inicio.html
+        return "dashboard/inicio";
+    }
+    
+    // ==========================================
+    // RUTAS DE ACCIÓN (POST)
+    // ==========================================
+
     @PostMapping("/iniciarSesion")
     public String procesarLogin(@RequestParam String correo, 
                                 @RequestParam String contraseña, 
                                 Model model) {
         
-        String sql = "SELECT * FROM usuarios WHERE correo = ? AND contraseña = ?";
+        String sql = "SELECT nombreC, cinturon_rango, ID_documento FROM usuarios WHERE correo = ? AND contraseña = ?";
         
         try (Connection con = BD.conexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -56,29 +76,33 @@ public class ControladorPrincipal {
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
-                // ¡Login Exitoso!
-                // Guardamos datos básicos en sesión para saber quién está conectado
+                // Login Exitoso: Guardar datos en sesión
                 session.setAttribute("usuarioLogueado", rs.getString("nombreC"));
                 session.setAttribute("rangoUsuario", rs.getString("cinturon_rango"));
                 session.setAttribute("id", rs.getString("ID_documento"));
-                System.out.println(session.getAttribute("id"));                
-                return "inicio"; // Redirige a la página principal del sistema (dashboard)
+                System.out.println("Usuario logueado: " + session.getAttribute("id"));
+                
+                // Redirigir al Dashboard
+                return "redirect:/inicio"; // Usar redirect para evitar reenvío de formulario (POST)
             } else {
                 // Login Fallido
                 model.addAttribute("msg", "Correo o contraseña incorrectos.");
-                return "inicioSesion";
+                return "auth/inicioSesion";
             }
             
         } catch (SQLException e) {
             e.printStackTrace();
             model.addAttribute("msg", "Error de conexión con la base de datos.");
-            return "inicioSesion";
+            return "auth/inicioSesion";
         }
     }
+    
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, HttpServletResponse response) {
+        // Limpiamos headers para asegurarnos de que el navegador no cachee la URL de salida
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         session.invalidate();  // Cierra la sesión
-        return "redirect:/"; // O donde quieras enviarlo
+        return "redirect:/login"; // Redirigir al login (que es la página pública de entrada)
     }
 
-    }
+}

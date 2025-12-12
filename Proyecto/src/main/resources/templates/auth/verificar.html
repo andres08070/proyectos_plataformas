@@ -1,37 +1,27 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Didamartials - Verificar Cuenta</title>
-    
-    <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" th:href="@{/styles.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<head th:replace="~{fragments/global :: head(titulo='Didamartials - Verificar Cuenta', archivoCss='/css/styles.css')}">
 </head>
+
 <body>
 
     <div class="container">
         
-        <a th:href="@{/}" class="btn-back" title="Volver al inicio" style="position: absolute; left: 20px; color: #555;">
-                <i class="fas fa-arrow-left fa-2x"></i>
-            </a>
+        <a th:href="@{/}" class="btn-back" title="Volver al inicio">
+            <i class="fas fa-arrow-left fa-2x"></i>
+        </a>
+
         <header class="header">
             <a th:href="@{/}" title="Ir a la página principal">
                 <img th:src="@{/imgs/logo2.png}" alt="Logo Didamartials" class="logo-img">
             </a>
-            
             <h2>Verificación de Seguridad</h2>
         </header>
 
         <div style="text-align: center; margin-bottom: 30px;">
             <p style="color: #555; margin-bottom: 10px;">Hemos enviado un código de 6 dígitos a tu correo.</p>
-            <p style="font-weight: bold; color: #1a1a1a;" th:text="${session.correo} ?: 'tu correo'"></p>
+            <p style="font-weight: bold; color: var(--color-principal);" th:text="${session.correo} ?: 'tu correo'"></p>
         </div>
 
         <form action="/verificar" method="post">
@@ -58,6 +48,10 @@
             </div>
 
         </form>
+        
+        <p th:text="${msg}" 
+           th:style="${msg != null && msg.contains('exitosamente')} ? 'color: var(--color-exito); margin-top: 15px;' : 'color: var(--color-alerta); margin-top: 15px;'">
+        </p>
     </div>
 
 </body>

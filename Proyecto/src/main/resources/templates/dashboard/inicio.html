@@ -1,19 +1,9 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Didamartials</title>
-    
-    <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" th:href="@{/dashboard.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<head th:replace="~{fragments/global :: head(titulo='Inicio - Didamartials', archivoCss='/css/dashboard.css')}">
 </head>
+
 <body>
 
     <nav class="navbar">
@@ -30,7 +20,7 @@
                 <span class="user-role">Miembro Activo</span>
             </div>
             
-            <a href="/logout" class="btn-logout" title="Cerrar Sesión">
+            <a th:href="@{/logout}" class="btn-logout" title="Cerrar Sesión">
                 <i class="fas fa-sign-out-alt"></i>
             </a>
         </div>
@@ -51,7 +41,7 @@
                 </div>
                 <h3>Explorar Campeonatos</h3>
                 <p>Busca campeonatos activos. Inscríbete como competidor, postúlate como juez o entrenador.</p>
-                <a href="/CrearCampeonato" class="btn-action">Ver Campeonatos</a>
+                <a href="#" class="btn-action">Ver Campeonatos</a>
             </div>
 
             <div class="action-card">
@@ -60,7 +50,7 @@
                 </div>
                 <h3>Mis Campeonatos</h3>
                 <p>Gestiona los torneos donde estás participando.</p>
-                <a th:href="@{/CrearCampeonato}" class="btn-action btn-outline">Ver mi Agenda</a>
+                <a href="#" class="btn-action btn-outline">Ver mi Agenda</a>
             </div>
 
             <div class="action-card card-create">
@@ -69,7 +59,7 @@
                 </div>
                 <h3>Organizar Campeonato</h3>
                 <p>Crea un campeonato desde cero y configura las categorías.</p>
-                <a href="/CrearCampeonato" class="link-action">Crear ahora &rarr;</a>
+                <a th:href="@{/CrearCampeonato}" class="link-action">Crear ahora &rarr;</a>
             </div>
 
             <div class="action-card">
@@ -78,7 +68,7 @@
                 </div>
                 <h3>Mis Datos Personales</h3>
                 <p>Gestiona tu foto, datos médicos, contacto de emergencia y club.</p>
-                <a href="/CrearCampeonato" class="link-action">Editar datos &rarr;</a>
+                <a th:href="@{/perfil}" class="link-action">Editar datos &rarr;</a>
             </div>
 
         </section>
@@ -99,5 +89,4 @@
 
     </main>
 </body>
-
 </html>

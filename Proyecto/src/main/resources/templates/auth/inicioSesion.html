@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Didamartials - Iniciar Sesión</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
-    <link rel="stylesheet" th:href="@{/styles.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<head th:replace="~{fragments/global :: head(titulo='Didamartials - Iniciar Sesión', archivoCss='/css/styles.css')}">
 </head>
+
 <body>
 
     <div class="container">
-        <a th:href="@{/}" class="btn-back" title="Volver al inicio" style="position: absolute; left: 20px; color: #555;">
+        <a th:href="@{/}" class="btn-back" title="Volver al inicio">
             <i class="fas fa-arrow-left fa-2x"></i>
         </a>
+
         <header class="header">
             <a th:href="@{/}" title="Ir a la página principal">
                 <img th:src="@{/imgs/logo2.png}" alt="Logo Didamartials" class="logo-img">
@@ -47,12 +41,12 @@
 
             <div style="text-align: center; margin-top: 15px;">
                 <p>¿Aún no tienes una cuenta? 
-                    <a th:href="@{/registro}" style="color: #e74c3c; text-decoration: none; font-weight: bold;">Regístrarse</a>
+                    <a th:href="@{/registro}" style="color: var(--color-acento); text-decoration: none; font-weight: bold;">Regístrarse</a>
                 </p>
             </div>
         </form>
         
-        <p th:text="${msg}" style="color: #e74c3c; margin-top: 10px; text-align: center; "></p>
+        <p th:text="${msg}" style="color: var(--color-alerta); margin-top: 10px; text-align: center; "></p>
     </div>
 </body>
 </html>

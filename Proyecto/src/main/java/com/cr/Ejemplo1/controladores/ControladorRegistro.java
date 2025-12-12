@@ -4,7 +4,6 @@
  */
 package com.cr.Ejemplo1.controladores;
 
-
 import com.cr.Ejemplo1.BD;
 import com.cr.Ejemplo1.EmailService;
 import com.cr.Ejemplo1.usuarios;
@@ -35,6 +34,7 @@ public class ControladorRegistro {
     private String generarCodigo() {
         return String.valueOf((int) (Math.random() * 900000) + 100000);
     }
+
     @PostMapping("/registrar")
     public String registrar(@RequestParam int ID_documento, 
                             @RequestParam String nombreC, 
@@ -56,28 +56,32 @@ public class ControladorRegistro {
         try (Connection con = BD.conexion();
         PreparedStatement verificar = con.prepareStatement(verificarBD)) {
             
-               // Verificar si el ID ya existe
+                // Verificar si el ID ya existe
                 verificar.setInt(1,ID_documento);  
                 verificar.setString(2,correo);
                 var rs = verificar.executeQuery();
                 if (rs.next() && rs.getInt(1) > 0) {
                     model.addAttribute("msg", "Numero de documento ya registrado o correo ya registrado");
-                    return "registro";
+                    // CAMBIO: Ahora está en la carpeta 'auth'
+                    return "auth/registro";
                 }
-                } catch (SQLException e) {
+        } catch (SQLException e) {
                e.printStackTrace();
                model.addAttribute("msg", "Error con la BD");
-               return "registro";
-           }
+               // CAMBIO: Ahora está en la carpeta 'auth'
+               return "auth/registro";
+        }
         
 
         if (contraseña.equals(Confirmar)){
             usuario.add(new usuarios(ID_documento,nombreC,null,0,contraseña,correo,sexo,nacionalidad));
             model.addAttribute("msg", "Se envió un código a: " + correo);
-            return "verificar";
+            // CAMBIO: Ahora está en la carpeta 'auth'
+            return "auth/verificar";
         }
         model.addAttribute("msg","La contraseña no coincide");
-        return "registro";
+        // CAMBIO: Ahora está en la carpeta 'auth'
+        return "auth/registro";
     }
     
     
@@ -111,17 +115,19 @@ public class ControladorRegistro {
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 model.addAttribute("msg", "Error al guardar en la base de datos.");
-                return "verificar";
+                // CAMBIO: Si falla, vuelve a verificar dentro de 'auth'
+                return "auth/verificar";
             }
 
             model.addAttribute("msg", "Registro verificado e ingresado exitosamente.");
             usuario.clear();
-            return "inicio";
+            // CAMBIO: Al terminar, va al dashboard privado
+            return "dashboard/inicio";
         }
 
         model.addAttribute("msg", "Código incorrecto.");
-        return "verificar";
+        // CAMBIO: Código mal, se queda en verificar
+        return "auth/verificar";
     }
-
 
 }

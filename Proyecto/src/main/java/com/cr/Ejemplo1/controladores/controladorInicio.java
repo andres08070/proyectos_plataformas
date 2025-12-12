@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller 
 public class controladorInicio {
-     @GetMapping("/")
+    
+    @GetMapping("/")
     public String inicio() {
-        return "index";
+        // CAMBIO IMPORTANTE:
+        // Antes buscaba en templates/index.html
+        // Ahora busca en templates/public/index.html
+        return "public/index";
     }
 }

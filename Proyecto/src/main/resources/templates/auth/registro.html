@@ -1,28 +1,20 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Didamartials - Registro</title>
-    
-    <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/styles.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<head th:replace="~{fragments/global :: head(titulo='Didamartials - Registro', archivoCss='/css/styles.css')}">
 </head>
+
 <body>
 
     <div class="container">
-            <a th:href="@{/}" class="btn-back" title="Volver al inicio" style="position: absolute; left: 20px; color: #555;">
-                <i class="fas fa-arrow-left fa-2x"></i>
-            </a>
+        <a th:href="@{/}" class="btn-back" title="Volver al inicio">
+            <i class="fas fa-arrow-left fa-2x"></i>
+        </a>
+        
         <header class="header">
             <a th:href="@{/}" title="Ir a la página principal">
                 <img th:src="@{/imgs/logo2.png}" alt="Logo Didamartials" class="logo-img">
             </a>
-
             <h2>Registro de Usuario</h2>
         </header>
 
@@ -37,7 +29,7 @@
                        oninput="if(this.value.length > 15) this.value = this.value.slice(0, 15);"
                        placeholder="Ej: 1090..."
                        title="Debe contener entre 6 y 15 números.">
-                <small id="docError" style="color: #e74c3c; display: none; margin-top: 5px;">Mínimo 6 dígitos requeridos</small>
+                <small id="docError" style="color: var(--color-alerta); display: none; margin-top: 5px;">Mínimo 6 dígitos requeridos</small>
             </div>
             
             <div class="form-group">
@@ -131,22 +123,22 @@
                        required
                        placeholder="Repite tu contraseña"
                        onkeyup="validarContrasenas()">
-                <small id="mensajeError" style="color: #e74c3c; display: none; margin-top: 5px;">Las contraseñas no coinciden</small>
+                <small id="mensajeError" style="color: var(--color-alerta); display: none; margin-top: 5px;">Las contraseñas no coinciden</small>
             </div>
 
             <button type="submit" class="btn-submit" id="botonRegistrar">Registrar</button>
             
             <div style="text-align: center; margin-top: 15px;">
                 <p>¿Ya tienes una cuenta? 
-                    <a th:href="@{/login}" style="color: #e74c3c; text-decoration: none; font-weight: bold;">Iniciar sesión</a>
+                    <a th:href="@{/login}" style="color: var(--color-acento); text-decoration: none; font-weight: bold;">Iniciar sesión</a>
                 </p>
             </div>
 
         </form>
         
-        <p th:text="${msg}" style="color: #e74c3c; margin-top: 10px;"></p>
+        <p th:text="${msg}" style="color: var(--color-alerta); margin-top: 10px;"></p>
     </div>
 
-    <script th:src="@{/script.js}"></script>
+    <script th:src="@{/js/script.js}"></script>
 </body>
 </html>

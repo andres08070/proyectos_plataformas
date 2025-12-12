@@ -4,6 +4,10 @@
 <head th:fragment="head(titulo, archivoCss)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Didamartials - Sistema profesional para la gestión de campeonatos de artes marciales.">
+    
+    <meta name="theme-color" content="#b71c1c">
+
     <title th:text="${titulo}">Didamartials</title>
     
     <link rel="icon" type="image/x-icon" th:href="@{/imgs/logoicon.ico}">
@@ -11,6 +15,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     
     <link rel="stylesheet" th:href="@{${archivoCss}}">
     
@@ -38,6 +44,9 @@
             © 2025 Didamartials - Sistema de gestión de campeonatos de artes marciales
         </div>
     </footer>
+
+    <div th:fragment="scripts">
+        </div>
 
 </body>
 </html>
