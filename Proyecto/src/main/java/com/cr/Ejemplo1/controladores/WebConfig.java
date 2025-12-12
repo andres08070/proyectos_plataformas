@@ -23,8 +23,8 @@ public class WebConfig implements WebMvcConfigurer {
                     "/login",           // Mostrar Login (GET)
                     "/iniciarSesion",   // Procesar Login (POST)
                     "/registro",        // Mostrar Registro (GET)
-                    "/registrar",       // Procesar Registro (POST) <--- ¡ESTA ES NUEVA!
-                    "/verificar",       // Procesar Verificación (POST) <--- ¡ESTA ES NUEVA!
+                    "/registrar",       // Procesar Registro (POST)
+                    "/verificar",       // Procesar Verificación (POST) 
                     // ... Archivos estáticos
                     "/css/**",         
                     "/js/**",          
