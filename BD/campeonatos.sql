@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-12-2025 a las 17:47:50
+-- Tiempo de generación: 12-12-2025 a las 17:59:53
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -62,6 +62,30 @@ INSERT INTO `campeonato` (`id`, `nombre`, `fechaInicio`, `fechaFin`, `ubicacion`
 (2, 'o aña', '2025-12-05', '2025-12-27', 'sexooooooooo', 'COMBATE', '21-30', '', '', 'Separado', '', '', '', 'Separado', '', '', '', 'Separado', '', '', '', 'Separado', 11),
 (3, '88147850', '2025-12-13', '2025-12-31', 'siiiiiiii', 'COMBATE', '', 'negro,blanco', '', 'Separado', '', '', '', 'Separado', '', '', '', 'Separado', '', '', '', 'Separado', 1);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `ID_documento` int(11) NOT NULL,
+  `nombreC` varchar(150) NOT NULL,
+  `sexo` varchar(20) DEFAULT NULL,
+  `edad` int(11) DEFAULT NULL,
+  `cinturon_rango` varchar(20) DEFAULT NULL,
+  `Nacionalidad` varchar(20) DEFAULT NULL,
+  `Correo` varchar(120) DEFAULT NULL,
+  `Contraseña` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`ID_documento`, `nombreC`, `sexo`, `edad`, `cinturon_rango`, `Nacionalidad`, `Correo`, `Contraseña`) VALUES
+(123456, 'andres', 'Masculino', 0, NULL, 'alemania', 'andresivan0807@gmail.com', 'Andres@07');
+
 --
 -- Índices para tablas volcadas
 --
@@ -71,6 +95,12 @@ INSERT INTO `campeonato` (`id`, `nombre`, `fechaInicio`, `fechaFin`, `ubicacion`
 --
 ALTER TABLE `campeonato`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`ID_documento`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
