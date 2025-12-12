@@ -5,6 +5,8 @@
 package com.cr.Ejemplo1.controladores;
 
 import com.cr.Ejemplo1.BD;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ControladorPrincipal {
-
     @Autowired
     private HttpSession session;
 
@@ -74,11 +75,10 @@ public class ControladorPrincipal {
             return "inicioSesion";
         }
     }
-    
-    // Opcional: Cerrar sesión
     @GetMapping("/logout")
-    public String cerrarSesion() {
-        session.invalidate();
-        return "redirect:/";
+    public String logout(HttpSession session) {
+        session.invalidate();  // Cierra la sesión
+        return "redirect:/"; // O donde quieras enviarlo
     }
-}
+
+    }

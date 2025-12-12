@@ -44,7 +44,7 @@ public class ControladorRegistro {
                             @RequestParam String contraseña,
                             @RequestParam String Confirmar,Model model) {
         
-        String verificarBD = "SELECT COUNT(*) FROM usuarios WHERE ID_documento = ?";
+        String verificarBD = "SELECT COUNT(*) FROM usuarios WHERE ID_documento = ? OR correo = ?";
         
         String codigo = generarCodigo();
         session.setAttribute("usuarioLogueado",nombreC);
@@ -55,12 +55,13 @@ public class ControladorRegistro {
         
         try (Connection con = BD.conexion();
         PreparedStatement verificar = con.prepareStatement(verificarBD)) {
-
+            
                // Verificar si el ID ya existe
-                verificar.setInt(1,ID_documento);               
+                verificar.setInt(1,ID_documento);  
+                verificar.setString(2,correo);
                 var rs = verificar.executeQuery();
                 if (rs.next() && rs.getInt(1) > 0) {
-                    model.addAttribute("msg", "Numero de documento ya registrado");
+                    model.addAttribute("msg", "Numero de documento ya registrado o correo ya registrado");
                     return "registro";
                 }
                 } catch (SQLException e) {
