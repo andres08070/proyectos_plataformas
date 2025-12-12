@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Campeonatos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        .campeonato-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+        }
+        .campeonato-info h2 { margin-top: 0; color: #007bff; font-size: 1.5em; }
+        .campeonato-info p { margin: 5px 0; color: #555; }
+        .btn-inscripcion {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+        .btn-inscripcion:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🗓️ Campeonatos Activos</h1>
+
+        <div th:each="campeonato : ${campeonatos}" class="campeonato-card">
+            
+            <div class="campeonato-info">
+                <h2 th:text="${campeonato.nombre}">Nombre del Campeonato</h2>
+                <p>
+                    <i class="fas fa-map-marker-alt"></i> Ubicación: 
+                    <span th:text="${campeonato.ubicacion}">Ubicación</span>
+                </p>
+                <p>
+                    <i class="fas fa-calendar-alt"></i> Fechas: 
+                    <span th:text="${#temporals.format(campeonato.fechaInicio, 'dd-MM-yyyy')}">Fecha Inicio</span> 
+                    - 
+                    <span th:text="${#temporals.format(campeonato.fechaFin, 'dd-MM-yyyy')}">Fecha Fin</span>
+                </p>
+            </div>
+
+            <div class="campeonato-acciones">
+                <a th:href="@{/inscripcion/{id}(id=${campeonato.id})}" class="btn-inscripcion">
+                    <i class="fas fa-check-circle"></i> Inscribirse
+                </a>
+            </div>
+            
+        </div>
+        
+        <div th:if="${#lists.isEmpty(campeonatos)}">
+            <p style="text-align: center; color: #888;">No hay campeonatos disponibles en este momento.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

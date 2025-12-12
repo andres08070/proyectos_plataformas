@@ -1,115 +1,124 @@
 package com.cr.Ejemplo1.controladores;
 
+// Importaciones para JDBC
 import com.cr.Ejemplo1.BD;
-import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cr.Ejemplo1.modelo.Campeonato;
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
+
 
 @Controller
 public class ControladorCrearCampeonato {
 
-    @Autowired
-    private HttpSession session;
+    private static final Logger logger = LoggerFactory.getLogger(ControladorCrearCampeonato.class);
+    
+    // Objeto para deserializar el JSON, inicializado una vez
+    private final ObjectMapper objectMapper = new ObjectMapper(); 
+    
+    // ... (Método guardarCampeonato - POST - sin cambios) ...
 
     @PostMapping("/guardar-campeonato")
-    public String guardarCampeonato(
-            @RequestParam("nombre") String nombre,
-            @RequestParam("fechaInicio") String fechaInicio,
-            @RequestParam("fechaFin") String fechaFin,
-            @RequestParam("ubicacion") String ubicacion,
-
-            @RequestParam(value = "modalidades", required = false) List<String> modalidades,
-
-            @RequestParam(value = "combate_pesos_data", required = false) String combatePesos,
-            @RequestParam(value = "combate_rangos_data", required = false) String combateRangos,
-            @RequestParam(value = "combate_edades_data", required = false) String combateEdades,
-            @RequestParam(value = "combate_genero_data", required = false) String combateGenero,
-
-            @RequestParam(value = "figuras_pesos_data", required = false) String figurasPesos,
-            @RequestParam(value = "figuras_rangos_data", required = false) String figurasRangos,
-            @RequestParam(value = "figuras_edades_data", required = false) String figurasEdades,
-            @RequestParam(value = "figuras_genero_data", required = false) String figurasGenero,
-
-            @RequestParam(value = "defensa_pesos_data", required = false) String defensaPesos,
-            @RequestParam(value = "defensa_rangos_data", required = false) String defensaRangos,
-            @RequestParam(value = "defensa_edades_data", required = false) String defensaEdades,
-            @RequestParam(value = "defensa_genero_data", required = false) String defensaGenero,
-
-            @RequestParam(value = "demo_pesos_data", required = false) String demoPesos,
-            @RequestParam(value = "demo_rangos_data", required = false) String demoRangos,
-            @RequestParam(value = "demo_edades_data", required = false) String demoEdades,
-            @RequestParam(value = "demo_genero_data", required = false) String demoGenero,
-
-            @RequestParam("numAreas") int numAreas,
-            Model model
-    ) {
-
-        // Convertir lista en String
-        String modalidadesString = (modalidades != null)
-                ? String.join(",", modalidades)
-                : null;
-
-        // SQL FINAL
-        String sql = "INSERT INTO campeonato (" +
-                "nombre, fechaInicio, fechaFin, ubicacion, modalidades, " +
-                "combate_pesos_data, combate_rangos_data, combate_edades_data, combate_genero_data, " +
-                "figuras_pesos_data, figuras_rangos_data, figuras_edades_data, figuras_genero_data, " +
-                "defensa_pesos_data, defensa_rangos_data, defensa_edades_data, defensa_genero_data, " +
-                "demo_pesos_data, demo_rangos_data, demo_edades_data, demo_genero_data, " +
-                "numAreas) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
+    public String guardarCampeonato(@ModelAttribute Campeonato campeonato) {
+        
+        logger.info("Iniciando guardado del Campeonato: {}", campeonato.getNombre());
+        
+        // **NOTA: La descripción también fue eliminada de aquí para la inserción**
+        String sqlInsert = "INSERT INTO campeonato (nombre, fecha_inicio, fecha_fin, ubicacion, num_areas, json_modalidades) " +
+                           "VALUES (?, ?, ?, ?, ?, ?)";
+        
         try (Connection con = BD.conexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement insertar = con.prepareStatement(sqlInsert)) {
+            
+            insertar.setString(1, campeonato.getNombre());
+            // insertar.setString(2, campeonato.getDescripcion()); <-- ELIMINADO
+            
+            Date sqlFechaInicio = Date.valueOf(campeonato.getFechaInicio());
+            Date sqlFechaFin = Date.valueOf(campeonato.getFechaFin());
+            
+            insertar.setDate(2, sqlFechaInicio); // El índice cambia
+            insertar.setDate(3, sqlFechaFin);    // El índice cambia
+            
+            insertar.setString(4, campeonato.getUbicacion()); // El índice cambia
+            insertar.setInt(5, campeonato.getNumAreas());    // El índice cambia
+            
+            insertar.setString(6, campeonato.getJsonModalidades()); // El índice cambia
+            
+            int filasAfectadas = insertar.executeUpdate();
+            
+            if (filasAfectadas > 0) {
+                 logger.info("Campeonato '{}' guardado exitosamente.", campeonato.getNombre());
+                 return "redirect:/inicio";
+            } else {
+                 logger.error("El guardado del Campeonato '{}' falló (0 filas afectadas).", campeonato.getNombre());
+                 return "error-page";
+            }
+            
+        } catch (SQLException e) {
+            logger.error("ERROR CRÍTICO al intentar guardar el Campeonato en la BD:", e);
+            e.printStackTrace();
+            return "error-page";
+        } catch (Exception e) {
+            logger.error("Error inesperado:", e);
+            return "error-page";
+        }
+    }
 
-            ps.setString(1, nombre);
-            ps.setString(2, fechaInicio);
-            ps.setString(3, fechaFin);
-            ps.setString(4, ubicacion);
-            ps.setString(5, modalidadesString);
 
-            // COMBATE
-            ps.setString(6, combatePesos);
-            ps.setString(7, combateRangos);
-            ps.setString(8, combateEdades);
-            ps.setString(9, combateGenero);
+    @GetMapping("/campeonato/lista") 
+    public String mostrarCampeonatos(Model model) { // <-- Aceptar el objeto Model
+        
+        // La consulta SQL solo obtiene los campos que se mostrarán en la lista.
+        String sqlSelect = "SELECT id, nombre, fecha_inicio, fecha_fin, ubicacion FROM campeonato";
+        
+        List<Campeonato> listaCampeonatos = new ArrayList<>();
 
-            // FIGURAS
-            ps.setString(10, figurasPesos);
-            ps.setString(11, figurasRangos);
-            ps.setString(12, figurasEdades);
-            ps.setString(13, figurasGenero);
-
-            // DEFENSA
-            ps.setString(14, defensaPesos);
-            ps.setString(15, defensaRangos);
-            ps.setString(16, defensaEdades);
-            ps.setString(17, defensaGenero);
-
-            // DEMO
-            ps.setString(18, demoPesos);
-            ps.setString(19, demoRangos);
-            ps.setString(20, demoEdades);
-            ps.setString(21, demoGenero);
-
-            // TATAMIS
-            ps.setInt(22, numAreas);
-
-            ps.executeUpdate();
+        System.out.println("\n--- Recopilando Campeonatos de la BD para la vista ---");
+        
+        try (Connection con = BD.conexion();
+             PreparedStatement stmt = con.prepareStatement(sqlSelect);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                
+                // Creamos un objeto Campeonato simple (solo con los datos que necesitamos)
+                Campeonato camp = new Campeonato();
+                camp.setId(rs.getLong("id")); // Asumo que tienes el setter getId/setId
+                camp.setNombre(rs.getString("nombre"));
+                
+                // Conversión de fechas a LocalDate
+                camp.setFechaInicio(rs.getDate("fecha_inicio").toLocalDate()); 
+                camp.setFechaFin(rs.getDate("fecha_fin").toLocalDate());
+                
+                camp.setUbicacion(rs.getString("ubicacion"));
+                
+                listaCampeonatos.add(camp);
+            }
 
         } catch (SQLException e) {
+            logger.error("Error al obtener la lista de campeonatos de la BD:", e);
             e.printStackTrace();
-            model.addAttribute("msg", "Error al guardar datos del campeonato");
-            return "errorBD"; // si quieres cambiarlo, me dices
+            model.addAttribute("errorMsg", "Hubo un error al cargar la lista de campeonatos.");
+            return "error-page";
         }
-
-        model.addAttribute("msg", "Campeonato creado exitosamente");
-        return "dashboard/inicio";
+        
+        // 2. Adjuntar la lista al modelo de Spring
+        model.addAttribute("campeonatos", listaCampeonatos);
+        
+        // 3. Devolver el nombre de la nueva plantilla HTML
+        return "campeonato/lista-campeonatos"; 
     }
+
 }
