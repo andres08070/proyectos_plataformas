@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-12-2025 a las 00:33:39
+-- Tiempo de generación: 13-12-2025 a las 02:20:08
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -36,16 +36,17 @@ CREATE TABLE `campeonato` (
   `num_areas` int(11) DEFAULT 1,
   `json_modalidades` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`json_modalidades`)),
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
-  `activo` tinyint(1) DEFAULT 1
+  `activo` tinyint(1) DEFAULT 1,
+  `id_admin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `campeonato`
 --
 
-INSERT INTO `campeonato` (`id`, `nombre`, `fecha_inicio`, `fecha_fin`, `ubicacion`, `num_areas`, `json_modalidades`, `fecha_creacion`, `activo`) VALUES
-(2, 'amir', '2025-12-12', '2025-12-27', 'san jose de cucuta', 1, '{\"mod_1765580990329\":{\"name\":\"wer\",\"desc\":\"rrew\",\"peso\":[\"Menor a 12kg\"],\"rango\":[\"negro\"],\"edad\":[\"21 - 43 años\"],\"genero\":\"Separado\"}}', '2025-12-12 23:10:48', 1),
-(3, 'ivan', '2025-12-12', '2025-12-27', 'mi casa', 12, '{\"mod_1765582240429\":{\"name\":\"Sexo\",\"desc\":\"anal full anal\",\"peso\":[\"Menor a 50kg\"],\"rango\":[\"sin correa\"],\"edad\":[\"18 - 100 años\"],\"genero\":\"Separado\"}}', '2025-12-12 23:31:46', 1);
+INSERT INTO `campeonato` (`id`, `nombre`, `fecha_inicio`, `fecha_fin`, `ubicacion`, `num_areas`, `json_modalidades`, `fecha_creacion`, `activo`, `id_admin`) VALUES
+(1, 'a', '2025-12-12', '2025-12-20', '123', 1, '{\"mod_1765587370429\":{\"name\":\"asd\",\"desc\":\"dsa\",\"peso\":[\"Mayor a 12kg\"],\"rango\":[],\"edad\":[],\"genero\":null}}', '2025-12-13 00:56:28', 1, 123456),
+(2, 'te odio amir', '2025-12-12', '2025-12-27', 'valla coma pipi amir', 11, '{\"mod_1765588685031\":{\"name\":\"si lees esto eres gay\",\"desc\":\"\",\"peso\":[\"Menor a 12kg\"],\"rango\":[],\"edad\":[],\"genero\":null}}', '2025-12-13 01:18:25', 1, 123456);
 
 -- --------------------------------------------------------
 
@@ -69,7 +70,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_documento`, `nombreC`, `sexo`, `edad`, `cinturon_rango`, `Nacionalidad`, `Correo`, `Contraseña`) VALUES
-(123456, 'andres', 'Masculino', 0, NULL, 'alemania', 'andresivan0807@gmail.com', 'Andres@07');
+(123456, 'andres', 'Masculino', 0, NULL, 'alemania', 'andresivan0807@gmail.com', 'Andres@07'),
+(1091657788, 'yicell dayana', 'Femenino', 0, NULL, 'bolivia', 'yicellmanzano0407@gmail.com', 'Yicell@23');
 
 --
 -- Índices para tablas volcadas
@@ -79,7 +81,9 @@ INSERT INTO `usuarios` (`ID_documento`, `nombreC`, `sexo`, `edad`, `cinturon_ran
 -- Indices de la tabla `campeonato`
 --
 ALTER TABLE `campeonato`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_admin` (`id_admin`),
+  ADD KEY `id_admin_2` (`id_admin`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -95,7 +99,17 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `campeonato`
 --
 ALTER TABLE `campeonato`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `campeonato`
+--
+ALTER TABLE `campeonato`
+  ADD CONSTRAINT `fk_campeonato_usuario` FOREIGN KEY (`id_admin`) REFERENCES `usuarios` (`ID_documento`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

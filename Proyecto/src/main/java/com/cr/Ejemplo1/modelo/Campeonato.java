@@ -7,16 +7,13 @@ public class Campeonato {
     // Campos del Step 1
     private long id;
     private String nombre;
-    // --- Campo Faltante Añadido ---
     private String descripcion; 
-    // -----------------------------
     private LocalDate fechaInicio; 
     private LocalDate fechaFin;
     private String ubicacion;
     private String jsonModalidades; 
-
-    // Campo del Step 3
     private int numAreas;
+    private String nombreCreador;
 
     // --- Getters y Setters (Necesarios para el mapeo de Spring) ---
 
@@ -85,6 +82,16 @@ public class Campeonato {
     public void setId(long id) {
         this.id = id;
     }
+
+    public String getNombreCreador() {
+        return nombreCreador;
+    }
+
+    public void setNombreCreador(String nombreCreador) {
+        this.nombreCreador = nombreCreador;
+    }
+    
+    
     
 
     // Opcional: Para ver todos los datos en la consola

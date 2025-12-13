@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ModalidadData {
     // Estos nombres de campos DEBEN coincidir con las claves del JSON (name, desc, peso, rango, edad, genero)
+    private int idCreador;
     private String name; 
     private String desc;
     private List<String> peso;
@@ -33,6 +34,10 @@ public class ModalidadData {
 
     public String getGenero() { return genero; }
     public void setGenero(String genero) { this.genero = genero; }
+
+    public int getIdCreador() {return idCreador;}
+
+    public void setIdCreador(int idCreador) {this.idCreador = idCreador;}
     
     @Override
     public String toString() {

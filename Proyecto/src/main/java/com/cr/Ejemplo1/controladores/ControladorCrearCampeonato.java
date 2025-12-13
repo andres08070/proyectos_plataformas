@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Date;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cr.Ejemplo1.modelo.Campeonato;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -31,31 +32,53 @@ public class ControladorCrearCampeonato {
     // ... (Método guardarCampeonato - POST - sin cambios) ...
 
     @PostMapping("/guardar-campeonato")
-    public String guardarCampeonato(@ModelAttribute Campeonato campeonato) {
+    public String guardarCampeonato(@ModelAttribute Campeonato campeonato, HttpSession session) {
         
-        logger.info("Iniciando guardado del Campeonato: {}", campeonato.getNombre());
+        // 1. OBTENER Y CONVERTIR EL ID DEL USUARIO DESDE LA SESIÓN (SOLUCIÓN)
+        // Se asume que el ID se guardó como String en la sesión, así que lo leemos como String.
+        String idCreadorString = (String) session.getAttribute("id");
+        Integer idCreador = null;
         
-        // **NOTA: La descripción también fue eliminada de aquí para la inserción**
-        String sqlInsert = "INSERT INTO campeonato (nombre, fecha_inicio, fecha_fin, ubicacion, num_areas, json_modalidades) " +
-                           "VALUES (?, ?, ?, ?, ?, ?)";
+        if (idCreadorString != null) {
+            try {
+                // Intentamos convertir la cadena de texto a número entero
+                idCreador = Integer.parseInt(idCreadorString);
+            } catch (NumberFormatException e) {
+                logger.error("El valor del ID de sesión '{}' no es un número válido. Posible problema de formato.", idCreadorString, e);
+                return "error-page"; // Manejar el error de formato
+            }
+        } else {
+            logger.error("Error: Usuario no logueado o ID no encontrado en la sesión.");
+            // Si el ID no está, redirigir al login
+            return "redirect:/login"; 
+        }
+
+        // --- El resto del código de guardado es el mismo ---
         
+        logger.info("Iniciando guardado del Campeonato '{}' por el usuario ID: {}", campeonato.getNombre(), idCreador);
+        
+        String sqlInsert = "INSERT INTO campeonato (nombre, fecha_inicio, fecha_fin, ubicacion, num_areas, json_modalidades, id_admin) " +
+                           "VALUES (?, ?, ?, ?, ?, ?, ?)"; 
+
         try (Connection con = BD.conexion();
              PreparedStatement insertar = con.prepareStatement(sqlInsert)) {
             
+            // Parámetros 1 a 6
             insertar.setString(1, campeonato.getNombre());
-            // insertar.setString(2, campeonato.getDescripcion()); <-- ELIMINADO
             
             Date sqlFechaInicio = Date.valueOf(campeonato.getFechaInicio());
             Date sqlFechaFin = Date.valueOf(campeonato.getFechaFin());
             
-            insertar.setDate(2, sqlFechaInicio); // El índice cambia
-            insertar.setDate(3, sqlFechaFin);    // El índice cambia
+            insertar.setDate(2, sqlFechaInicio);
+            insertar.setDate(3, sqlFechaFin);
             
-            insertar.setString(4, campeonato.getUbicacion()); // El índice cambia
-            insertar.setInt(5, campeonato.getNumAreas());    // El índice cambia
+            insertar.setString(4, campeonato.getUbicacion());
+            insertar.setInt(5, campeonato.getNumAreas());
+            insertar.setString(6, campeonato.getJsonModalidades()); 
             
-            insertar.setString(6, campeonato.getJsonModalidades()); // El índice cambia
-            
+            // AGREGAR EL ID DEL CREADOR (Parámetro 7)
+            insertar.setInt(7, idCreador); // <-- Nuevo parámetro
+
             int filasAfectadas = insertar.executeUpdate();
             
             if (filasAfectadas > 0) {
@@ -78,10 +101,12 @@ public class ControladorCrearCampeonato {
 
 
     @GetMapping("/campeonato/lista") 
-    public String mostrarCampeonatos(Model model) { // <-- Aceptar el objeto Model
+    public String mostrarCampeonatos(Model model) {
         
-        // La consulta SQL solo obtiene los campos que se mostrarán en la lista.
-        String sqlSelect = "SELECT id, nombre, fecha_inicio, fecha_fin, ubicacion FROM campeonato";
+        // 1. CONSULTA SQL MODIFICADA: Usamos JOIN para obtener el nombre del creador (u.nombreC)
+        String sqlSelect = "SELECT c.id, c.nombre, c.fecha_inicio, c.fecha_fin, c.ubicacion, u.nombreC AS nombre_creador " +
+                           "FROM campeonato c " +
+                           "INNER JOIN usuarios u ON c.id_admin = u.ID_documento";
         
         List<Campeonato> listaCampeonatos = new ArrayList<>();
 
@@ -93,9 +118,9 @@ public class ControladorCrearCampeonato {
             
             while (rs.next()) {
                 
-                // Creamos un objeto Campeonato simple (solo con los datos que necesitamos)
+                // Creamos un objeto Campeonato y leemos todos los datos
                 Campeonato camp = new Campeonato();
-                camp.setId(rs.getLong("id")); // Asumo que tienes el setter getId/setId
+                camp.setId(rs.getLong("id"));
                 camp.setNombre(rs.getString("nombre"));
                 
                 // Conversión de fechas a LocalDate
@@ -103,6 +128,9 @@ public class ControladorCrearCampeonato {
                 camp.setFechaFin(rs.getDate("fecha_fin").toLocalDate());
                 
                 camp.setUbicacion(rs.getString("ubicacion"));
+                
+                // 2. LEER EL NOMBRE DEL CREADOR USANDO EL ALIAS 'nombre_creador'
+                camp.setNombreCreador(rs.getString("nombre_creador"));
                 
                 listaCampeonatos.add(camp);
             }
@@ -114,11 +142,10 @@ public class ControladorCrearCampeonato {
             return "error-page";
         }
         
-        // 2. Adjuntar la lista al modelo de Spring
+        // Adjuntar la lista al modelo de Spring
         model.addAttribute("campeonatos", listaCampeonatos);
         
-        // 3. Devolver el nombre de la nueva plantilla HTML
-        return "campeonato/lista-campeonatos"; 
+        return "campeonato/lista-campeonatos";
     }
 
 }
