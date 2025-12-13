@@ -1,144 +1,73 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Lista de Campeonatos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
-        }
-
-        .campeonato-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #fff;
-        }
-
-        .campeonato-info {
-            flex: 1;
-        }
-
-        .campeonato-info h2 {
-            margin: 0 0 10px 0;
-            color: #007bff;
-            font-size: 1.4em;
-        }
-
-        .detalle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 5px 0;
-            color: #555;
-            font-size: 0.95em;
-        }
-
-        .detalle i {
-            width: 18px;
-            text-align: center;
-            color: #666;
-        }
-
-        .campeonato-acciones {
-            margin-left: 15px;
-            white-space: nowrap;
-        }
-
-        .btn-inscripcion {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 0.9em;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-inscripcion:hover {
-            background-color: #218838;
-        }
-    </style>
+    <head th:replace="~{fragments/global :: head(titulo='Campeonatos Disponibles - DidaMartials', archivoCss='/css/dashboard.css')}"></head>
+    <link rel="stylesheet" th:href="@{/css/lista-campeonatos.css}">
 </head>
-
 <body>
 
-<div class="container">
-    <h1>🗓️ Campeonatos Activos</h1>
-
-    <div th:each="campeonato : ${campeonatos}" class="campeonato-card">
-
-        <div class="campeonato-info">
-            <h2 th:text="${campeonato.nombre}">Nombre del Campeonato</h2>
-
-            <div class="detalle">
-                <i class="fas fa-user-tie"></i>
-                <span>
-                    <strong>Creado por:</strong>
-                    <span th:text="${campeonato.nombreCreador}">Creador</span>
-                </span>
-            </div>
-
-            <div class="detalle">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>
-                    <strong>Ubicación:</strong>
-                    <span th:text="${campeonato.ubicacion}">Ubicación</span>
-                </span>
-            </div>
-
-            <div class="detalle">
-                <i class="fas fa-calendar-alt"></i>
-                <span>
-                    <strong>Fechas:</strong>
-                    <span th:text="${#temporals.format(campeonato.fechaInicio, 'dd-MM-yyyy')}">Inicio</span>
-                    -
-                    <span th:text="${#temporals.format(campeonato.fechaFin, 'dd-MM-yyyy')}">Fin</span>
-                </span>
-            </div>
-        </div>
-
-        <div class="campeonato-acciones">
-            <a th:href="@{/inscripcion/{id}(id=${campeonato.id})}" class="btn-inscripcion">
-                <i class="fas fa-check-circle"></i> Inscribirse
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a th:href="@{/inicio}" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="nav-logo">
+                <span class="brand-text">DidaMartials</span>
             </a>
         </div>
+        <div class="nav-user">
+            <a th:href="@{/inicio}" class="btn-logout" title="Volver al inicio"><i class="fas fa-home"></i></a>
+        </div>
+    </nav>
 
+    <div class="dashboard-container">
+        
+        <div class="page-header centered">
+            <h2>Campeonatos Abiertos</h2>
+            <p>Explora los próximos eventos y asegura tu lugar en el tatami.</p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(campeonatos)}" class="empty-state-container">
+            <div class="empty-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <h3>No hay campeonatos disponibles</h3>
+            <p>Actualmente no hay eventos abiertos para inscripción. Vuelve a consultar pronto.</p>
+        </div>
+
+        <div class="championship-grid" th:unless="${#lists.isEmpty(campeonatos)}">
+            
+            <div class="champ-card" th:each="camp : ${campeonatos}">
+                
+                <div class="champ-card-top-accent"></div>
+                
+                <div class="champ-card-body">
+                    <h3 class="champ-title" th:text="${camp.nombre}">Nombre del Torneo</h3>
+                    
+                    <div class="champ-details">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt detail-icon"></i>
+                            <div>
+                                <span class="detail-label">Fechas:</span>
+                                <span th:text="|${camp.fechaInicio} al ${camp.fechaFin}|">01/01/2025 al 05/01/2025</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt detail-icon"></i>
+                            <div>
+                                <span class="detail-label">Sede:</span>
+                                <span th:text="${camp.ubicacion}">Coliseo Central</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="champ-card-footer">
+                    <a th:href="@{/inscripciones/{id}(id=${camp.id})}" class="btn-card-action">
+                        Inscribirse Ahora <i class="fas fa-arrow-right" style="margin-left: 8px; font-size: 0.9rem;"></i>
+                    </a>
+                </div>
+            </div>
+            </div>
     </div>
-
-    <div th:if="${#lists.isEmpty(campeonatos)}">
-        <p style="text-align: center; color: #888;">
-            No hay campeonatos disponibles en este momento.
-        </p>
-    </div>
-
-</div>
 
 </body>
 </html>

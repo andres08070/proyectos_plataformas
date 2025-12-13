@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Campeonatos - Agenda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .card-camp { transition: transform 0.2s; border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card-camp:hover { transform: translateY(-5px); }
+        .status-badge { position: absolute; top: 10px; right: 10px; }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark mb-5">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/inicio}"><i class="fas fa-arrow-left me-2"></i>Volver al Panel</a>
+        <span class="navbar-text text-white">Mi Agenda de Torneos</span>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold"><i class="fas fa-calendar-alt me-2 text-primary"></i>Mis Eventos</h2>
+        <a th:href="@{/CrearCampeonato}" class="btn btn-success btn-sm"><i class="fas fa-plus me-1"></i>Nuevo</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(misCampeonatos)}" class="text-center py-5">
+        <i class="fas fa-clipboard-list fa-4x text-muted mb-3"></i>
+        <h4 class="text-muted">No tienes campeonatos activos.</h4>
+        <p>Inscríbete en uno o crea tu propio torneo.</p>
+    </div>
+
+    <div class="row g-4" th:unless="${#lists.isEmpty(misCampeonatos)}">
+        <div class="col-md-6 col-lg-4" th:each="c : ${misCampeonatos}">
+            <div class="card h-100 card-camp">
+                <div class="card-body">
+                    <span class="badge bg-info status-badge">Organizador</span> <h5 class="card-title fw-bold mt-2" th:text="${c.nombre}">Torneo</h5>
+                    <p class="card-text text-muted small" th:text="${c.descripcion}">Desc...</p>
+                    
+                    <div class="d-flex align-items-center text-secondary mb-2">
+                        <i class="fas fa-map-marker-alt me-2"></i> <span th:text="${c.ubicacion}">Ubicación</span>
+                    </div>
+                    <div class="d-flex align-items-center text-secondary">
+                        <i class="far fa-calendar me-2"></i> 
+                        <span th:text="|${c.fechaInicio} - ${c.fechaFin}|">Fechas</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 pb-3">
+                    <a th:href="@{/mis-campeonatos/{id}(id=${c.id})}" class="btn btn-primary w-100">
+                        <i class="fas fa-cogs me-2"></i>Gestionar / Ver Detalles
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

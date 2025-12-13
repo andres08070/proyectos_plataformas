@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Campeonato</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/detalle-mis-campeonatos.css}">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/inicio}"><i class="fas fa-arrow-left me-2"></i>Volver al Inicio</a>
+        <div class="d-flex" th:if="${rolUsuario == 'CREADOR'}">
+            <a href="#" class="btn btn-outline-warning btn-sm me-2"><i class="fas fa-edit me-1"></i>Editar Torneo</a>
+            <a href="#" class="btn btn-outline-info btn-sm"><i class="fas fa-cogs me-1"></i>Administrar</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container pb-5">
+    
+    <div class="mb-5">
+        <h2 class="fw-bold mb-1" th:text="${campeonato.nombre}">Nombre del Campeonato</h2>
+        <p class="text-muted" th:text="${campeonato.descripcion}">Descripción del torneo...</p>
+        <span class="badge bg-primary" th:if="${rolUsuario == 'CREADOR'}">Eres el Organizador</span>
+        <span class="badge bg-danger" th:if="${rolUsuario == 'JUEZ'}">Rol: Juez</span>
+        <span class="badge bg-success" th:if="${rolUsuario == 'COMPETIDOR'}">Rol: Competidor</span>
+    </div>
+
+
+    <ul class="nav nav-pills nav-fill mb-4 gap-2 p-1 bg-white rounded-pill shadow-sm custom-tabs" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation" th:each="mod, stat : ${listaModalidades}">
+            <button th:class="'nav-link rounded-pill ' + (${stat.first} ? 'active' : '')" 
+                    th:id="'pills-' + ${stat.index} + '-tab'" 
+                    data-bs-toggle="pill" 
+                    th:data-bs-target="'#pills-' + ${stat.index}" 
+                    type="button" role="tab" 
+                    th:aria-controls="'pills-' + ${stat.index}" 
+                    th:aria-selected="${stat.first}"
+                    th:text="${mod}">Modalidad</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+        <div th:each="mod, stat : ${listaModalidades}" 
+             th:class="'tab-pane fade ' + (${stat.first} ? 'show active' : '')" 
+             th:id="'pills-' + ${stat.index}" 
+             role="tabpanel" 
+             th:aria-labelledby="'pills-' + ${stat.index} + '-tab'">
+            
+            <div class="row g-4">
+                <div class="col-12 text-center py-4 text-muted" th:if="${#lists.isEmpty(mapaCategorias.get(mod))}">
+                    <i class="fas fa-inbox fa-3x mb-3 opacity-25"></i>
+                    <p>Aún no se han definido categorías para esta modalidad.</p>
+                </div>
+
+                <div class="col-md-6 col-lg-4" th:each="cat : ${mapaCategorias.get(mod)}">
+                    <div class="card h-100 border-0 shadow-sm cat-card">
+                        <div class="card-header bg-white border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
+                            <h5 class="card-title fw-bold mb-0" th:text="${cat.nombre()}">Nombre Categoría</h5>
+                            <span class="badge bg-dark rounded-pill px-3">
+                                <i class="fas fa-users me-1"></i><span th:text="${cat.competidores().size()}">0</span>
+                            </span>
+                        </div>
+                        <div class="card-body px-4">
+                            <hr class="opacity-10">
+                            
+                            <div class="competitors-list mb-4">
+                                <h6 class="text-uppercase text-muted small fw-bold mb-3">Competidores</h6>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2 d-flex align-items-center" th:each="comp : ${cat.competidores()}">
+                                        <div class="avatar-small me-2 bg-secondary-subtle text-secondary">Does</div>
+                                        <div>
+                                            <span class="fw-medium" th:text="${comp.nombre()}">Nombre</span>
+                                            <small class="text-muted d-block">Edad: <span th:text="${comp.edad()}"></span> | <span th:text="${comp.club()}">Club</span></small>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="podium-section p-3 rounded-3 bg-light mb-3" th:if="${cat.oro() != null}">
+                                <h6 class="text-center text-uppercase small fw-bold mb-3" style="letter-spacing: 1px;">Resultados Oficiales</h6>
+                                <div class="d-flex justify-content-around text-center align-items-end podium-container">
+                                    <div class="podium-step silver" th:if="${cat.plata() != null}">
+                                        <div class="medal-icon mb-2"><i class="fas fa-medal fa-2x text-secondary"></i></div>
+                                        <small class="fw-bold d-block text-truncate" style="max-width: 80px;" th:text="${cat.plata().nombre()}">Plata</small>
+                                        <div class="step-block">2</div>
+                                    </div>
+                                    <div class="podium-step gold" th:if="${cat.oro() != null}">
+                                        <div class="medal-icon mb-2"><i class="fas fa-medal fa-3x text-warning"></i></div>
+                                        <span class="fw-bold d-block text-truncate" style="max-width: 90px;" th:text="${cat.oro().nombre()}">Oro</span>
+                                        <div class="step-block main">1</div>
+                                    </div>
+                                    <div class="podium-step bronze" th:if="${cat.bronce() != null}">
+                                        <div class="medal-icon mb-2"><i class="fas fa-medal fa-2x" style="color: #cd7f32;"></i></div>
+                                        <small class="fw-bold d-block text-truncate" style="max-width: 80px;" th:text="${cat.bronce().nombre()}">Bronce</small>
+                                        <div class="step-block">3</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="card-footer bg-white border-0 pb-4 px-4">
+                            <button th:if="${rolUsuario == 'JUEZ'}" class="btn btn-dark w-100 py-2 fw-medium">
+                                <i class="fas fa-clipboard-check me-2"></i>Calificar Categoría
+                            </button>
+
+                            <button th:if="${rolUsuario == 'CREADOR'}" class="btn btn-outline-primary w-100 py-2 fw-medium">
+                                <i class="fas fa-cogs me-2"></i>Gestionar Categoría
+                            </button>
+                            
+                            <button th:if="${(rolUsuario == 'COMPETIDOR' or rolUsuario == 'ESPECTADOR') and cat.oro() != null}" class="btn btn-outline-success w-100 py-2 fw-medium" disabled>
+                                <i class="fas fa-check-circle me-2"></i>Categoría Finalizada
+                            </button>
+                        </div>
+                    </div>
+                </div> </div> </div> </div> </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

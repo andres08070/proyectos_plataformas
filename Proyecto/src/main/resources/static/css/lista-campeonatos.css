@@ -1,0 +1,176 @@
+/* ==========================================================
+   ESTILOS PARA LISTA DE CAMPEONATOS (estilo DidaMartials)
+========================================================== */
+
+/* Encabezado de página */
+.page-header.centered {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.page-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-principal, #1a1a1a); /* Usa variable si existe, fallback a negro */
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.page-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* ================= GRID LAYOUT ================= */
+.championship-grid {
+    display: grid;
+    /* Crea columnas automáticas con un ancho mínimo de 320px */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    padding-bottom: 40px;
+}
+
+/* ================= DISEÑO DE TARJETA ================= */
+.champ-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eee;
+}
+
+/* Efecto Hover: Levantar y sombra roja */
+.champ-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 15px 35px rgba(183, 28, 28, 0.15); /* Sombra roja suave */
+    border-color: transparent;
+}
+
+/* Acento rojo superior en hover */
+.champ-card-top-accent {
+    height: 4px;
+    background: var(--color-acento, #b71c1c);
+    width: 0;
+    transition: width 0.4s ease;
+}
+.champ-card:hover .champ-card-top-accent {
+    width: 100%;
+}
+
+/* Cuerpo de la tarjeta */
+.champ-card-body {
+    padding: 25px;
+    flex-grow: 1; /* Ocupa el espacio disponible */
+}
+
+.champ-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    color: #222;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+/* Detalles (Icono + Texto) */
+.champ-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.detail-icon {
+    color: var(--color-acento, #b71c1c);
+    font-size: 1.1rem;
+    margin-top: 3px; /* Alineación óptica */
+}
+
+.detail-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.detail-item span:not(.detail-label) {
+    color: #555;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Pie de tarjeta y Botón */
+.champ-card-footer {
+    padding: 20px 25px;
+    background: #fcfcfc;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn-card-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--color-acento, #b71c1c);
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    transition: background-color 0.2s ease;
+}
+
+.btn-card-action:hover {
+    background-color: #8e1515; /* Un rojo un poco más oscuro */
+    color: white;
+}
+
+/* ================= ESTADO VACÍO ================= */
+.empty-state-container {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: 16px;
+    border: 2px dashed #e0e0e0;
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.empty-state-container h3 {
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.empty-state-container p {
+    color: #777;
+}
+
+/* Ajuste Responsive para móviles muy pequeños */
+@media (max-width: 480px) {
+    .championship-grid {
+        grid-template-columns: 1fr; /* Una sola columna */
+    }
+    .dashboard-container {
+        padding: 20px 15px;
+    }
+    .champ-title {
+        font-size: 1.2rem;
+    }
+}
