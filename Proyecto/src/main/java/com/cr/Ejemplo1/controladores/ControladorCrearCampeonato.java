@@ -4,7 +4,6 @@ import com.cr.Ejemplo1.BD;
 import com.cr.Ejemplo1.modelo.Campeonato;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.cr.Ejemplo1.util.SessionUtil;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -23,47 +22,34 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 public class ControladorCrearCampeonato {
-    
-     @Autowired
-    private SessionUtil sessionUtil;
 
     private static final Logger logger = LoggerFactory.getLogger(ControladorCrearCampeonato.class);
 
     // =====================================================================
-    // POST - GUARDAR CAMPEONATO (YA TIENE VERIFICACIÓN)
+    // POST - GUARDAR CAMPEONATO
     // =====================================================================
     @PostMapping("/guardar-campeonato")
-    public String guardarCampeonato(@ModelAttribute Campeonato campeonato, 
+    public String guardarCampeonato(@ModelAttribute Campeonato campeonato,
                                     HttpSession session,
                                     HttpServletResponse response) {
-        
+
         // 🔒 PREVENIR CACHE
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
-        
-        // Verificar sesión
-        String idCreadorString = (String) session.getAttribute("id");
-        if (idCreadorString == null) {
+
+        // ✅ VERIFICAR SESIÓN (CORRECTO)
+        Integer idCreador = (Integer) session.getAttribute("id");
+        if (idCreador == null) {
             logger.error("Usuario no logueado. Redirigiendo a login.");
             return "redirect:/auth/inicioSesion";
         }
 
-        // Resto del código original...
-        Integer idCreador;
-        try {
-            idCreador = Integer.parseInt(idCreadorString);
-        } catch (NumberFormatException e) {
-            logger.error("El ID de sesión no es un número válido: {}", idCreadorString, e);
-            return "redirect:/auth/inicioSesion";
-        }
-
-        logger.info("Iniciando guardado del Campeonato '{}' por el usuario ID: {}", 
-                   campeonato.getNombre(), idCreador);
+        logger.info("Iniciando guardado del Campeonato '{}' por el usuario ID: {}",
+                campeonato.getNombre(), idCreador);
 
         String sqlInsert = """
             INSERT INTO campeonato
@@ -102,110 +88,96 @@ public class ControladorCrearCampeonato {
     }
 
     // =====================================================================
-    // GET - LISTA DE CAMPEONATOS (CORREGIDO - VERIFICA SESIÓN)
+    // GET - LISTA DE CAMPEONATOS
     // =====================================================================
     @GetMapping("/campeonato/lista")
-public String mostrarCampeonatos(Model model, 
-                                 HttpServletResponse response, 
-                                 HttpSession session) {
-    
-    // 🔒 PREVENIR CACHE
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.setHeader("Pragma", "no-cache");
-    response.setHeader("Expires", "0");
-    
-    // ✅ VERIFICAR SI EL USUARIO TIENE SESIÓN ACTIVA
-    String idUsuarioStr = (String) session.getAttribute("id");
-    if (idUsuarioStr == null || idUsuarioStr.trim().isEmpty()) {
-        logger.warn("Intento de acceso no autorizado a /campeonato/lista");
-        
-        // Guardar la URL a la que intentaba acceder para redirigir después del login
-        session.setAttribute("redirectUrl", "/campeonato/lista");
-        
-        return "redirect:/auth/inicioSesion";
-    }
-    
-    int idUsuario;
-    try {
-        idUsuario = Integer.parseInt(idUsuarioStr);
-    } catch (NumberFormatException e) {
-        logger.error("El ID de sesión no es un número válido: {}", idUsuarioStr, e);
-        return "redirect:/auth/inicioSesion";
-    }
-    
-    logger.info("Usuario ID: {} accediendo a lista de campeonatos", idUsuario);
+    public String mostrarCampeonatos(Model model,
+                                     HttpServletResponse response,
+                                     HttpSession session) {
 
-    String sqlSelect = """
-        SELECT
-            c.id,
-            c.nombre,
-            c.fecha_inicio,
-            c.fecha_fin,
-            c.ubicacion,
-            u.nombreC AS nombre_creador
-        FROM campeonato c
-        INNER JOIN usuarios u ON c.id_admin = u.ID_documento
-        WHERE c.id_admin != ?   -- Excluir los campeonatos del usuario actual
-    """;
-
-    List<Campeonato> listaCampeonatos = new ArrayList<>();
-
-    try (Connection con = BD.conexion();
-         PreparedStatement stmt = con.prepareStatement(sqlSelect)) {
-
-        stmt.setInt(1, idUsuario);  // Establecer el parámetro
-
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            Campeonato camp = new Campeonato();
-            camp.setId(rs.getLong("id"));
-            camp.setNombre(rs.getString("nombre"));
-            camp.setFechaInicio(rs.getDate("fecha_inicio").toLocalDate());
-            camp.setFechaFin(rs.getDate("fecha_fin").toLocalDate());
-            camp.setUbicacion(rs.getString("ubicacion"));
-            camp.setNombreCreador(rs.getString("nombre_creador"));
-
-            listaCampeonatos.add(camp);
-        }
-
-    } catch (SQLException e) {
-        logger.error("Error al obtener campeonatos:", e);
-        model.addAttribute("errorMsg", "Error al cargar campeonatos.");
-        return "error-page";
-    }
-
-    model.addAttribute("campeonatos", listaCampeonatos);
-    return "campeonato/lista-campeonatos";
-}
-    
-    // =====================================================================
-    // GET - PÁGINA PARA CREAR CAMPEONATO (TAMBIÉN DEBE VERIFICAR SESIÓN)
-    // =====================================================================
-    @GetMapping("/CrearCampeonato")
-    public String mostrarFormularioCrear(Model model, 
-                                         HttpServletResponse response, 
-                                         HttpSession session) {
-        
         // 🔒 PREVENIR CACHE
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
-        
-        // ✅ VERIFICAR SESIÓN
-        String idUsuario = (String) session.getAttribute("id");
-        if (idUsuario == null || idUsuario.trim().isEmpty()) {
+
+        // ✅ VERIFICAR SESIÓN (CORRECTO)
+        Integer idUsuario = (Integer) session.getAttribute("id");
+        if (idUsuario == null) {
+            logger.warn("Intento de acceso no autorizado a /campeonato/lista");
+            session.setAttribute("redirectUrl", "/campeonato/lista");
+            return "redirect:/auth/inicioSesion";
+        }
+
+        logger.info("Usuario ID: {} accediendo a lista de campeonatos", idUsuario);
+
+        String sqlSelect = """
+            SELECT
+                c.id,
+                c.nombre,
+                c.fecha_inicio,
+                c.fecha_fin,
+                c.ubicacion,
+                u.nombreC AS nombre_creador
+            FROM campeonato c
+            INNER JOIN usuarios u ON c.id_admin = u.ID_documento
+            WHERE c.id_admin != ?
+        """;
+
+        List<Campeonato> listaCampeonatos = new ArrayList<>();
+
+        try (Connection con = BD.conexion();
+             PreparedStatement stmt = con.prepareStatement(sqlSelect)) {
+
+            stmt.setInt(1, idUsuario);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Campeonato camp = new Campeonato();
+                camp.setId(rs.getLong("id"));
+                camp.setNombre(rs.getString("nombre"));
+                camp.setFechaInicio(rs.getDate("fecha_inicio").toLocalDate());
+                camp.setFechaFin(rs.getDate("fecha_fin").toLocalDate());
+                camp.setUbicacion(rs.getString("ubicacion"));
+                camp.setNombreCreador(rs.getString("nombre_creador"));
+
+                listaCampeonatos.add(camp);
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error al obtener campeonatos:", e);
+            model.addAttribute("errorMsg", "Error al cargar campeonatos.");
+            return "error-page";
+        }
+
+        model.addAttribute("campeonatos", listaCampeonatos);
+        return "campeonato/lista-campeonatos";
+    }
+
+    // =====================================================================
+    // GET - PÁGINA CREAR CAMPEONATO
+    // =====================================================================
+    @GetMapping("/CrearCampeonato")
+    public String mostrarFormularioCrear(Model model,
+                                         HttpServletResponse response,
+                                         HttpSession session) {
+
+        // 🔒 PREVENIR CACHE
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+
+        // ✅ VERIFICAR SESIÓN (CORRECTO)
+        Integer idUsuario = (Integer) session.getAttribute("id");
+        if (idUsuario == null) {
             logger.warn("Intento de acceso no autorizado a /CrearCampeonato");
             session.setAttribute("redirectUrl", "/CrearCampeonato");
             return "redirect:/auth/inicioSesion";
         }
-        
+
         logger.info("Usuario ID: {} accediendo a CrearCampeonato", idUsuario);
-        
-        // Pasar un objeto campeonato vacío al formulario
+
         model.addAttribute("campeonato", new Campeonato());
         return "campeonato/CrearCampeonato";
     }
-    
-    
 }

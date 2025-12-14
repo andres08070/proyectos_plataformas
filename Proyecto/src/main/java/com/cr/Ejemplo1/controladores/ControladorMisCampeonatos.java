@@ -18,38 +18,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ControladorMisCampeonatos {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(ControladorMisCampeonatos.class);
-    
+
     @GetMapping("/campeonato/manage/mis-campeonatos")
-    public String mostrarMisCampeonatos(Model model, 
-                                        HttpServletResponse response, 
+    public String mostrarMisCampeonatos(Model model,
+                                        HttpServletResponse response,
                                         HttpSession session) {
-        
+
         // 🔒 PREVENIR CACHE
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
-        
-        // ✅ VERIFICAR SESIÓN
-        String idUsuarioStr = (String) session.getAttribute("id");
-        if (idUsuarioStr == null || idUsuarioStr.trim().isEmpty()) {
-            logger.warn("Intento de acceso no autorizado a /campeonato/mis-campeonatos");
-            session.setAttribute("redirectUrl", "/campeonato/mis-campeonatos");
+
+        // ✅ VERIFICAR SESIÓN (ID COMO INTEGER)
+        Integer idUsuario = (Integer) session.getAttribute("id");
+
+        if (idUsuario == null) {
+            logger.warn("Intento de acceso no autorizado a /campeonato/manage/mis-campeonatos");
+            session.setAttribute("redirectUrl", "/campeonato/manage/mis-campeonatos");
             return "redirect:/auth/inicioSesion";
         }
-        
-        int idUsuario;
-        try {
-            idUsuario = Integer.parseInt(idUsuarioStr);
-        } catch (NumberFormatException e) {
-            logger.error("El ID de sesión no es un número válido: {}", idUsuarioStr, e);
-            return "redirect:/auth/inicioSesion";
-        }
-        
+
         logger.info("Usuario ID: {} accediendo a sus campeonatos", idUsuario);
 
-        // ✅ CONSULTA PARA SOLO LOS CAMPEONATOS DEL USUARIO ACTUAL
+        // ✅ CONSULTA: SOLO CAMPEONATOS DEL USUARIO ACTUAL
         String sqlSelect = """
             SELECT
                 c.id,
@@ -60,7 +53,7 @@ public class ControladorMisCampeonatos {
                 u.nombreC AS nombre_creador
             FROM campeonato c
             INNER JOIN usuarios u ON c.id_admin = u.ID_documento
-            WHERE c.id_admin = ?   -- Solo los campeonatos del usuario actual
+            WHERE c.id_admin = ?
         """;
 
         List<Campeonato> misCampeonatos = new ArrayList<>();
@@ -85,7 +78,7 @@ public class ControladorMisCampeonatos {
             }
 
         } catch (SQLException e) {
-            logger.error("Error al obtener mis campeonatos:", e);
+            logger.error("Error al obtener mis campeonatos", e);
             model.addAttribute("errorMsg", "Error al cargar tus campeonatos.");
             return "error-page";
         }

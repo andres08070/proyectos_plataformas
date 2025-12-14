@@ -7,8 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,23 +39,21 @@ public class ControladorPrincipal {
     // ==========================================
     
     @GetMapping("/inicio")
-public String inicio(HttpServletResponse response, HttpSession session, Model model) {
-    // 🔒 Prevenir cache
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.setHeader("Pragma", "no-cache");
-    response.setHeader("Expires", "0");
-    
-    // ✅ Verificar sesión
-    String idUsuarioStr = (String) session.getAttribute("id");
-    if (idUsuarioStr == null || idUsuarioStr.trim().isEmpty()) {
-        return "redirect:/auth/inicioSesion";
-    }
-    
-    
-    return "dashboard/inicio";
-}
+    public String inicio(HttpServletResponse response, HttpSession session, Model model) {
+        // 🔒 Prevenir cache
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
 
-    
+        // ✅ Verificar sesión (ID COMO INTEGER)
+        Integer idUsuario = (Integer) session.getAttribute("id");
+        if (idUsuario == null) {
+            return "redirect:/auth/inicioSesion";
+        }
+
+        return "dashboard/inicio";
+    }
+
     // ==========================================
     // RUTAS DE ACCIÓN (POST)
     // ==========================================
@@ -84,16 +80,15 @@ public String inicio(HttpServletResponse response, HttpSession session, Model mo
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
-                // Login Exitoso: Guardar datos en sesión
+                // ✅ Login Exitoso: Guardar datos en sesión (TIPOS CORRECTOS)
                 session.setAttribute("usuarioLogueado", rs.getString("nombreC"));
                 session.setAttribute("rangoUsuario", rs.getString("cinturon_rango"));
-                session.setAttribute("id", rs.getString("ID_documento"));
-                System.out.println("Usuario logueado: " + session.getAttribute("id"));
+                session.setAttribute("id", rs.getInt("ID_documento")); // 👈 AQUÍ ESTABA EL ERROR
                 
-                // Redirigir al Dashboard
+                System.out.println("Usuario logueado con ID: " + session.getAttribute("id"));
+                
                 return "redirect:/inicio";
             } else {
-                // Login Fallido
                 model.addAttribute("msg", "Correo o contraseña incorrectos.");
                 return "auth/inicioSesion";
             }
@@ -115,9 +110,6 @@ public String inicio(HttpServletResponse response, HttpSession session, Model mo
         // Invalidar toda la sesión
         session.invalidate();
         
-        // Redirigir al login con parámetro de logout exitoso
         return "redirect:/auth/inicioSesion?logout=true";
     }
-    
-    
 }

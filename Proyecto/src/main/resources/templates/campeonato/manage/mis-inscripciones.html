@@ -6,166 +6,120 @@
 
 <body>
 
-    <nav class="navbar">
-        <div class="nav-brand">
-            <a th:href="@{/inicio}" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
-                <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="nav-logo">
-                <span class="brand-text">DidaMartials</span>
-            </a>
-        </div>
+<nav class="navbar">
+    <div class="nav-brand">
+        <a th:href="@{/inicio}" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+            <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="nav-logo">
+            <span class="brand-text">DidaMartials</span>
+        </a>
+    </div>
 
-        <div class="nav-user">
-            <a th:href="@{/inicio}" class="btn-secondary">
-                <i class="fas fa-home"></i> Volver al Inicio
-            </a>
-        </div>
-    </nav>
+    <div class="nav-user">
+        <a th:href="@{/inicio}" class="btn-secondary">
+            <i class="fas fa-home"></i> Volver al Inicio
+        </a>
+    </div>
+</nav>
 
-    <main class="dashboard-container">
-        
-        <header class="page-header centered">
-            <h2>Mis Inscripciones</h2>
-            <p>Revisa todos los campeonatos en los que estás participando.</p>
-        </header>
+<main class="dashboard-container">
 
-        <!-- Mensajes Flash -->
-        <div th:if="${mensajeExito}" class="alert alert-success" role="alert">
-            <i class="fas fa-check-circle"></i> <span th:text="${mensajeExito}"></span>
-        </div>
-        
-        <div th:if="${mensajeError}" class="alert alert-danger" role="alert">
-            <i class="fas fa-exclamation-circle"></i> <span th:text="${mensajeError}"></span>
-        </div>
+    <header class="page-header centered">
+        <h2>Mis Inscripciones</h2>
+        <p>Revisa todos los campeonatos en los que estás participando.</p>
+    </header>
 
-        <div th:if="${inscripciones != null and not #lists.isEmpty(inscripciones)}">
-            <div class="inscripciones-container">
-                <div class="inscripcion-card" th:each="inscripcion : ${inscripciones}">
-                    <div class="inscripcion-header">
-                        <h3 th:text="${inscripcion.nombreCampeonato}">Nombre del Campeonato</h3>
-                        <!-- Estado del campeonato -->
-                        <span class="inscripcion-estado" 
-                              th:text="${inscripcion.estado}"
-                              th:classappend="${inscripcion.estado == 'ACTIVA' ? 'estado-activa' : 
-                                             (inscripcion.estado == 'PENDIENTE' ? 'estado-pendiente' : 
-                                             (inscripcion.estado == 'FINALIZADA' ? 'estado-finalizada' : 
-                                             (inscripcion.estado == 'CANCELADA' ? 'estado-cancelada' : 'estado-otro')))}">
-                            Estado
-                        </span>
-                    </div>
-                    
-                    <div class="inscripcion-details">
-                        <!-- Información general del campeonato -->
-                        <div class="detail-row">
-                            <i class="fas fa-user-tag"></i>
-                            <div>
-                                <span class="detail-label">Tu Rol</span>
-                                <span th:text="${inscripcion.rol}">Competidor</span>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-row">
-                            <i class="fas fa-calendar-alt"></i>
-                            <div>
-                                <span class="detail-label">Fechas</span>
-                                <span>
-                                    <span th:text="${#dates.format(inscripcion.fechaInicio, 'dd/MM/yyyy')}">Inicio</span>
-                                    <span th:if="${inscripcion.fechaFin != null}"> al 
-                                    <span th:text="${#dates.format(inscripcion.fechaFin, 'dd/MM/yyyy')}">Fin</span></span>
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-row">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <div>
-                                <span class="detail-label">Ubicación</span>
-                                <span th:text="${inscripcion.ubicacion}">Coliseo Central</span>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-row">
-                            <i class="fas fa-user-check"></i>
-                            <div>
-                                <span class="detail-label">Organizador</span>
-                                <span th:text="${inscripcion.creadorNombre}">Nombre del Organizador</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Sección de modalidades inscritas -->
-                        <div class="modalidades-section">
-                            <div class="section-title">
-                                <i class="fas fa-layer-group"></i>
-                                <h4>Modalidades Inscritas (<span th:text="${#lists.size(inscripcion.modalidades)}">0</span>)</h4>
-                            </div>
+    <!-- Mensajes Flash -->
+    <div th:if="${mensajeExito}" class="alert alert-success">
+        <i class="fas fa-check-circle"></i> <span th:text="${mensajeExito}"></span>
+    </div>
 
-                            <div class="modalidades-grid" th:if="${#lists.size(inscripcion.modalidades) > 0}">
-                                <div class="modalidad-item" th:each="modalidad : ${inscripcion.modalidades}">
-                                    <div class="modalidad-header">
-                                        <strong th:text="${modalidad.name}">Nombre Modalidad</strong>
-                                        <span class="modalidad-id" th:text="${modalidad.idModalidad}">ID</span>
-                                    </div>
+    <div th:if="${mensajeError}" class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> <span th:text="${mensajeError}"></span>
+    </div>
 
-                                    <div class="modalidad-details" th:if="${modalidad.desc != null and not #strings.isEmpty(modalidad.desc)}">
-                                        <span class="modalidad-desc" th:text="${modalidad.desc}">Descripción</span>
-                                    </div>
+    <div th:if="${inscripciones != null and not #lists.isEmpty(inscripciones)}">
+        <div class="inscripciones-container">
+            <div class="inscripcion-card" th:each="inscripcion : ${inscripciones}">
 
-                                    <div class="modalidad-extra">
-                                        <span class="badge" th:if="${modalidad.genero != null and not #strings.isEmpty(modalidad.genero)}"
-                                              th:text="${modalidad.genero}">Género</span>
+                <div class="inscripcion-header">
+                    <h3 th:text="${inscripcion['nombreCampeonato']}">Nombre</h3>
 
-                                        <!-- Para peso: iteramos sobre la lista -->
-                                        <div th:if="${modalidad.peso != null and #lists.size(modalidad.peso) > 0}">
-                                            <span class="badge-label">Peso:</span>
-                                            <span th:each="p : ${modalidad.peso}" class="badge">
-                                                <span th:text="${p}"></span>
-                                            </span>
-                                        </div>
-
-                                        <!-- Para rango: iteramos sobre la lista -->
-                                        <div th:if="${modalidad.rango != null and #lists.size(modalidad.rango) > 0}">
-                                            <span class="badge-label">Rango:</span>
-                                            <span th:each="r : ${modalidad.rango}" class="badge">
-                                                <span th:text="${r}"></span>
-                                            </span>
-                                        </div>
-
-                                        <!-- Para edad: iteramos sobre la lista -->
-                                        <div th:if="${modalidad.edad != null and #lists.size(modalidad.edad) > 0}">
-                                            <span class="badge-label">Edad:</span>
-                                            <span th:each="e : ${modalidad.edad}" class="badge">
-                                                <span th:text="${e}"></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    
-                    <div class="inscripcion-actions">
-                        <a th:href="@{/inscripciones/{id}(id=${inscripcion.idCampeonato})}" class="btn-card-action">
-                            <i class="fas fa-eye"></i> Ver Detalles del Campeonato
-                        </a>
-                        <a th:href="@{/campeonato/manage/mis-campeonatos}" class="btn-card-action btn-secondary">
-                            <i class="fas fa-list"></i> Gestionar Campeonatos
-                        </a>
-                    </div>
+                    <span class="inscripcion-estado"
+                          th:text="${inscripcion['estado']}"
+                          th:classappend="${inscripcion['estado'] == 'ACTIVA' ? 'estado-activa' :
+                                          (inscripcion['estado'] == 'PENDIENTE' ? 'estado-pendiente' :
+                                          (inscripcion['estado'] == 'FINALIZADA' ? 'estado-finalizada' :
+                                          (inscripcion['estado'] == 'CANCELADA' ? 'estado-cancelada' : 'estado-otro')))}">
+                    </span>
                 </div>
-            </div>
-        </div>
-        
-        <div th:if="${inscripciones == null or #lists.isEmpty(inscripciones)}" class="empty-state-container">
-            <div class="empty-icon">
-                <i class="fas fa-clipboard-list"></i>
-            </div>
-            <h3>No tienes inscripciones</h3>
-            <p>¡Aún no te has inscrito en ningún campeonato! Explora los campeonatos disponibles y participa.</p>
-            <a th:href="@{/campeonato/lista}" class="btn-primary">
-                <i class="fas fa-search"></i> Explorar Campeonatos
-            </a>
-        </div>
 
-    </main>
+                <div class="inscripcion-details">
+
+                    <div class="detail-row">
+                        <i class="fas fa-user-tag"></i>
+                        <div>
+                            <span class="detail-label">Tu Rol</span>
+                            <span th:text="${inscripcion['rol']}"></span>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <i class="fas fa-calendar-alt"></i>
+                        <div>
+                            <span class="detail-label">Fechas</span>
+                            <span th:text="${#dates.format(inscripcion['fechaInicio'], 'dd/MM/yyyy')}"></span>
+                            <span th:if="${inscripcion['fechaFin'] != null}">
+                                al <span th:text="${#dates.format(inscripcion['fechaFin'], 'dd/MM/yyyy')}"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <span class="detail-label">Ubicación</span>
+                            <span th:text="${inscripcion['ubicacion']}"></span>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <i class="fas fa-user-check"></i>
+                        <div>
+                            <span class="detail-label">Organizador</span>
+                            <span th:text="${inscripcion['creadorNombre']}"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="inscripcion-actions">
+                    <a th:href="@{/inscripciones/{id}(id=${inscripcion['idCampeonato']})}"
+                       class="btn-card-action">
+                        <i class="fas fa-eye"></i> Ver Detalles del Campeonato
+                    </a>
+
+                    <a th:href="@{/campeonato/manage/mis-campeonatos}"
+                       class="btn-card-action btn-secondary">
+                        <i class="fas fa-list"></i> Gestionar Campeonatos
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${inscripciones == null or #lists.isEmpty(inscripciones)}"
+         class="empty-state-container">
+        <div class="empty-icon">
+            <i class="fas fa-clipboard-list"></i>
+        </div>
+        <h3>No tienes inscripciones</h3>
+        <p>¡Aún no te has inscrito en ningún campeonato!</p>
+        <a th:href="@{/campeonato/lista}" class="btn-primary">
+            <i class="fas fa-search"></i> Explorar Campeonatos
+        </a>
+    </div>
+
+</main>
 </body>
 </html>
