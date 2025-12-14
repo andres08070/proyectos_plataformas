@@ -1,113 +1,95 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Inscripciones</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; background-color: #f4f7f6; }
-        .contenedor-principal { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-        h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        .tarjeta-inscripcion { 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            padding: 15px; 
-            margin-bottom: 20px; 
-            background-color: #fff;
-            transition: transform 0.2s;
-        }
-        .tarjeta-inscripcion:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        .tarjeta-inscripcion h2 { color: #007bff; margin-top: 0; }
-        .tarjeta-inscripcion h3 { color: #555; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 15px; }
-        .tabla-modalidad { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .tabla-modalidad th, .tabla-modalidad td { border: 1px solid #eee; padding: 8px; text-align: left; }
-        .tabla-modalidad th { background-color: #f8f8f8; width: 30%; }
-        .btn-detalle { 
-            display: inline-block; 
-            padding: 8px 15px; 
-            background-color: #28a745; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 4px; 
-            margin-top: 10px;
-        }
-        .mensaje-vacio { padding: 15px; background-color: #ffc107; color: #333; border-radius: 4px; }
-    </style>
+    <head th:replace="~{fragments/global :: head(titulo='Mis Campeonatos - DidaMartials', archivoCss='/css/dashboard.css')}"></head>
+    <link rel="stylesheet" th:href="@{/css/lista-campeonatos.css}">
 </head>
 <body>
-    <div class="contenedor-principal">
-        <h1>Mis Inscripciones</h1>
 
-        <div th:if="${#lists.isEmpty(inscripciones)}" class="mensaje-vacio">
-            <p>Aún no te has inscrito a ningún campeonato o modalidad.</p>
-            <a href="/campeonatos/listar">Buscar campeonatos</a>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a th:href="@{/inicio}" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="nav-logo">
+                <span class="brand-text">DidaMartials</span>
+            </a>
+        </div>
+        <div class="nav-user">
+            <a th:href="@{/inicio}" class="btn-secondary" title="Volver al inicio">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        
+        <div class="page-header centered">
+            <h2>Mis Campeonatos</h2>
+            <p>Gestiona los campeonatos que has creado.</p>
+            
+            <!-- Botón para crear nuevo campeonato -->
+            <div class="action-buttons" style="margin-top: 20px;">
+                <a th:href="@{/CrearCampeonato}" class="btn-primary">
+                    <i class="fas fa-plus"></i> Crear Nuevo Campeonato
+                </a>
+            </div>
         </div>
 
-        <div th:each="inscripcion : ${inscripciones}" class="tarjeta-inscripcion">
-            
-            <h2>
-                <span th:text="${inscripcion.nombreCampeonato}">Nombre del Campeonato</span> 
-                <small>(ID: <span th:text="${inscripcion.idCampeonato}">1</span>)</small>
-            </h2>
-            <p><strong>Ubicación:</strong> <span th:text="${inscripcion.ubicacion}"></span></p>
-            <p>
-                <strong>Fecha de Inicio:</strong> 
-                <span th:text="${#dates.format(inscripcion.fechaInicio, 'dd-MM-yyyy')}"></span>
-            </p>
-            
-            <div th:with="modalidad=${inscripcion.modalidad}">
-
-                <h3>Detalle de la Modalidad Inscrita</h3>
-                
-                <table class="tabla-modalidad">
-                    <tbody>
-                        <tr>
-                            <th>Nombre</th>
-                            <td th:text="${modalidad.name}">[Nombre Modalidad]</td>
-                        </tr>
-
-                        <tr th:if="${modalidad.desc != null and !modalidad.desc.isEmpty()}">
-                            <th>Descripción</th>
-                            <td th:text="${modalidad.desc}">[Descripción]</td>
-                        </tr>
-
-                        <tr th:if="${modalidad.peso != null and !modalidad.peso.isEmpty()}">
-                            <th>Peso(s)</th>
-                            <td th:text="${#strings.listJoin(modalidad.peso, ', ')}">[Pesos]</td>
-                        </tr>
-                        
-                        <tr th:if="${modalidad.rango != null and !modalidad.rango.isEmpty()}">
-                            <th>Rango(s)</th>
-                            <td th:text="${#strings.listJoin(modalidad.rango, ', ')}">[Rangos]</td>
-                        </tr>
-                        
-                        <tr th:if="${modalidad.edad != null and !modalidad.edad.isEmpty()}">
-                            <th>Edad(es)</th>
-                            <td th:text="${#strings.listJoin(modalidad.edad, ', ')}">[Edades]</td>
-                        </tr>
-                        
-                        <tr th:if="${modalidad.genero != null and !modalidad.genero.isEmpty()}">
-                            <th>Género</th>
-                            <td th:text="${modalidad.genero}">[Género]</td>
-                        </tr>
-                        
-                        <tr>
-                            <th>ID Modalidad (Técnico)</th>
-                            <td th:text="${modalidad.idModalidad}">[mod_12345]</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div th:if="${#lists.isEmpty(campeonatos)}" class="empty-state-container">
+            <div class="empty-icon">
+                <i class="fas fa-trophy"></i>
             </div>
-
-            <a th:href="@{/inscripciones/{id}(id=${inscripcion.idCampeonato})}" class="btn-detalle">
-                Ver Detalles del Campeonato
+            <h3>Aún no has creado ningún campeonato</h3>
+            <p>Crea tu primer campeonato para organizar eventos y permitir que otros se inscriban.</p>
+            <a th:href="@{/CrearCampeonato}" class="btn-primary">
+                <i class="fas fa-plus"></i> Crear Mi Primer Campeonato
             </a>
+        </div>
 
-            <hr>
+        <div class="championship-grid" th:unless="${#lists.isEmpty(campeonatos)}">
+            
+            <div class="champ-card" th:each="camp : ${campeonatos}">
+                
+                <div class="champ-card-top-accent"></div>
+                
+                <div class="champ-card-body">
+                    <h3 class="champ-title" th:text="${camp.nombre}">Nombre del Torneo</h3>
+                    
+                    <div class="champ-creator">
+                        <i class="fas fa-user-check"></i>
+                        <span><strong>¡Este es tu campeonato!</strong></span>
+                    </div>
+                    
+                    <div class="champ-details">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt detail-icon"></i>
+                            <div>
+                                <span class="detail-label">Fechas:</span>
+                                <span th:text="|${camp.fechaInicio} al ${camp.fechaFin}|">01/01/2025 al 05/01/2025</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt detail-icon"></i>
+                            <div>
+                                <span class="detail-label">Sede:</span>
+                                <span th:text="${camp.ubicacion}">Coliseo Central</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="champ-card-footer">
+                    <div class="card-footer-buttons">
+                        <a th:href="@{/campeonato/detalle-mis-campeonatos/{id}(id=${camp.id})}" class="btn-card-action">
+                            <i class="fas fa-eye"></i> Ver Detalles
+                        </a>
+                        <a th:href="@{/campeonato/manage/dashboardCampeonato?id={id}(id=${camp.id})}" class="btn-card-action btn-manage">
+                            <i class="fas fa-cog"></i> Gestionar
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </body>
 </html>

@@ -1,0 +1,367 @@
+/* ==========================================================
+   ESTILOS PARA MIS INSCRIPCIONES
+========================================================== */
+
+/* Variables de colores */
+:root {
+    --color-principal: #1a1a1a;
+    --color-acento: #b71c1c;
+    --color-blanco: #ffffff;
+    --color-fondo: #f8f9fa;
+    --color-borde: #dee2e6;
+    --color-texto: #333333;
+    --color-texto-secundario: #666666;
+    --color-hover: #8e1515;
+    --sombra-suave: 0 2px 8px rgba(0,0,0,0.1);
+    --sombra-fuerte: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Contenedor principal */
+.inscripciones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Tarjeta de inscripción */
+.inscripcion-card {
+    background: var(--color-blanco);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: var(--sombra-suave);
+    border: 1px solid var(--color-borde);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.inscripcion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(183, 28, 28, 0.1);
+    border-color: var(--color-acento);
+}
+
+/* Acento superior rojo */
+.inscripcion-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--color-acento);
+    border-radius: 12px 12px 0 0;
+}
+
+.inscripcion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.inscripcion-header h3 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-principal);
+    font-size: 1.4rem;
+    margin: 0;
+    font-weight: 600;
+    flex: 1;
+}
+
+/* Estados de inscripción */
+.inscripcion-estado {
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.estado-aprobado {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.estado-pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.estado-rechazado {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.estado-otro {
+    background-color: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+}
+
+/* Detalles de la inscripción */
+.inscripcion-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.detail-row i {
+    color: var(--color-acento);
+    font-size: 1.1rem;
+    margin-top: 3px;
+    min-width: 20px;
+}
+
+.detail-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.detail-row span:not(.detail-label) {
+    color: var(--color-texto);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Botones de acción */
+.inscripcion-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-card-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 25px;
+    background-color: var(--color-acento);
+    color: var(--color-blanco);
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-acento);
+}
+
+.btn-card-action:hover {
+    background-color: var(--color-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(183, 28, 28, 0.2);
+}
+
+/* Estado vacío */
+.empty-state-container {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-blanco);
+    border-radius: 16px;
+    border: 2px dashed #e0e0e0;
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: var(--color-acento);
+    margin-bottom: 20px;
+    opacity: 0.7;
+}
+
+.empty-state-container h3 {
+    color: var(--color-principal);
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.empty-state-container p {
+    color: var(--color-texto-secundario);
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+}
+
+/* Botón primario */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--color-acento);
+    color: var(--color-blanco);
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: var(--sombra-suave);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-fuerte);
+}
+
+/* Botón secundario */
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background-color: var(--color-blanco);
+    color: var(--color-acento);
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-acento);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-acento);
+    color: var(--color-blanco);
+    transform: translateY(-2px);
+}
+
+/* Sección de inscripciones en dashboard */
+.inscripciones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.section-header h2 {
+    margin: 0;
+}
+
+.link-action {
+    color: var(--color-acento);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+.link-action:hover {
+    color: var(--color-hover);
+    gap: 8px;
+}
+
+/* Estado vacío en dashboard */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--color-blanco);
+    border-radius: 12px;
+    border: 2px dashed #e0e0e0;
+}
+
+.empty-state i {
+    color: var(--color-acento);
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.empty-state h3 {
+    color: var(--color-principal);
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.empty-state p {
+    color: var(--color-texto-secundario);
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+/* Botón de acción */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--color-acento);
+    color: var(--color-blanco);
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-acento);
+}
+
+.btn-action:hover {
+    background-color: var(--color-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(183, 28, 28, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .inscripcion-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .inscripcion-details {
+        grid-template-columns: 1fr;
+    }
+    
+    .inscripcion-actions {
+        justify-content: center;
+    }
+    
+    .btn-card-action {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .inscripciones-grid {
+        grid-template-columns: 1fr;
+    }
+}

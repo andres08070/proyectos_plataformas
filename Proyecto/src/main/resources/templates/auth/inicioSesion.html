@@ -10,6 +10,11 @@
         <a th:href="@{/}" class="btn-back" title="Volver al inicio">
             <i class="fas fa-arrow-left fa-2x"></i>
         </a>
+        
+        <div th:if="${param.logout != null}" class="alert alert-info">
+            <i class="fas fa-check-circle"></i>
+            <p>Sesión cerrada exitosamente.</p>
+        </div>
 
         <header class="header">
             <a th:href="@{/}" title="Ir a la página principal">
@@ -48,5 +53,25 @@
         
         <p th:text="${msg}" style="color: var(--color-alerta); margin-top: 10px; text-align: center; "></p>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Efecto de focus en inputs
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                input.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.parentElement.classList.remove('focused');
+                    }
+                });
+            });
+
+            // Mostrar/ocultar contraseña (opcional, podrías añadir un icono)
+            // Si quieres añadir un ojo para mostrar contraseña, puedes hacerlo aquí
+        });
+    </script>
 </body>
 </html>

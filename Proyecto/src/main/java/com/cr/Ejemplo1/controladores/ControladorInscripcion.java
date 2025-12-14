@@ -6,6 +6,7 @@ import com.cr.Ejemplo1.modelo.ModalidadData;
 import com.fasterxml.jackson.databind.ObjectMapper; 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,115 +38,126 @@ public class ControladorInscripcion {
     // Métodos auxiliares (se mantienen al final de la clase)
 
     @GetMapping("/inscripciones/{id}")
-    public String mostrarDetalleCampeonato(@PathVariable("id") Long id, Model model,HttpSession session) {
-
-        Campeonato campeonato = null;
-        List<Map<String, String>> modalidadesProcesadas = new ArrayList<>();
-
-        // 1️⃣ Obtener id del usuario desde sesión
-        String idUsuario = (String) session.getAttribute("id");
-        if (idUsuario == null) {
-            return "redirect:/login";
-        }
-
-        String sqlSelect = "SELECT c.id, c.nombre, c.ubicacion, c.json_modalidades, " +
-                           "u.nombreC AS nombre_creador " +
-                           "FROM campeonato c " +
-                           "INNER JOIN usuarios u ON c.id_admin = u.ID_documento " +
-                           "WHERE c.id = ?";
-
-        String sqlModalidadesInscritas =
-            "SELECT id_modalidad FROM campeonatos_inscripcion " +
-            "WHERE id_campeonato = ? AND id_usuario = ?";
-
-        try (Connection con = BD.conexion();
-             PreparedStatement stmt = con.prepareStatement(sqlSelect)) {
-
-            // ===========================
-            // 2️⃣ Modalidades ya inscritas
-            // ===========================
-            Set<String> modalidadesInscritas = new HashSet<>();
-
-            try (PreparedStatement ps = con.prepareStatement(sqlModalidadesInscritas)) {
-                ps.setLong(1, id);
-                ps.setString(2, idUsuario);
-
-                ResultSet rsModalidades = ps.executeQuery();
-                while (rsModalidades.next()) {
-                    modalidadesInscritas.add(rsModalidades.getString("id_modalidad"));
-                }
-            }
-
-            // ===========================
-            // 3️⃣ Obtener campeonato
-            // ===========================
-            stmt.setLong(1, id);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (!rs.next()) {
-                    model.addAttribute("errorMsg", "Campeonato no encontrado.");
-                    return "error-page";
-                }
-
-                campeonato = new Campeonato();
-                campeonato.setId(rs.getLong("id"));
-                campeonato.setNombre(rs.getString("nombre"));
-                campeonato.setUbicacion(rs.getString("ubicacion"));
-                campeonato.setNombreCreador(rs.getString("nombre_creador"));
-
-                String jsonModalidades = rs.getString("json_modalidades");
-
-                if (jsonModalidades != null && !jsonModalidades.trim().isEmpty()) {
-
-                    JsonNode rootNode = objectMapper.readTree(jsonModalidades);
-
-                    // ===========================
-                    // 4️⃣ Procesar JSON filtrando
-                    // ===========================
-                    rootNode.fields().forEachRemaining(entry -> {
-                        String idModalidad = entry.getKey();
-
-                        // ❌ Ya inscrito → no mostrar
-                        if (modalidadesInscritas.contains(idModalidad)) {
-                            return;
-                        }
-
-                        JsonNode modalidadNode = entry.getValue();
-                        Map<String, String> modalidadLimpia = new LinkedHashMap<>();
-                        modalidadLimpia.put("idModalidad", idModalidad);
-
-                        String nombre = getStringValue(modalidadNode, "name");
-                        String descripcion = getStringValue(modalidadNode, "desc");
-                        String peso = getArrayValue(modalidadNode, "peso");
-                        String rango = getArrayValue(modalidadNode, "rango");
-                        String edad = getArrayValue(modalidadNode, "edad");
-                        String genero = getStringValue(modalidadNode, "genero");
-
-                        if (!nombre.isEmpty()) modalidadLimpia.put("Nombre", nombre);
-                        if (!descripcion.isEmpty()) modalidadLimpia.put("Descripción", descripcion);
-                        if (!peso.isEmpty()) modalidadLimpia.put("Peso(s)", peso);
-                        if (!rango.isEmpty()) modalidadLimpia.put("Rango(s)", rango);
-                        if (!edad.isEmpty()) modalidadLimpia.put("Edad(es)", edad);
-                        if (!genero.isEmpty()) modalidadLimpia.put("Género", genero);
-
-                        if (modalidadLimpia.size() > 1) {
-                            modalidadesProcesadas.add(modalidadLimpia);
-                        }
-                    });
-                }
-
-                model.addAttribute("campeonato", campeonato);
-                model.addAttribute("modalidades", modalidadesProcesadas);
-            }
-
-        } catch (Exception e) {
-            logger.error("Error al cargar inscripciones:", e);
-            model.addAttribute("errorMsg", "Error al cargar las inscripciones.");
-            return "error-page";
-        }
-
-        return "campeonato/manage/Inscripciones";
+public String mostrarDetalleCampeonato(@PathVariable("id") Long id, Model model, HttpSession session, HttpServletResponse response) {
+    
+    // 🔒 PREVENIR CACHE PARA EVITAR "VOLVER ATRÁS"
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Expires", "0");
+    
+    // 1️⃣ Verificar sesión primero
+    String idUsuario = (String) session.getAttribute("id");
+    if (idUsuario == null) {
+        return "redirect:/auth/inicioSesion";
     }
+    
+    Campeonato campeonato = null;
+    List<Map<String, String>> modalidadesProcesadas = new ArrayList<>();
+
+    // 🔧 CONSULTA SQL PARA OBTENER DATOS DEL CAMPEONATO
+    String sqlSelect = "SELECT c.id, c.nombre, c.ubicacion, c.json_modalidades, " +
+                       "c.fecha_inicio, c.fecha_fin, c.num_areas, " +
+                       "u.nombreC AS nombre_creador " +
+                       "FROM campeonato c " +
+                       "INNER JOIN usuarios u ON c.id_admin = u.ID_documento " +
+                       "WHERE c.id = ?";
+
+    // CONSULTA PARA OBTENER LAS MODALIDADES EN LAS QUE YA ESTÁ INSCRITO EL USUARIO
+    String sqlModalidadesInscritas =
+        "SELECT id_modalidad FROM campeonatos_inscripcion " +
+        "WHERE id_campeonato = ? AND id_usuario = ?";
+
+    try (Connection con = BD.conexion();
+         PreparedStatement stmt = con.prepareStatement(sqlSelect)) {
+
+        // ===========================
+        // 2️⃣ Modalidades ya inscritas
+        // ===========================
+        Set<String> modalidadesInscritas = new HashSet<>();
+
+        try (PreparedStatement ps = con.prepareStatement(sqlModalidadesInscritas)) {
+            ps.setLong(1, id);
+            ps.setString(2, idUsuario);
+
+            ResultSet rsModalidades = ps.executeQuery();
+            while (rsModalidades.next()) {
+                modalidadesInscritas.add(rsModalidades.getString("id_modalidad"));
+            }
+        }
+
+        // ===========================
+        // 3️⃣ Obtener campeonato CON TODOS LOS DATOS
+        // ===========================
+        stmt.setLong(1, id);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (!rs.next()) {
+                model.addAttribute("errorMsg", "Campeonato no encontrado.");
+                return "error-page";
+            }
+
+            campeonato = new Campeonato();
+            campeonato.setId(rs.getLong("id"));
+            campeonato.setNombre(rs.getString("nombre"));
+            campeonato.setUbicacion(rs.getString("ubicacion"));
+            campeonato.setNombreCreador(rs.getString("nombre_creador"));
+            campeonato.setFechaInicio(rs.getDate("fecha_inicio").toLocalDate());
+            campeonato.setFechaFin(rs.getDate("fecha_fin").toLocalDate());
+            campeonato.setNumAreas(rs.getInt("num_areas"));
+
+            String jsonModalidades = rs.getString("json_modalidades");
+
+            if (jsonModalidades != null && !jsonModalidades.trim().isEmpty()) {
+
+                JsonNode rootNode = objectMapper.readTree(jsonModalidades);
+
+                // ===========================
+                // 4️⃣ Procesar JSON filtrando las ya inscritas
+                // ===========================
+                rootNode.fields().forEachRemaining(entry -> {
+                    String idModalidad = entry.getKey();
+
+                    // ❌ Ya inscrito → no mostrar
+                    if (modalidadesInscritas.contains(idModalidad)) {
+                        return;
+                    }
+
+                    JsonNode modalidadNode = entry.getValue();
+                    Map<String, String> modalidadLimpia = new LinkedHashMap<>();
+                    modalidadLimpia.put("idModalidad", idModalidad);
+
+                    String nombre = getStringValue(modalidadNode, "name");
+                    String descripcion = getStringValue(modalidadNode, "desc");
+                    String peso = getArrayValue(modalidadNode, "peso");
+                    String rango = getArrayValue(modalidadNode, "rango");
+                    String edad = getArrayValue(modalidadNode, "edad");
+                    String genero = getStringValue(modalidadNode, "genero");
+
+                    if (!nombre.isEmpty()) modalidadLimpia.put("Nombre", nombre);
+                    if (!descripcion.isEmpty()) modalidadLimpia.put("Descripción", descripcion);
+                    if (!peso.isEmpty()) modalidadLimpia.put("Peso(s)", peso);
+                    if (!rango.isEmpty()) modalidadLimpia.put("Rango(s)", rango);
+                    if (!edad.isEmpty()) modalidadLimpia.put("Edad(es)", edad);
+                    if (!genero.isEmpty()) modalidadLimpia.put("Género", genero);
+
+                    if (modalidadLimpia.size() > 1) {
+                        modalidadesProcesadas.add(modalidadLimpia);
+                    }
+                });
+            }
+
+            model.addAttribute("campeonato", campeonato);
+            model.addAttribute("modalidades", modalidadesProcesadas);
+        }
+
+    } catch (Exception e) {
+        logger.error("Error al cargar inscripciones:", e);
+        model.addAttribute("errorMsg", "Error al cargar las inscripciones.");
+        return "error-page";
+    }
+
+    return "campeonato/manage/inscripciones";
+}
 
 
     /**
@@ -175,59 +187,65 @@ public class ControladorInscripcion {
         return "";
     }
     @PostMapping("/inscripciones/inscribir")
-    public String inscribirUsuarioModalidad(
-            @RequestParam("idCampeonato") Long idCampeonato,
-            @RequestParam("idModalidad") String idModalidad,
-            HttpSession session,
-            RedirectAttributes redirectAttributes
-    ) {
+public String inscribirUsuarioModalidad(
+        @RequestParam("idCampeonato") Long idCampeonato,
+        @RequestParam("idModalidad") String idModalidad,
+        HttpSession session,
+        RedirectAttributes redirectAttributes
+) {
 
-        Object idSesion = session.getAttribute("id");
+    Object idSesion = session.getAttribute("id");
 
-        if (idSesion == null) {
-            redirectAttributes.addFlashAttribute(
-                    "mensajeError",
-                    "Debes iniciar sesión para inscribirte."
-            );
-            return "redirect:/login";
-        }
-
-        Long idUsuario = Long.valueOf(idSesion.toString());
-
-        System.out.println("📝 INSCRIPCIÓN");
-        System.out.println("Campeonato: " + idCampeonato);
-        System.out.println("Usuario: " + idUsuario);
-        System.out.println("Modalidad: " + idModalidad);
-
-        String sqlInsert = """
-            INSERT INTO campeonatos_inscripcion
-            (id_campeonato, id_usuario, id_modalidad)
-            VALUES (?, ?, ?)
-        """;
-
-        try (
-            Connection con = BD.conexion();
-            PreparedStatement stmt = con.prepareStatement(sqlInsert)
-        ) {
-
-            stmt.setLong(1, idCampeonato);
-            stmt.setLong(2, idUsuario);
-            stmt.setString(3, idModalidad);
-
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            logger.error("❌ Error al guardar la inscripción", e);
-            redirectAttributes.addFlashAttribute(
-                    "mensajeError",
-                    "No se pudo completar la inscripción."
-            );
-        }
-
-        return "redirect:/inicio";
+    if (idSesion == null) {
+        redirectAttributes.addFlashAttribute(
+                "mensajeError",
+                "Debes iniciar sesión para inscribirte."
+        );
+        return "redirect:/auth/inicioSesion";
     }
 
-    @GetMapping("/mis-inscripciones")
+    Long idUsuario = Long.valueOf(idSesion.toString());
+
+    System.out.println("📝 INSCRIPCIÓN");
+    System.out.println("Campeonato: " + idCampeonato);
+    System.out.println("Usuario: " + idUsuario);
+    System.out.println("Modalidad: " + idModalidad);
+
+    String sqlInsert = """
+        INSERT INTO campeonatos_inscripcion
+        (id_campeonato, id_usuario, id_modalidad)
+        VALUES (?, ?, ?)
+    """;
+
+    try (
+        Connection con = BD.conexion();
+        PreparedStatement stmt = con.prepareStatement(sqlInsert)
+    ) {
+
+        stmt.setLong(1, idCampeonato);
+        stmt.setLong(2, idUsuario);
+        stmt.setString(3, idModalidad);
+
+        stmt.executeUpdate();
+        
+        redirectAttributes.addFlashAttribute(
+            "mensajeExito",
+            "¡Inscripción exitosa! Has sido inscrito en la modalidad seleccionada."
+        );
+
+    } catch (SQLException e) {
+        logger.error("❌ Error al guardar la inscripción", e);
+        redirectAttributes.addFlashAttribute(
+                "mensajeError",
+                "No se pudo completar la inscripción. Inténtalo de nuevo."
+        );
+    }
+
+    return "redirect:/inscripciones/" + idCampeonato;
+}
+
+    
+@GetMapping("/mis-inscripciones")
     public String mostrarMisInscripciones(
             Model model,
             HttpSession session,
@@ -241,7 +259,7 @@ public class ControladorInscripcion {
                     "mensajeAdvertencia",
                     "Debes iniciar sesión para ver tus inscripciones."
             );
-            return "redirect:/login";
+            return "redirect:/auth/inicioSesion";
         }
 
         Long idUsuario = Long.valueOf(idSesion.toString());
@@ -307,9 +325,8 @@ public class ControladorInscripcion {
         System.out.println("📦 TOTAL INSCRIPCIONES: " + inscripcionesDetalladas.size());
 
         model.addAttribute("inscripciones", inscripcionesDetalladas);
-        return "campeonato/manage/lista-mis-campeonatos";
+        return "campeonato/manage/mis-inscripciones";
     }
-
 
 
 

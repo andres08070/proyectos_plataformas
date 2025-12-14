@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ControladorPrincipal {
     
-    // NOTA: Es mejor dejar el @Autowired de la sesión en el método o usar @RequestScope, 
-    // pero lo mantengo aquí ya que así lo tenías.
     @Autowired
     private HttpSession session; 
 
@@ -26,35 +26,37 @@ public class ControladorPrincipal {
     // RUTAS PÚBLICAS (Login y Registro - GET)
     // ==========================================
 
-    @GetMapping("/login")
+    @GetMapping("/auth/inicioSesion")
     public String mostrarLogin() {
-        // Retorna: src/main/resources/templates/auth/inicioSesion.html
         return "auth/inicioSesion";
     }
     
     @GetMapping("/registro")
     public String mostrarFormulario(){
-        // Retorna: src/main/resources/templates/auth/registro.html
         return "auth/registro";
     }
     
     // ==========================================
-    // RUTAS PRIVADAS (Protegidas por Interceptor)
+    // RUTAS PRIVADAS (Protegidas por sesión)
     // ==========================================
-
-    @GetMapping("/CrearCampeonato")
-    public String crearCampeonato() {
-        // El Interceptor ya verificó la sesión y puso Anti-Caché.
-        // Retorna: src/main/resources/templates/campeonato/CrearCampeonato.html
-        return "campeonato/CrearCampeonato"; 
-    }
     
     @GetMapping("/inicio")
-    public String inicio() {
-        // El Interceptor ya verificó la sesión y puso Anti-Caché.
-        // Retorna: src/main/resources/templates/dashboard/inicio.html
-        return "dashboard/inicio";
+public String inicio(HttpServletResponse response, HttpSession session, Model model) {
+    // 🔒 Prevenir cache
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Expires", "0");
+    
+    // ✅ Verificar sesión
+    String idUsuarioStr = (String) session.getAttribute("id");
+    if (idUsuarioStr == null || idUsuarioStr.trim().isEmpty()) {
+        return "redirect:/auth/inicioSesion";
     }
+    
+    
+    return "dashboard/inicio";
+}
+
     
     // ==========================================
     // RUTAS DE ACCIÓN (POST)
@@ -63,7 +65,13 @@ public class ControladorPrincipal {
     @PostMapping("/iniciarSesion")
     public String procesarLogin(@RequestParam String correo, 
                                 @RequestParam String contraseña, 
-                                Model model) {
+                                Model model,
+                                HttpServletResponse response) {
+        
+        // 🔒 PREVENIR CACHE EN LOGIN
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
         
         String sql = "SELECT nombreC, cinturon_rango, ID_documento FROM usuarios WHERE correo = ? AND contraseña = ?";
         
@@ -83,7 +91,7 @@ public class ControladorPrincipal {
                 System.out.println("Usuario logueado: " + session.getAttribute("id"));
                 
                 // Redirigir al Dashboard
-                return "redirect:/inicio"; // Usar redirect para evitar reenvío de formulario (POST)
+                return "redirect:/inicio";
             } else {
                 // Login Fallido
                 model.addAttribute("msg", "Correo o contraseña incorrectos.");
@@ -98,11 +106,18 @@ public class ControladorPrincipal {
     }
     
     @GetMapping("/logout")
-    public String logout(HttpSession session, HttpServletResponse response) {
-        // Limpiamos headers para asegurarnos de que el navegador no cachee la URL de salida
+    public String logout(HttpServletResponse response) {
+        // 🔒 PREVENIR CACHE
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        session.invalidate();  // Cierra la sesión
-        return "redirect:/login"; // Redirigir al login (que es la página pública de entrada)
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+        
+        // Invalidar toda la sesión
+        session.invalidate();
+        
+        // Redirigir al login con parámetro de logout exitoso
+        return "redirect:/auth/inicioSesion?logout=true";
     }
-
+    
+    
 }

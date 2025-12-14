@@ -14,23 +14,34 @@
             </a>
         </div>
         <div class="nav-user">
-            <a th:href="@{/inicio}" class="btn-logout" title="Volver al inicio"><i class="fas fa-home"></i></a>
+            <a th:href="@{/inicio}" class="btn-secondary" title="Volver al inicio">
+                <i class="fas fa-home"></i> Inicio
+            </a>
         </div>
     </nav>
 
     <div class="dashboard-container">
         
         <div class="page-header centered">
-            <h2>Campeonatos Abiertos</h2>
-            <p>Explora los próximos eventos y asegura tu lugar en el tatami.</p>
+            <h2>Campeonatos Abiertos de Otros Usuarios</h2>
+            <p>Explora los próximos eventos creados por otros usuarios y asegura tu lugar en el tatami.</p>
+            
+            <!-- Botón para crear nuevo campeonato -->
+            <div class="action-buttons" style="margin-top: 20px;">
+                <a th:href="@{/CrearCampeonato}" class="btn-primary">
+                    <i class="fas fa-plus"></i> Crear Nuevo Campeonato
+                </a>
+            </div>
         </div>
 
+        <!-- Resto de tu HTML permanece igual -->
         <div th:if="${#lists.isEmpty(campeonatos)}" class="empty-state-container">
             <div class="empty-icon">
-                <i class="fas fa-trophy"></i>
+                <i class="fas fa-users"></i>
             </div>
-            <h3>No hay campeonatos disponibles</h3>
-            <p>Actualmente no hay eventos abiertos para inscripción. Vuelve a consultar pronto.</p>
+            <h3>No hay campeonatos de otros usuarios disponibles</h3>
+            <p>Actualmente no hay eventos abiertos creados por otros usuarios para inscripción.</p>
+            <p>Puedes <a th:href="@{/CrearCampeonato}">crear tu propio campeonato</a> o volver más tarde.</p>
         </div>
 
         <div class="championship-grid" th:unless="${#lists.isEmpty(campeonatos)}">
@@ -41,6 +52,11 @@
                 
                 <div class="champ-card-body">
                     <h3 class="champ-title" th:text="${camp.nombre}">Nombre del Torneo</h3>
+                    
+                    <div class="champ-creator">
+                        <i class="fas fa-user"></i>
+                        <span>Creado por: <strong th:text="${camp.nombreCreador}"></strong></span>
+                    </div>
                     
                     <div class="champ-details">
                         <div class="detail-item">
@@ -66,7 +82,7 @@
                     </a>
                 </div>
             </div>
-            </div>
+        </div>
     </div>
 
 </body>

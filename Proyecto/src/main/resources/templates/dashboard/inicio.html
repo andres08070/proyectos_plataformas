@@ -40,18 +40,17 @@
                     <i class="fas fa-search"></i>
                 </div>
                 <h3>Explorar Campeonatos</h3>
-                <p>Busca campeonatos activos. Inscríbete como competidor, postúlate como juez o entrenador.</p>
-                <a th:href="@{/campeonato/lista}" class="btn-action">Ver Campeonatos</a>
+                <p>Busca campeonatos activos creados por otros usuarios e inscríbete.</p>
+                <a th:href="@{/campeonato/lista}" class="btn-action">Ver Campeonatos Disponibles</a>
             </div>
 
             <div class="action-card">
                 <div class="card-icon">
-                    <i class="fas fa-calendar-check"></i>
+                    <i class="fas fa-user-tie"></i>
                 </div>
-                <h3>Mis Campeonatos</h3>
-                <p>Gestiona los torneos donde estás participando.</p>
-
-                <a th:href="@{/mis-inscripciones}" class="btn-action btn-outline">Ver mi Agenda</a>
+                <h3>Mis Campeonatos Creados</h3>
+                <p>Gestiona los torneos que has organizado como administrador.</p>
+                <a th:href="@{/campeonato/manage/mis-campeonatos}" class="btn-action">Gestionar Mis Campeonatos</a>
             </div>
 
             <div class="action-card card-create">
@@ -59,7 +58,7 @@
                     <i class="fas fa-plus-circle"></i>
                 </div>
                 <h3>Organizar Campeonato</h3>
-                <p>Crea un campeonato desde cero y configura las categorías.</p>
+                <p>Crea un nuevo campeonato desde cero y configura las categorías.</p>
                 <a th:href="@{/CrearCampeonato}" class="link-action">Crear ahora &rarr;</a>
             </div>
 
@@ -74,17 +73,58 @@
 
         </section>
 
+        <!-- Sección de Mis Inscripciones -->
         <section class="upcoming-section">
-            <h2>Actividad Reciente</h2>
-            <div class="event-row">
-                <div class="event-date">
-                    <i class="fas fa-user-ninja fa-lg"></i>
+            <div class="section-header">
+                <h2>Mis Inscripciones Recientes</h2>
+                <a th:href="@{/mis-inscripciones}" class="link-action">
+                    Ver todas mis inscripciones <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div th:if="${inscripciones != null and not #lists.isEmpty(inscripciones)}">
+                <div class="inscripciones-grid">
+                    <div class="inscripcion-card" th:each="inscripcion : ${inscripciones}">
+                        <div class="inscripcion-header">
+                            <h4 th:text="${inscripcion.nombreCampeonato}">Nombre del Campeonato</h4>
+                            <span class="inscripcion-estado" th:text="${inscripcion.estado}">Estado</span>
+                        </div>
+                        
+                        <div class="inscripcion-details">
+                            <div class="detail-row">
+                                <i class="fas fa-user-tag"></i>
+                                <span th:text="${inscripcion.rol}">Competidor</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-layer-group"></i>
+                                <span th:text="${inscripcion.categoria}">Categoría</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span th:text="${inscripcion.fechas}">Fecha</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span th:text="${inscripcion.ubicacion}">Ubicación</span>
+                            </div>
+                        </div>
+                        
+                        <div class="inscripcion-actions">
+                            <a th:href="@{/mis-inscripciones}" class="btn-card-action">
+                                Ver Detalles <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="event-info">
-                    <h4>Inscrito en: Copa Regional 2025</h4>
-                    <p>Rol: Competidor - Categoría: Cinturón Negro</p>
-                </div>
-                <button class="btn-small">Ver Detalle</button>
+            </div>
+            
+            <div th:if="${inscripciones == null or #lists.isEmpty(inscripciones)}" class="empty-state">
+                <i class="fas fa-clipboard-list fa-2x"></i>
+                <h3>No tienes inscripciones activas</h3>
+                <p>¡Aún no te has inscrito en ningún campeonato! Explora los campeonatos disponibles y participa.</p>
+                <a th:href="@{/campeonato/lista}" class="btn-action">
+                    <i class="fas fa-search"></i> Explorar Campeonatos
+                </a>
             </div>
         </section>
 

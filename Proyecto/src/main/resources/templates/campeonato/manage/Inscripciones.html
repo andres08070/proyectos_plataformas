@@ -2,61 +2,159 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detalle e Inscripción al Campeonato</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .campeonato-header { background-color: #f0f0f0; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .modalidad-card { border: 1px solid #ccc; padding: 15px; margin-top: 15px; border-radius: 6px; }
-        .modalidad-card h3 { color: #0056b3; margin-top: 0; }
-        .data-item { margin-bottom: 5px; }
-        .data-item strong { display: inline-block; width: 100px; }
-        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
-        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
-    </style>
+    <title>Inscripción - DidaMartials</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/inscripciones.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Botón de retroceso -->
+    <a th:href="@{/campeonato/lista}" class="btn-back" title="Volver a lista">
+        <i class="fas fa-arrow-left fa-2x"></i>
+    </a>
 
-    <div th:if="${mensajeExito}" class="alert-success">
-        <p th:text="${mensajeExito}"></p>
-    </div>
-    <div th:if="${mensajeError}" class="alert-error">
-        <p th:text="${mensajeError}"></p>
-    </div>
-    
-    <div class="campeonato-header">
-        <h1>Inscripción: <span th:text="${campeonato.nombre}">[Nombre Campeonato]</span></h1>
-        <p><strong>Ubicación:</strong> <span th:text="${campeonato.ubicacion}">[Ubicación]</span></p>
-        <p><strong>Organizador:</strong> <span th:text="${campeonato.nombreCreador}">[Creador]</span></p>
-    </div>
-
-    <h2>Modalidades Disponibles</h2>
-    
-    <div th:if="${modalidades.isEmpty()}" style="color: red;">
-        <p>No hay modalidades activas o con detalles registrados para este campeonato.</p>
-    </div>
-    
-    <div th:each="modalidad : ${modalidades}" class="modalidad-card">
-        
-        <div th:each="entry : ${modalidad}" class="data-item">
-            <th:block th:if="${entry.key != 'idModalidad'}">
-                <strong><span th:text="${entry.key}">[Clave]</span>:</strong> 
-                <span th:text="${entry.value}">[Valor]</span>
-            </th:block>
+    <div class="container">
+        <!-- Alertas -->
+        <div th:if="${mensajeExito}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <p th:text="${mensajeExito}"></p>
         </div>
         
-        <form th:action="@{/inscripciones/inscribir}" method="post" style="margin-top: 15px;">
+        <div th:if="${mensajeError}" class="alert alert-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p th:text="${mensajeError}"></p>
+        </div>
+
+        <!-- Header del campeonato -->
+        <div class="campeonato-header">
+            <div class="header">
+                <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="logo-img">
+                <h2>INSCRIPCIÓN AL CAMPEONATO</h2>
+            </div>
             
-            <input type="hidden" name="idCampeonato" th:value="${campeonato.id}" />
-            
-            <input type="hidden" name="idModalidad" th:value="${modalidad.get('idModalidad')}" />
-            
-            <input type="hidden" name="idUsuario" th:value="123456" /> 
-            
-            <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer;">
-                Inscribirse en esta modalidad
-            </button>
-        </form>
+            <div class="campeonato-info">
+                <h1><i class="fas fa-trophy"></i> <span th:text="${campeonato.nombre}">[Nombre Campeonato]</span></h1>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Ubicación:</strong>
+                            <span th:text="${campeonato.ubicacion}">[Ubicación]</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Fechas - usando camelCase como en Campeonato.java -->
+                    <div class="info-item" th:if="${campeonato.fechaInicio != null}">
+                        <i class="fas fa-calendar-alt"></i>
+                        <div>
+                            <strong>Fechas:</strong>
+                            <span th:text="${#temporals.format(campeonato.fechaInicio, 'dd/MM/yyyy')} + ' - ' + ${#temporals.format(campeonato.fechaFin, 'dd/MM/yyyy')}">
+                                Fechas del evento
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <i class="fas fa-user-tie"></i>
+                        <div>
+                            <strong>Organizador:</strong>
+                            <span th:text="${campeonato.nombreCreador}">[Creador]</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Número de áreas -->
+                    <div class="info-item" th:if="${campeonato.numAreas > 0}">
+                        <i class="fas fa-th-large"></i>
+                        <div>
+                            <strong>Áreas:</strong>
+                            <span th:text="${campeonato.numAreas} + ' disponibles'">Áreas disponibles</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Modalidades -->
+        <section class="modalidades-section">
+            <div class="section-header">
+                <h2><i class="fas fa-list-alt"></i> MODALIDADES DISPONIBLES</h2>
+                <p th:if="${modalidades != null and !modalidades.isEmpty()}" 
+                   th:text="${'Selecciona una modalidad para inscribirte (' + modalidades.size() + ' disponibles)'}">
+                    Modalidades disponibles
+                </p>
+            </div>
+
+            <!-- Mensaje si no hay modalidades -->
+            <div th:if="${modalidades != null and modalidades.isEmpty()}" class="empty-state">
+                <i class="fas fa-clipboard-list fa-3x"></i>
+                <h3>No hay modalidades activas</h3>
+                <p>No hay modalidades activas o con detalles registrados para este campeonato.</p>
+                <a th:href="@{/campeonato/lista}" class="btn-outline">Ver otros campeonatos</a>
+            </div>
+
+            <!-- Grid de Modalidades -->
+            <div class="grid-modalidades" th:if="${modalidades != null and !modalidades.isEmpty()}">
+                <div th:each="modalidad, stat : ${modalidades}" class="modalidad-card" 
+                     th:classappend="${stat.index % 2 == 0} ? 'card-primary' : 'card-secondary'">
+                    
+                    <!-- Contenido de la tarjeta - SIN mostrar idModalidad -->
+                    <div class="modalidad-content">
+                        <div class="data-grid">
+                            <!-- Mostrar todas las entradas excepto 'idModalidad' -->
+                            <div th:each="entry : ${modalidad}" class="data-row"
+                                 th:if="${entry.key != 'idModalidad' and entry.value != null and !entry.value.toString().isEmpty()}">
+                                <span class="data-label" th:text="${entry.key} + ':'">[Clave]:</span>
+                                <span class="data-value" th:text="${entry.value}">[Valor]</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario de inscripción -->
+                    <div class="modalidad-footer">
+                        <form th:action="@{/inscripciones/inscribir}" method="post" class="inscripcion-form">
+                            <input type="hidden" name="idCampeonato" th:value="${campeonato.id}" />
+                            <input type="hidden" name="idModalidad" th:value="${modalidad.get('idModalidad')}" />
+                            
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-user-plus"></i>
+                                INSCRIBIRME EN ESTA MODALIDAD
+                            </button>
+                        </form>
+                        
+                        <div class="additional-info">
+                            <small><i class="fas fa-info-circle"></i> Recibirás confirmación por correo</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Información adicional -->
+        <div class="disclaimer">
+            <h4><i class="fas fa-exclamation-circle"></i> IMPORTANTE</h4>
+            <ul>
+                <li>Tu inscripción está sujeta a verificación por los organizadores</li>
+            </ul>
+        </div>
     </div>
 
+    <!-- Script para confirmar inscripción -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('.inscripcion-form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const modalidadCard = this.closest('.modalidad-card');
+                    const modalidadNombre = modalidadCard.querySelector('.data-label')?.textContent || 'esta modalidad';
+                    if (!confirm(`¿Confirmas tu inscripción en ${modalidadNombre}?`)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
