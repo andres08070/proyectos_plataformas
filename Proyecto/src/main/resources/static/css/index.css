@@ -4,7 +4,7 @@
 * {
     box-sizing: border-box; /* Esto evita que el padding aumente el ancho total */
 }
-
+/* no me toques los htmls putito */
 :root {
     --color-principal: #1a1a1a;  /* Negro suave para textos */
     --color-texto: #555555;      /* Gris para párrafos */
