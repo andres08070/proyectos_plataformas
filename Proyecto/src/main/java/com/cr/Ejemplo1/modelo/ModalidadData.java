@@ -1,20 +1,17 @@
 package com.cr.Ejemplo1.modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // Clase para mapear la estructura interna de cada modalidad en el JSON de la BD
 public class ModalidadData {
-
-    // Campo para almacenar el ID dinámico de la modalidad (ej: "mod_176...")
-    private String idModalidad;
-
-    // Campos que coinciden con las claves del JSON
-    private String name;
-    private String desc;
-    private List<String> peso;
-    private List<String> rango;
-    private List<String> edad;
-    private String genero;
+    private String idModalidad = "";
+    private String name = "";
+    private String desc = "";
+    private List<String> peso = new ArrayList<>();
+    private List<String> rango = new ArrayList<>();
+    private List<String> edad = new ArrayList<>();
+    private String genero = "";
 
     // Constructor vacío (obligatorio para Jackson)
     public ModalidadData() {

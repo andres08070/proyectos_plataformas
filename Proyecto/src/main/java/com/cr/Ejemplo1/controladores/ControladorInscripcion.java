@@ -246,87 +246,106 @@ public String inscribirUsuarioModalidad(
 
     
 @GetMapping("/mis-inscripciones")
-    public String mostrarMisInscripciones(
-            Model model,
-            HttpSession session,
-            RedirectAttributes redirectAttributes
+public String mostrarMisInscripciones(
+        Model model,
+        HttpSession session,
+        RedirectAttributes redirectAttributes
+) {
+    Object idSesion = session.getAttribute("id");
+
+    if (idSesion == null) {
+        redirectAttributes.addFlashAttribute(
+                "mensajeAdvertencia",
+                "Debes iniciar sesión para ver tus inscripciones."
+        );
+        return "redirect:/auth/inicioSesion";
+    }
+
+    Long idUsuario = Long.valueOf(idSesion.toString());
+    System.out.println("👉 ID USUARIO SESIÓN: " + idUsuario);
+
+    // CONSULTA: Obtener todas las inscripciones del usuario, con datos del campeonato y la modalidad
+    String sql = """
+        SELECT
+            ci.id_modalidad,
+            c.id AS id_campeonato,
+            c.nombre AS nombre_campeonato,
+            c.ubicacion,
+            c.fecha_inicio,
+            c.fecha_fin,
+            c.json_modalidades,
+            u.nombreC AS creador_nombre,
+            COALESCE(ci.estado, 'PENDIENTE') AS estado_inscripcion,
+            'COMPETIDOR' AS rol_usuario,
+            usr.nombreC AS nombre_participante,
+            usr.cinturon_rango AS categoria_usuario
+        FROM campeonatos_inscripcion ci
+        INNER JOIN campeonato c ON ci.id_campeonato = c.id
+        INNER JOIN usuarios u ON c.id_admin = u.ID_documento
+        INNER JOIN usuarios usr ON ci.id_usuario = usr.ID_documento
+        WHERE ci.id_usuario = ?
+        ORDER BY c.fecha_inicio DESC
+    """;
+
+    // Usaremos un Map para agrupar por campeonato
+    Map<Long, Map<String, Object>> campeonatosMap = new LinkedHashMap<>();
+
+    try (
+        Connection con = BD.conexion();
+        PreparedStatement stmt = con.prepareStatement(sql)
     ) {
+        stmt.setLong(1, idUsuario);
 
-        Object idSesion = session.getAttribute("id");
-
-        if (idSesion == null) {
-            redirectAttributes.addFlashAttribute(
-                    "mensajeAdvertencia",
-                    "Debes iniciar sesión para ver tus inscripciones."
-            );
-            return "redirect:/auth/inicioSesion";
-        }
-
-        Long idUsuario = Long.valueOf(idSesion.toString());
-        System.out.println("👉 ID USUARIO SESIÓN: " + idUsuario);
-
-        String sql = """
-            SELECT
-                ci.id_modalidad,
-                c.id AS id_campeonato,
-                c.nombre AS nombre_campeonato,
-                c.ubicacion,
-                c.fecha_inicio,
-                c.json_modalidades
-            FROM campeonatos_inscripcion ci
-            INNER JOIN campeonato c ON ci.id_campeonato = c.id
-            WHERE ci.id_usuario = ?
-            ORDER BY c.fecha_inicio DESC
-        """;
-
-        List<Map<String, Object>> inscripcionesDetalladas = new ArrayList<>();
-
-        try (
-            Connection con = BD.conexion();
-            PreparedStatement stmt = con.prepareStatement(sql)
-        ) {
-
-            stmt.setLong(1, idUsuario);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-
-                while (rs.next()) {
-
-                    String idModalidad = rs.getString("id_modalidad");
-                    String jsonModalidades = rs.getString("json_modalidades");
-
-                    System.out.println("✔ Modalidad encontrada: " + idModalidad);
-
-                    ModalidadData modalidad =
-                            extractModalidadDetails(jsonModalidades, idModalidad);
-
-                    if (modalidad == null) {
-                        System.out.println("⚠ Modalidad NO encontrada en JSON: " + idModalidad);
-                        continue;
-                    }
-
-                    Map<String, Object> inscripcion = new LinkedHashMap<>();
-                    inscripcion.put("idCampeonato", rs.getLong("id_campeonato"));
-                    inscripcion.put("nombreCampeonato", rs.getString("nombre_campeonato"));
-                    inscripcion.put("ubicacion", rs.getString("ubicacion"));
-                    inscripcion.put("fechaInicio", rs.getDate("fecha_inicio"));
-                    inscripcion.put("modalidad", modalidad);
-
-                    inscripcionesDetalladas.add(inscripcion);
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Long idCampeonato = rs.getLong("id_campeonato");
+                
+                // Si el campeonato no está en el mapa, lo agregamos
+                if (!campeonatosMap.containsKey(idCampeonato)) {
+                    Map<String, Object> campeonatoData = new LinkedHashMap<>();
+                    campeonatoData.put("idCampeonato", idCampeonato);
+                    campeonatoData.put("nombreCampeonato", rs.getString("nombre_campeonato"));
+                    campeonatoData.put("ubicacion", rs.getString("ubicacion"));
+                    campeonatoData.put("fechaInicio", rs.getDate("fecha_inicio"));
+                    campeonatoData.put("fechaFin", rs.getDate("fecha_fin"));
+                    campeonatoData.put("creadorNombre", rs.getString("creador_nombre"));
+                    campeonatoData.put("estado", rs.getString("estado_inscripcion"));
+                    campeonatoData.put("rol", rs.getString("rol_usuario"));
+                    campeonatoData.put("nombreParticipante", rs.getString("nombre_participante"));
+                    campeonatoData.put("categoriaUsuario", rs.getString("categoria_usuario"));
+                    // Lista para modalidades
+                    campeonatoData.put("modalidades", new ArrayList<ModalidadData>());
+                    
+                    campeonatosMap.put(idCampeonato, campeonatoData);
+                }
+                
+                // Procesar la modalidad de esta fila
+                String idModalidad = rs.getString("id_modalidad");
+                String jsonModalidades = rs.getString("json_modalidades");
+                
+                ModalidadData modalidad = extractModalidadDetails(jsonModalidades, idModalidad);
+                if (modalidad != null) {
+                    // Agregar la modalidad a la lista de modalidades del campeonato
+                    @SuppressWarnings("unchecked")
+                    List<ModalidadData> modalidadesList = (List<ModalidadData>) campeonatosMap.get(idCampeonato).get("modalidades");
+                    modalidadesList.add(modalidad);
                 }
             }
-
-        } catch (Exception e) {
-            logger.error("❌ Error al cargar inscripciones del usuario {}", idUsuario, e);
-            model.addAttribute("errorMsg", "Error al cargar inscripciones.");
-            return "error-page";
         }
-
-        System.out.println("📦 TOTAL INSCRIPCIONES: " + inscripcionesDetalladas.size());
-
-        model.addAttribute("inscripciones", inscripcionesDetalladas);
-        return "campeonato/manage/mis-inscripciones";
+    } catch (Exception e) {
+        logger.error("❌ Error al cargar inscripciones del usuario {}", idUsuario, e);
+        model.addAttribute("errorMsg", "Error al cargar inscripciones.");
+        return "error-page";
     }
+
+    // Convertir el mapa a lista para la vista
+    List<Map<String, Object>> inscripcionesAgrupadas = new ArrayList<>(campeonatosMap.values());
+    
+    System.out.println("📦 TOTAL CAMPEONATOS INSCRITOS: " + inscripcionesAgrupadas.size());
+
+    model.addAttribute("inscripciones", inscripcionesAgrupadas);
+    return "campeonato/manage/mis-inscripciones";
+}
 
 
 
