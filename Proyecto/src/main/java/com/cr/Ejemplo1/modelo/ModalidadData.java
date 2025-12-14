@@ -2,45 +2,91 @@ package com.cr.Ejemplo1.modelo;
 
 import java.util.List;
 
+// Clase para mapear la estructura interna de cada modalidad en el JSON de la BD
 public class ModalidadData {
-    // Estos nombres de campos DEBEN coincidir con las claves del JSON (name, desc, peso, rango, edad, genero)
-    private int idCreador;
-    private String name; 
+
+    // Campo para almacenar el ID dinámico de la modalidad (ej: "mod_176...")
+    private String idModalidad;
+
+    // Campos que coinciden con las claves del JSON
+    private String name;
     private String desc;
     private List<String> peso;
     private List<String> rango;
     private List<String> edad;
     private String genero;
-    
-    // NOTA: El campo 'name' es el nombre de la modalidad (Ej: "Combate").
 
-    // --- Getters y Setters (Necesarios para la deserialización de Jackson) ---
-    // (Tu IDE puede generarlos automáticamente)
+    // Constructor vacío (obligatorio para Jackson)
+    public ModalidadData() {
+        // Necesario para la deserialización
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    
-    public String getDesc() { return desc; }
-    public void setDesc(String desc) { this.desc = desc; }
+    // --- Getters y Setters ---
 
-    public List<String> getPeso() { return peso; }
-    public void setPeso(List<String> peso) { this.peso = peso; }
+    public String getIdModalidad() {
+        return idModalidad;
+    }
 
-    public List<String> getRango() { return rango; }
-    public void setRango(List<String> rango) { this.rango = rango; }
+    public void setIdModalidad(String idModalidad) {
+        this.idModalidad = idModalidad;
+    }
 
-    public List<String> getEdad() { return edad; }
-    public void setEdad(List<String> edad) { this.edad = edad; }
+    public String getName() {
+        return name;
+    }
 
-    public String getGenero() { return genero; }
-    public void setGenero(String genero) { this.genero = genero; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public int getIdCreador() {return idCreador;}
+    public String getDesc() {
+        return desc;
+    }
 
-    public void setIdCreador(int idCreador) {this.idCreador = idCreador;}
-    
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public List<String> getPeso() {
+        return peso;
+    }
+
+    public void setPeso(List<String> peso) {
+        this.peso = peso;
+    }
+
+    public List<String> getRango() {
+        return rango;
+    }
+
+    public void setRango(List<String> rango) {
+        this.rango = rango;
+    }
+
+    public List<String> getEdad() {
+        return edad;
+    }
+
+    public void setEdad(List<String> edad) {
+        this.edad = edad;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
     @Override
     public String toString() {
-        return "ModalidadData [name=" + name + ", peso=" + peso + ", genero=" + genero + "]";
+        return "ModalidadData [idModalidad=" + idModalidad +
+               ", name=" + name +
+               ", desc=" + desc +
+               ", peso=" + peso +
+               ", rango=" + rango +
+               ", edad=" + edad +
+               ", genero=" + genero + "]";
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-12-2025 a las 04:15:37
+-- Tiempo de generación: 14-12-2025 a las 02:50:59
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -45,8 +45,32 @@ CREATE TABLE `campeonato` (
 --
 
 INSERT INTO `campeonato` (`id`, `nombre`, `fecha_inicio`, `fecha_fin`, `ubicacion`, `num_areas`, `json_modalidades`, `fecha_creacion`, `activo`, `id_admin`) VALUES
-(1, 'a', '2025-12-12', '2025-12-20', '123', 1, '{\"mod_1765587370429\":{\"name\":\"asd\",\"desc\":\"dsa\",\"peso\":[\"Mayor a 12kg\"],\"rango\":[],\"edad\":[],\"genero\":null}}', '2025-12-13 00:56:28', 1, 123456),
-(2, 'te odio amir', '2025-12-12', '2025-12-27', 'valla coma pipi amir', 11, '{\"mod_1765588685031\":{\"name\":\"si lees esto eres gay\",\"desc\":\"\",\"peso\":[\"Menor a 12kg\"],\"rango\":[],\"edad\":[],\"genero\":null}}', '2025-12-13 01:18:25', 1, 123456);
+(6, 'Prueba 1', '2025-12-13', '2025-12-14', 'En tu casa', 12, '{\"mod_1765672405244\":{\"name\":\"Modalidad 1\",\"desc\":\"\",\"peso\":[\"Menor a 12kg\"],\"rango\":[\"blanco - negro\"],\"edad\":[\"20 años\"],\"genero\":null}}', '2025-12-14 00:34:09', 1, 1077294332),
+(7, 'prueba 2', '2025-12-13', '2025-12-28', 'mi casa', 12, '{\"mod_1765675718428\":{\"name\":\"modo 1\",\"desc\":\"pues si ni modo 1\",\"peso\":[\"Menor a 32kg\"],\"rango\":[],\"edad\":[],\"genero\":null},\"mod_1765675730097\":{\"name\":\"modo 2\",\"desc\":\"pues si ni modo 2\",\"peso\":[\"Menor a 43kg\"],\"rango\":[],\"edad\":[],\"genero\":null}}', '2025-12-14 01:29:25', 1, 1077294332),
+(8, 'prueba 3', '2025-12-13', '2025-12-27', 'En tu casa', 10, '{\"mod_1765676482412\":{\"name\":\"modo 1\",\"desc\":\"\",\"peso\":[\"Menor a 58kg\",\"Menor a 23kg\",\"Menor a 32kg\"],\"rango\":[],\"edad\":[],\"genero\":null},\"mod_1765676578162\":{\"name\":\"modo 2\",\"desc\":\"\",\"peso\":[\"Menor a 58kg\"],\"rango\":[],\"edad\":[],\"genero\":null},\"mod_1765676587396\":{\"name\":\"modo 3\",\"desc\":\"\",\"peso\":[\"Menor a 42kg\"],\"rango\":[],\"edad\":[],\"genero\":null}}', '2025-12-14 01:45:59', 1, 1077294332);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `campeonatos_inscripcion`
+--
+
+CREATE TABLE `campeonatos_inscripcion` (
+  `id_inscripcion` bigint(20) NOT NULL,
+  `id_campeonato` bigint(20) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `id_modalidad` varchar(50) NOT NULL,
+  `fecha_inscripcion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `estado` varchar(20) DEFAULT 'Pendiente'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `campeonatos_inscripcion`
+--
+
+INSERT INTO `campeonatos_inscripcion` (`id_inscripcion`, `id_campeonato`, `id_usuario`, `id_modalidad`, `fecha_inscripcion`, `estado`) VALUES
+(12, 7, 1077294332, 'mod_1765675730097', '2025-12-14 01:33:01', 'Pendiente'),
+(13, 6, 1077294332, 'mod_1765672405244', '2025-12-14 01:46:09', 'Pendiente');
 
 -- --------------------------------------------------------
 
@@ -70,7 +94,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_documento`, `nombreC`, `sexo`, `edad`, `cinturon_rango`, `Nacionalidad`, `Correo`, `Contraseña`) VALUES
-(123456, 'andres', 'Masculino', 0, NULL, 'alemania', 'andresivan0807@gmail.com', 'Andres@07');
+(1077294332, 'andres gonzalez', 'masculino', 20, 'negro', 'colombia', 'andresivan0807@gmail.com', 'Andresivan@2');
 
 --
 -- Índices para tablas volcadas
@@ -83,6 +107,14 @@ ALTER TABLE `campeonato`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_admin` (`id_admin`),
   ADD KEY `id_admin_2` (`id_admin`);
+
+--
+-- Indices de la tabla `campeonatos_inscripcion`
+--
+ALTER TABLE `campeonatos_inscripcion`
+  ADD PRIMARY KEY (`id_inscripcion`),
+  ADD UNIQUE KEY `uk_inscripcion` (`id_campeonato`,`id_usuario`,`id_modalidad`),
+  ADD KEY `id_usuario` (`id_usuario`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -98,7 +130,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `campeonato`
 --
 ALTER TABLE `campeonato`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT de la tabla `campeonatos_inscripcion`
+--
+ALTER TABLE `campeonatos_inscripcion`
+  MODIFY `id_inscripcion` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Restricciones para tablas volcadas
@@ -109,6 +147,13 @@ ALTER TABLE `campeonato`
 --
 ALTER TABLE `campeonato`
   ADD CONSTRAINT `fk_campeonato_usuario` FOREIGN KEY (`id_admin`) REFERENCES `usuarios` (`ID_documento`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `campeonatos_inscripcion`
+--
+ALTER TABLE `campeonatos_inscripcion`
+  ADD CONSTRAINT `campeonatos_inscripcion_ibfk_1` FOREIGN KEY (`id_campeonato`) REFERENCES `campeonato` (`id`),
+  ADD CONSTRAINT `campeonatos_inscripcion_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`ID_documento`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
