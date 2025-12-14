@@ -2,6 +2,7 @@ package com.cr.Ejemplo1.controladores;
 
 import com.cr.Ejemplo1.BD;
 import com.cr.Ejemplo1.modelo.Campeonato;
+import com.cr.Ejemplo1.modelo.ModalidadData;
 import com.fasterxml.jackson.databind.ObjectMapper; 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -25,6 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ControladorInscripcion {
@@ -176,29 +178,37 @@ public class ControladorInscripcion {
     public String inscribirUsuarioModalidad(
             @RequestParam("idCampeonato") Long idCampeonato,
             @RequestParam("idModalidad") String idModalidad,
-            jakarta.servlet.http.HttpSession session) {
-
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
 
         Object idSesion = session.getAttribute("id");
-        Long idUsuario = Long.valueOf(idSesion.toString());
 
-        System.out.println("ID Campeonato: " + idCampeonato);
-        System.out.println("ID Usuario sesión: " + idUsuario);
-        System.out.println("ID Modalidad: " + idModalidad);
-
-        if (idCampeonato == null || idUsuario == null || idModalidad == null || idModalidad.isEmpty()) {
-            logger.error("Datos inválidos para inscripción");
-            return "redirect:/error";
+        if (idSesion == null) {
+            redirectAttributes.addFlashAttribute(
+                    "mensajeError",
+                    "Debes iniciar sesión para inscribirte."
+            );
+            return "redirect:/login";
         }
 
+        Long idUsuario = Long.valueOf(idSesion.toString());
+
+        System.out.println("📝 INSCRIPCIÓN");
+        System.out.println("Campeonato: " + idCampeonato);
+        System.out.println("Usuario: " + idUsuario);
+        System.out.println("Modalidad: " + idModalidad);
+
         String sqlInsert = """
-            INSERT INTO campeonatos_inscripcion 
+            INSERT INTO campeonatos_inscripcion
             (id_campeonato, id_usuario, id_modalidad)
             VALUES (?, ?, ?)
         """;
 
-        try (Connection con = BD.conexion();
-             PreparedStatement stmt = con.prepareStatement(sqlInsert)) {
+        try (
+            Connection con = BD.conexion();
+            PreparedStatement stmt = con.prepareStatement(sqlInsert)
+        ) {
 
             stmt.setLong(1, idCampeonato);
             stmt.setLong(2, idUsuario);
@@ -207,11 +217,127 @@ public class ControladorInscripcion {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("Error al guardar la inscripción:", e);
+            logger.error("❌ Error al guardar la inscripción", e);
+            redirectAttributes.addFlashAttribute(
+                    "mensajeError",
+                    "No se pudo completar la inscripción."
+            );
         }
 
-        return "redirect:/inscripciones/" + idCampeonato;
+        return "redirect:/inicio";
     }
 
+    @GetMapping("/mis-inscripciones")
+    public String mostrarMisInscripciones(
+            Model model,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+
+        Object idSesion = session.getAttribute("id");
+
+        if (idSesion == null) {
+            redirectAttributes.addFlashAttribute(
+                    "mensajeAdvertencia",
+                    "Debes iniciar sesión para ver tus inscripciones."
+            );
+            return "redirect:/login";
+        }
+
+        Long idUsuario = Long.valueOf(idSesion.toString());
+        System.out.println("👉 ID USUARIO SESIÓN: " + idUsuario);
+
+        String sql = """
+            SELECT
+                ci.id_modalidad,
+                c.id AS id_campeonato,
+                c.nombre AS nombre_campeonato,
+                c.ubicacion,
+                c.fecha_inicio,
+                c.json_modalidades
+            FROM campeonatos_inscripcion ci
+            INNER JOIN campeonato c ON ci.id_campeonato = c.id
+            WHERE ci.id_usuario = ?
+            ORDER BY c.fecha_inicio DESC
+        """;
+
+        List<Map<String, Object>> inscripcionesDetalladas = new ArrayList<>();
+
+        try (
+            Connection con = BD.conexion();
+            PreparedStatement stmt = con.prepareStatement(sql)
+        ) {
+
+            stmt.setLong(1, idUsuario);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+
+                    String idModalidad = rs.getString("id_modalidad");
+                    String jsonModalidades = rs.getString("json_modalidades");
+
+                    System.out.println("✔ Modalidad encontrada: " + idModalidad);
+
+                    ModalidadData modalidad =
+                            extractModalidadDetails(jsonModalidades, idModalidad);
+
+                    if (modalidad == null) {
+                        System.out.println("⚠ Modalidad NO encontrada en JSON: " + idModalidad);
+                        continue;
+                    }
+
+                    Map<String, Object> inscripcion = new LinkedHashMap<>();
+                    inscripcion.put("idCampeonato", rs.getLong("id_campeonato"));
+                    inscripcion.put("nombreCampeonato", rs.getString("nombre_campeonato"));
+                    inscripcion.put("ubicacion", rs.getString("ubicacion"));
+                    inscripcion.put("fechaInicio", rs.getDate("fecha_inicio"));
+                    inscripcion.put("modalidad", modalidad);
+
+                    inscripcionesDetalladas.add(inscripcion);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("❌ Error al cargar inscripciones del usuario {}", idUsuario, e);
+            model.addAttribute("errorMsg", "Error al cargar inscripciones.");
+            return "error-page";
+        }
+
+        System.out.println("📦 TOTAL INSCRIPCIONES: " + inscripcionesDetalladas.size());
+
+        model.addAttribute("inscripciones", inscripcionesDetalladas);
+        return "campeonato/manage/lista-mis-campeonatos";
+    }
+
+
+
+
+
+    // =====================================================================
+    // MÉTODO AUXILIAR - EXTRAER MODALIDAD
+    // =====================================================================
+private ModalidadData extractModalidadDetails(
+        String jsonModalidades,
+        String idModalidad
+) throws com.fasterxml.jackson.core.JsonProcessingException {
+
+    if (jsonModalidades == null || jsonModalidades.isBlank()) {
+        return null;
+    }
+
+    JsonNode rootNode = objectMapper.readTree(jsonModalidades);
+    JsonNode modalidadNode = rootNode.get(idModalidad);
+
+    if (modalidadNode == null) {
+        return null;
+    }
+
+    ModalidadData modalidad =
+            objectMapper.treeToValue(modalidadNode, ModalidadData.class);
+
+    modalidad.setIdModalidad(idModalidad);
+    return modalidad;
+}
 
 }
