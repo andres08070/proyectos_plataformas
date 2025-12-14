@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Campeonato - DidaMartials</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/inscripciones.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Botón de retroceso -->
+    <a th:href="@{/campeonato/manage/mis-campeonatos}" class="btn-back" title="Volver a lista">
+        <i class="fas fa-arrow-left fa-2x"></i>
+    </a>
+
+    <div class="container">
+
+        <!-- Header del campeonato -->
+        <div class="campeonato-header">
+            <div class="header">
+                <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="logo-img">
+                <h2>CAMPEONATO</h2>
+            </div>
+
+            <div class="campeonato-info">
+                <h1>
+                    <i class="fas fa-trophy"></i>
+                    <span th:text="${campeonato.nombre}">[Nombre Campeonato]</span>
+                </h1>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Ubicación:</strong>
+                            <span th:text="${campeonato.ubicacion}">[Ubicación]</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item" th:if="${campeonato.fechaInicio != null}">
+                        <i class="fas fa-calendar-alt"></i>
+                        <div>
+                            <strong>Fechas:</strong>
+                            <span th:text="${#temporals.format(campeonato.fechaInicio, 'dd/MM/yyyy')} + ' - ' + ${#temporals.format(campeonato.fechaFin, 'dd/MM/yyyy')}">
+                                Fechas del evento
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <i class="fas fa-user-tie"></i>
+                        <div>
+                            <strong>Organizador:</strong>
+                            <span th:text="${campeonato.nombreCreador}">[Creador]</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item" th:if="${campeonato.numAreas > 0}">
+                        <i class="fas fa-th-large"></i>
+                        <div>
+                            <strong>Áreas:</strong>
+                            <span th:text="${campeonato.numAreas} + ' disponibles'">Áreas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Modalidades -->
+        <section class="modalidades-section">
+            <div class="section-header">
+                <h2>
+                    <i class="fas fa-list-alt"></i>
+                    MODALIDADES
+                </h2>
+                <p th:if="${modalidades != null and !modalidades.isEmpty()}"
+                   th:text="${'Modalidades registradas (' + modalidades.size() + ')'}">
+                    Modalidades
+                </p>
+            </div>
+
+            <!-- Sin modalidades -->
+            <div th:if="${modalidades != null and modalidades.isEmpty()}" class="empty-state">
+                <i class="fas fa-clipboard-list fa-3x"></i>
+                <h3>No hay modalidades registradas</h3>
+                <p>Este campeonato no tiene modalidades disponibles.</p>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid-modalidades" th:if="${modalidades != null and !modalidades.isEmpty()}">
+                <div th:each="modalidad, stat : ${modalidades}"
+                     class="modalidad-card"
+                     th:classappend="${stat.index % 2 == 0} ? 'card-primary' : 'card-secondary'">
+
+                    <div class="modalidad-content">
+                        <div class="data-grid">
+                            <div th:each="entry : ${modalidad}"
+                                 class="data-row"
+                                 th:if="${entry.key != 'idModalidad'
+                                         and entry.value != null
+                                         and !entry.value.toString().isEmpty()}">
+
+                                <span class="data-label" th:text="${entry.key} + ':'">[Campo]:</span>
+                                <span class="data-value" th:text="${entry.value}">[Valor]</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>

@@ -76,7 +76,6 @@
         <!-- Sección de Mis Inscripciones -->
         <section class="upcoming-section">
             <div class="section-header">
-                <h2>Mis Inscripciones Recientes</h2>
                 <a th:href="@{/mis-inscripciones}" class="link-action">
                     Ver todas mis inscripciones <i class="fas fa-arrow-right"></i>
                 </a>
@@ -120,8 +119,8 @@
             
             <div th:if="${inscripciones == null or #lists.isEmpty(inscripciones)}" class="empty-state">
                 <i class="fas fa-clipboard-list fa-2x"></i>
-                <h3>No tienes inscripciones activas</h3>
-                <p>¡Aún no te has inscrito en ningún campeonato! Explora los campeonatos disponibles y participa.</p>
+
+                <p>Explora los campeonatos disponibles y participa.</p>
                 <a th:href="@{/campeonato/lista}" class="btn-action">
                     <i class="fas fa-search"></i> Explorar Campeonatos
                 </a>
