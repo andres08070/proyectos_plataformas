@@ -18,6 +18,109 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); return false;
         }
     });
+    // ==========================================
+    // 1. ALERTA DE ÉXITO (Con temporizador)
+    // ==========================================
+    const mensajeExito = /*[[${mensajeExito}]]*/ null;
+    
+    if (mensajeExito) {
+        Swal.fire({
+            title: '¡Éxito!',
+            text: mensajeExito,
+            icon: 'success',
+            confirmButtonText: 'Ver mis campeonatos',
+            confirmButtonColor: '#b71c1c',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            
+            // --- NUEVAS LÍNEAS AGREGADAS ---
+            timer: 3000, // 3000ms = 3 segundos
+            timerProgressBar: true
+            // -------------------------------
+
+        }).then((result) => {
+            // Verificamos si se cerró por el botón "Ver" O por el temporizador
+            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                // Recargamos la página
+                window.location.reload();
+            }
+        });
+    }
+    
+    // ==========================================
+    // 2. ALERTA DE ERROR (Con temporizador)
+    // ==========================================
+    const mensajeError = /*[[${mensajeError}]]*/ null;
+    
+    if (mensajeError) {
+        Swal.fire({
+            title: 'Error',
+            text: mensajeError,
+            icon: 'error',
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#b71c1c',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+
+            // --- NUEVAS LÍNEAS AGREGADAS ---
+            timer: 4000, // Le damos un segundo más al error para leerlo bien
+            timerProgressBar: true
+            // -------------------------------
+        });
+    }
+
+    // ==========================================
+    // 3. LÓGICA DE ELIMINACIÓN (Sin cambios)
+    // ==========================================
+    const deleteButtons = document.querySelectorAll('.btn-delete-title');
+    
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const idCampeonato = this.getAttribute('data-id');
+            const nombreCampeonato = this.getAttribute('data-nombre');
+            
+            confirmarEliminacion(idCampeonato, nombreCampeonato);
+        });
+    });
+    
+    function confirmarEliminacion(idCampeonato, nombreCampeonato) {
+        const nombreEscapado = nombreCampeonato.replace(/'/g, "\\'").replace(/"/g, '\\"');
+        
+        Swal.fire({
+            title: '¿Eliminar campeonato?',
+            html: `
+                <div style="text-align: left;">
+                    <p>Estás a punto de eliminar: <strong>${nombreEscapado}</strong></p>
+                    <p style="color: #b71c1c; font-size: 0.9em;">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        Esta acción borrará todas las inscripciones y datos asociados. No se puede deshacer.
+                    </p>
+                </div>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarCampeonato(idCampeonato);
+            }
+        });
+    }
+    
+    function eliminarCampeonato(idCampeonato) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/campeonato/eliminar/${idCampeonato}`;
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
 });
 
 /* ========================================================
@@ -347,3 +450,4 @@ function generateSummary() {
     jsonInput.value = JSON.stringify(activeModalities);
     div.innerHTML = html;
 }
+

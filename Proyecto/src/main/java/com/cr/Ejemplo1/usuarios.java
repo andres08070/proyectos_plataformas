@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cr.Ejemplo1;
 
-/**
- *
- * @author andre
- */
 public class usuarios {
     protected int ID_documento;
     protected String nombreC;
@@ -18,7 +10,14 @@ public class usuarios {
     protected String sexo;
     protected String nacionalidad;
 
-    public usuarios(int ID_documento, String nombreC, String cinturon_rango, int edad, String contraseña,String correo, String sexo, String nacionalidad) {
+    // CONSTRUCTOR VACÍO - CORREGIDO (sin excepción)
+    public usuarios() {
+        // Constructor vacío para Spring/Jackson
+    }
+
+    // Constructor con parámetros
+    public usuarios(int ID_documento, String nombreC, String cinturon_rango, int edad, 
+                   String contraseña, String correo, String sexo, String nacionalidad) {
         this.ID_documento = ID_documento;
         this.nombreC = nombreC;
         this.cinturon_rango = cinturon_rango;
@@ -29,37 +28,68 @@ public class usuarios {
         this.nacionalidad = nacionalidad;
     }
 
+    // Getters y Setters
     public int getID_documento() {
         return ID_documento;
+    }
+
+    public void setID_documento(int ID_documento) {
+        this.ID_documento = ID_documento;
     }
 
     public String getNombreC() {
         return nombreC;
     }
 
+    public void setNombreC(String nombreC) {
+        this.nombreC = nombreC;
+    }
+
     public String getCinturon_rango() {
         return cinturon_rango;
+    }
+
+    public void setCinturon_rango(String cinturon_rango) {
+        this.cinturon_rango = cinturon_rango;
     }
 
     public int getEdad() {
         return edad;
     }
 
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
     public String getContraseña() {
         return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
     public String getCorreo() {
         return correo;
     }
 
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
     public String getSexo() {
         return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     public String getNacionalidad() {
         return nacionalidad;
     }
-    
-            
+
+    public void setNacionalidad(String nacionalidad) {
+        this.nacionalidad = nacionalidad;
+    }
 }

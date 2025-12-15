@@ -21,7 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ControladorCrearCampeonato {
@@ -34,7 +36,8 @@ public class ControladorCrearCampeonato {
     @PostMapping("/guardar-campeonato")
     public String guardarCampeonato(@ModelAttribute Campeonato campeonato,
                                     HttpSession session,
-                                    HttpServletResponse response) {
+                                    HttpServletResponse response,
+                                    RedirectAttributes redirectAttributes) {
 
         // 🔒 PREVENIR CACHE
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -72,18 +75,22 @@ public class ControladorCrearCampeonato {
 
             if (filasAfectadas > 0) {
                 logger.info("Campeonato '{}' guardado exitosamente.", campeonato.getNombre());
-                return "redirect:/inicio";
+                redirectAttributes.addFlashAttribute("mensajeExito", "Campeonato creado exitosamente.");
+                return "redirect:/campeonato/manage/mis-campeonatos";
             }
 
             logger.error("No se insertó el campeonato.");
-            return "error-page";
+            redirectAttributes.addFlashAttribute("mensajeError", "No se pudo crear el campeonato.");
+            return "redirect:/campeonato/manage/mis-campeonatos";  // Redirigir a la lista de mis campeonatos
 
         } catch (SQLException e) {
             logger.error("Error SQL al guardar campeonato:", e);
-            return "error-page";
+            redirectAttributes.addFlashAttribute("mensajeError", "Error al crear el campeonato. Inténtalo de nuevo.");
+            return "redirect:/campeonato/manage/mis-campeonatos";
         } catch (Exception e) {
             logger.error("Error inesperado:", e);
-            return "error-page";
+            redirectAttributes.addFlashAttribute("mensajeError", "Error inesperado. Inténtalo de nuevo.");
+            return "redirect:/campeonato/manage/mis-campeonatos";
         }
     }
 
@@ -179,5 +186,77 @@ public class ControladorCrearCampeonato {
 
         model.addAttribute("campeonato", new Campeonato());
         return "campeonato/CrearCampeonato";
+    }
+    
+    @PostMapping("/campeonato/eliminar/{id}")
+    public String eliminarCampeonato(@PathVariable("id") Long idCampeonato,
+                                     HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
+
+        // ✅ Verificar sesión
+        Integer idUsuario = (Integer) session.getAttribute("id");
+        if (idUsuario == null) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Debes iniciar sesión para realizar esta acción.");
+            return "redirect:/auth/inicioSesion";
+        }
+
+        logger.info("Usuario ID: {} intentando eliminar campeonato ID: {}", idUsuario, idCampeonato);
+
+        // SQL para eliminar primero las inscripciones (debido a la restricción de clave foránea)
+        String sqlEliminarInscripciones = "DELETE FROM campeonatos_inscripcion WHERE id_campeonato = ?";
+        String sqlEliminarCampeonato = "DELETE FROM campeonato WHERE id = ? AND id_admin = ?";
+
+        try (Connection con = BD.conexion()) {
+            // Iniciar transacción
+            con.setAutoCommit(false);
+
+            try {
+                // 1. Eliminar inscripciones asociadas
+                try (PreparedStatement stmtInscripciones = con.prepareStatement(sqlEliminarInscripciones)) {
+                    stmtInscripciones.setLong(1, idCampeonato);
+                    int filasInscripciones = stmtInscripciones.executeUpdate();
+                    logger.info("Eliminadas {} inscripciones del campeonato ID: {}", filasInscripciones, idCampeonato);
+                }
+
+                // 2. Eliminar campeonato (solo si es del usuario)
+                try (PreparedStatement stmtCampeonato = con.prepareStatement(sqlEliminarCampeonato)) {
+                    stmtCampeonato.setLong(1, idCampeonato);
+                    stmtCampeonato.setInt(2, idUsuario);
+                    int filasCampeonato = stmtCampeonato.executeUpdate();
+
+                    if (filasCampeonato > 0) {
+                        con.commit();
+                        logger.info("Campeonato ID: {} eliminado exitosamente por usuario ID: {}", idCampeonato, idUsuario);
+                        redirectAttributes.addFlashAttribute("mensajeExito", 
+                            "Campeonato eliminado correctamente.");
+                    } else {
+                        con.rollback();
+                        logger.warn("No se pudo eliminar el campeonato. Posiblemente no existe o no tienes permisos.");
+                        redirectAttributes.addFlashAttribute("mensajeError", 
+                            "No se pudo eliminar el campeonato. Verifica que existe y que tienes permisos.");
+                    }
+                }
+
+            } catch (SQLException e) {
+                con.rollback();
+                logger.error("Error durante la eliminación del campeonato ID: {}", idCampeonato, e);
+                redirectAttributes.addFlashAttribute("mensajeError", 
+                    "Error al eliminar el campeonato. Inténtalo de nuevo.");
+                throw e;
+            }
+
+            con.setAutoCommit(true);
+
+        } catch (SQLException e) {
+            logger.error("Error SQL al eliminar campeonato ID: {}", idCampeonato, e);
+            redirectAttributes.addFlashAttribute("mensajeError", 
+                "Error de base de datos al eliminar el campeonato.");
+        } catch (Exception e) {
+            logger.error("Error inesperado al eliminar campeonato ID: {}", idCampeonato, e);
+            redirectAttributes.addFlashAttribute("mensajeError", 
+                "Error inesperado. Por favor, contacta al administrador.");
+        }
+
+        return "redirect:/campeonato/manage/mis-campeonatos";
     }
 }

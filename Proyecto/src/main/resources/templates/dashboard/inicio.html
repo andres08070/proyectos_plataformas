@@ -73,59 +73,16 @@
 
         </section>
 
-        <!-- Sección de Mis Inscripciones -->
-        <section class="upcoming-section">
-            <div class="section-header">
-                <a th:href="@{/mis-inscripciones}" class="link-action">
-                    Ver todas mis inscripciones <i class="fas fa-arrow-right"></i>
-                </a>
+        <!-- Sección de Mis Inscripciones - AHORA COMO TARJETA HORIZONTAL -->
+        <div class="horizontal-card">
+            <div class="horizontal-card-content">
+                <h3>Mis Inscripciones</h3>
+                <p>Revisa el estado de tus inscripciones en campeonatos activos.</p>
             </div>
-            
-            <div th:if="${inscripciones != null and not #lists.isEmpty(inscripciones)}">
-                <div class="inscripciones-grid">
-                    <div class="inscripcion-card" th:each="inscripcion : ${inscripciones}">
-                        <div class="inscripcion-header">
-                            <h4 th:text="${inscripcion.nombreCampeonato}">Nombre del Campeonato</h4>
-                            <span class="inscripcion-estado" th:text="${inscripcion.estado}">Estado</span>
-                        </div>
-                        
-                        <div class="inscripcion-details">
-                            <div class="detail-row">
-                                <i class="fas fa-user-tag"></i>
-                                <span th:text="${inscripcion.rol}">Competidor</span>
-                            </div>
-                            <div class="detail-row">
-                                <i class="fas fa-layer-group"></i>
-                                <span th:text="${inscripcion.categoria}">Categoría</span>
-                            </div>
-                            <div class="detail-row">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span th:text="${inscripcion.fechas}">Fecha</span>
-                            </div>
-                            <div class="detail-row">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span th:text="${inscripcion.ubicacion}">Ubicación</span>
-                            </div>
-                        </div>
-                        
-                        <div class="inscripcion-actions">
-                            <a th:href="@{/mis-inscripciones}" class="btn-card-action">
-                                Ver Detalles <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="horizontal-card-action">
+                <a th:href="@{/mis-inscripciones}" class="btn-action">Ver Inscripciones</a>
             </div>
-            
-            <div th:if="${inscripciones == null or #lists.isEmpty(inscripciones)}" class="empty-state">
-                <i class="fas fa-clipboard-list fa-2x"></i>
-
-                <p>Explora los campeonatos disponibles y participa.</p>
-                <a th:href="@{/campeonato/lista}" class="btn-action">
-                    <i class="fas fa-search"></i> Explorar Campeonatos
-                </a>
-            </div>
-        </section>
+        </div>
 
     </main>
 </body>

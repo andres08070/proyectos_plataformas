@@ -52,7 +52,7 @@ public class ControladorPrincipal {
         }
 
         return "dashboard/inicio";
-    }
+    } 
 
     // ==========================================
     // RUTAS DE ACCIÓN (POST)

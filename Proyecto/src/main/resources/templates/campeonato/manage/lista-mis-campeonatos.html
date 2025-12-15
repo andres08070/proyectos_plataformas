@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <head th:replace="~{fragments/global :: head(titulo='Mis Campeonatos - DidaMartials', archivoCss='/css/dashboard.css')}"></head>
-    <link rel="stylesheet" th:href="@{/css/lista-campeonatos.css}">
-</head>
+
+<head th:replace="~{fragments/global :: head(titulo='Mis Campeonatos - DidaMartials', archivoCss='/css/dashboard.css')}"></head>
+<link rel="stylesheet" th:href="@{/css/lista-campeonatos.css}">
+
 <body>
 
 <nav class="navbar">
@@ -14,8 +14,8 @@
         </a>
     </div>
     <div class="nav-user">
-        <a th:href="@{/inicio}" class="btn-secondary" title="Volver al inicio">
-            <i class="fas fa-home"></i> Inicio
+        <a th:href="@{/inicio}" class="btn-secondary">
+            <i class="fas fa-home"></i> Volver al Inicio
         </a>
     </div>
 </nav>
@@ -31,6 +31,16 @@
                 <i class="fas fa-plus"></i> Crear Nuevo Campeonato
             </a>
         </div>
+    </div>
+
+    <div th:if="${mensajeExito}" class="alert-message success">
+        <i class="fas fa-check-circle"></i>
+        <span th:text="${mensajeExito}"></span>
+    </div>
+    
+    <div th:if="${mensajeError}" class="alert-message error">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span th:text="${mensajeError}"></span>
     </div>
 
     <div th:if="${#lists.isEmpty(campeonatos)}" class="empty-state-container">
@@ -51,7 +61,17 @@
             <div class="champ-card-top-accent"></div>
 
             <div class="champ-card-body">
-                <h3 class="champ-title" th:text="${camp.nombre}"></h3>
+                
+                <div class="champ-header-row">
+                    <h3 class="champ-title" th:text="${camp.nombre}">Nombre del Campeonato</h3>
+                    
+                    <button class="btn-delete-title" 
+                            th:data-id="${camp.id}" 
+                            th:data-nombre="${camp.nombre}"
+                            title="Eliminar campeonato">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
 
                 <div class="champ-creator">
                     <i class="fas fa-user-check"></i>
@@ -78,22 +98,98 @@
 
             <div class="champ-card-footer">
                 <div class="card-footer-buttons">
-
                     <a th:href="@{/inscripciones/{id}(id=${camp.id}, view='readonly')}"
                        class="btn-card-action">
                         <i class="fas fa-eye"></i> Ver Detalles
                     </a>
-
                     <a th:href="@{/campeonato/inscripciones/pendientes/{idCampeonato}(idCampeonato=${camp.id})}"
                         class="btn-card-action btn-manage">
-                         <i class="fas fa-cog"></i> Gestionar
-                     </a>
+                        <i class="fas fa-cog"></i> Gestionar Inscripciones
+                    </a>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ==========================================
+        // 1. LÓGICA PARA DESVANECER ALERTAS (DOM)
+        // ==========================================
+        const alertas = document.querySelectorAll('.alert-message');
+        
+        if (alertas.length > 0) {
+            setTimeout(function() {
+                alertas.forEach(function(alerta) {
+                    // Añadir clase fade-out para iniciar transición CSS
+                    alerta.classList.add('fade-out');
+                    
+                    // Esperar 500ms (tiempo de la transición) y eliminar del DOM
+                    setTimeout(function() {
+                        alerta.remove();
+                    }, 500); 
+                });
+            }, 3000); // 3 segundos de lectura
+        }
+
+        // ==========================================
+        // 2. LÓGICA DE CONFIRMACIÓN DE ELIMINAR (SweetAlert)
+        // ==========================================
+        const deleteButtons = document.querySelectorAll('.btn-delete-title');
+        
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                const idCampeonato = this.getAttribute('data-id');
+                const nombreCampeonato = this.getAttribute('data-nombre');
+                
+                confirmarEliminacion(idCampeonato, nombreCampeonato);
+            });
+        });
+        
+        function confirmarEliminacion(idCampeonato, nombreCampeonato) {
+            const nombreEscapado = nombreCampeonato ? nombreCampeonato.replace(/'/g, "\\'").replace(/"/g, '\\"') : 'este campeonato';
+            
+            Swal.fire({
+                title: '¿Eliminar campeonato?',
+                html: `
+                    <div style="text-align: left;">
+                        <p>Estás a punto de eliminar: <strong>${nombreEscapado}</strong></p>
+                        <p style="color: #b71c1c; font-size: 0.9em;">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Esta acción borrará todas las inscripciones y datos asociados. No se puede deshacer.
+                        </p>
+                    </div>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    eliminarCampeonato(idCampeonato);
+                }
+            });
+        }
+        
+        function eliminarCampeonato(idCampeonato) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/campeonato/eliminar/${idCampeonato}`;
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+</script>
 
 </body>
 </html>

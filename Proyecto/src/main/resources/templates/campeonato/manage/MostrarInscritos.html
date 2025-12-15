@@ -1,71 +1,211 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title th:text="'Gestión de Inscripciones - ' + ${nombreCampeonato}">Gestión de Inscripciones</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-family: Arial, sans-serif; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .aceptar { background-color: #4CAF50; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; }
-        .rechazar { background-color: #f44336; color: white; border: none; padding: 8px 12px; margin-left: 5px; cursor: pointer; border-radius: 4px; }
-        .mensaje-exito { color: green; font-weight: bold; margin-bottom: 15px; }
-        .mensaje-error { color: red; font-weight: bold; margin-bottom: 15px; }
-    </style>
+    <head th:replace="~{fragments/global :: head(titulo='Gestión de Inscripciones', archivoCss='/css/dashboard.css')}"></head>
+    <link rel="stylesheet" th:href="@{/css/gestion-inscripciones.css}">
 </head>
 <body>
 
-    <h1 th:text="'Gestión de Inscripciones Pendientes: ' + ${nombreCampeonato}">Gestión de Inscripciones Pendientes</h1>
-    
-    <div th:if="${successMsg}" class="mensaje-exito" th:text="${successMsg}"></div>
-    <div th:if="${errorMsg}" class="mensaje-error" th:text="${errorMsg}"></div>
+<nav class="navbar">
+    <div class="nav-brand">
+        <a th:href="@{/inicio}" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+            <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="nav-logo">
+            <span class="brand-text">DidaMartials</span>
+        </a>
+    </div>
+    <div class="nav-user">
+        <button class="btn-volver" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i> Volver
+        </button>
+    </div>
+</nav>
 
-    <div th:if="${inscripciones.isEmpty()}">
-        <p>🎉 ¡No hay inscripciones pendientes en este momento!</p>
+<main class="dashboard-container">
+
+    <div class="gestion-container">
+        
+        <div class="gestion-header">
+            <div>
+                <h1 th:text="'Gestión de Inscripciones: ' + ${nombreCampeonato}">Gestión de Inscripciones</h1>
+                <!-- Información del perfil del administrador -->
+                <div th:if="${perfilUsuario != null}" class="admin-info">
+                    <small style="color: #666; font-size: 0.85rem;">
+                        <i class="fas fa-user-shield"></i> Administrador: 
+                        <span th:text="${perfilUsuario.get('nombre')}"></span> | 
+                        Cinturón: <span th:text="${perfilUsuario.get('cinturon_rango') ?: 'No especificado'}"></span>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${successMsg}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i> <span th:text="${successMsg}"></span>
+        </div>
+
+        <div th:if="${errorMsg}" class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i> <span th:text="${errorMsg}"></span>
+        </div>
+
+        <div th:if="${inscripciones != null and inscripciones.isEmpty()}" class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-check-double"></i>
+            </div>
+            <h3>¡No hay inscripciones pendientes!</h3>
+            <p>Todas las inscripciones han sido revisadas. ¡Buen trabajo!</p>
+            <button class="btn-volver" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+        </div>
+
+        <div th:if="${inscripciones != null and not inscripciones.isEmpty()}" class="table-responsive">
+            <table class="inscripciones-table">
+                <thead>
+                    <tr>
+                        <th>ID Inscripción</th>
+                        <th>Participante</th>
+                        <th>Edad</th>
+                        <th>Sexo</th>
+                        <th>Cinturón / Rango</th>
+                        <th>Modalidad</th>
+                        <th>Fecha de Inscripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="inscripcion : ${inscripciones}">
+                        <td th:text="${inscripcion.idInscripcion}">125</td>
+                        <td th:text="${inscripcion.nombreParticipante}">Juan Pérez</td>
+                        <td>
+                            <span class="edad-badge" th:text="${inscripcion.edad}">25</span>
+                        </td>
+                        <td>
+                            <span th:classappend="${inscripcion.sexo == 'M'} ? 'badge-masculino' : 'badge-femenino'" 
+                                  class="badge">
+                                <span th:if="${inscripcion.sexo == 'M'}">♂ Masculino</span>
+                                <span th:if="${inscripcion.sexo == 'F'}">♀ Femenino</span>
+                                <span th:if="${inscripcion.sexo != 'M' and inscripcion.sexo != 'F'}" 
+                                      th:text="${inscripcion.sexo}">Otro</span>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="cinturon-badge" th:text="${inscripcion.cinturonRango}">Negro</span>
+                        </td>
+                        <td>
+                            <strong th:text="${inscripcion.nombreModalidad}">Kumite</strong>
+                        </td>
+                        <td th:text="${#temporals.format(inscripcion.fechaInscripcion, 'dd/MM/yyyy HH:mm')}">14/12/2025 10:30</td>
+                        <td>
+                            <div class="acciones-container">
+                                <form th:action="@{/campeonato/inscripciones/procesar}" method="post">
+                                    <input type="hidden" name="id_inscripcion" th:value="${inscripcion.idInscripcion}" />
+                                    <input type="hidden" name="id_campeonato" th:value="${idCampeonato}" />
+                                    <input type="hidden" name="accion" value="aceptar" />
+                                    <button type="submit" class="btn-aceptar">
+                                        <i class="fas fa-check"></i> Aceptar
+                                    </button>
+                                </form>
+                                
+                                <form th:action="@{/campeonato/inscripciones/procesar}" method="post">
+                                    <input type="hidden" name="id_inscripcion" th:value="${inscripcion.idInscripcion}" />
+                                    <input type="hidden" name="id_campeonato" th:value="${idCampeonato}" />
+                                    <input type="hidden" name="accion" value="rechazar" />
+                                    <button type="submit" class="btn-rechazar">
+                                        <i class="fas fa-times"></i> Rechazar
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <p style="color: #666; font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Recordatorio:</strong> Las inscripciones "aceptadas" podrán participar, las "rechazadas" serán notificadas.
+            </p>
+        </div>
+
     </div>
 
-    <table th:unless="${inscripciones.isEmpty()}">
-        <thead>
-            <tr>
-                <th>ID Insc.</th>
-                <th>Participante</th>
-                <th>Edad/Sexo</th>
-                <th>Cinturón/Rango</th>
-                <th>Modalidad</th> 
-                <th>Fecha Insc.</th> <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="inscripcion : ${inscripciones}">
-                <td th:text="${inscripcion.idInscripcion}">125</td>
-                <td th:text="${inscripcion.nombreParticipante}">Juan Pérez</td>
-                <td>
-                    <span th:text="${inscripcion.edad}">25</span> / <span th:text="${inscripcion.sexo}">M</span>
-                </td>
-                <td th:text="${inscripcion.cinturonRango}">Negro</td>
+</main>
+
+<!-- SweetAlert2 para confirmaciones -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Añadir confirmación antes de rechazar una inscripción
+        const rechazarButtons = document.querySelectorAll('.btn-rechazar');
+        
+        rechazarButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
                 
-                <td th:text="${inscripcion.nombreModalidad}">Kumite</td> 
+                const form = this.closest('form');
+                const nombreParticipante = this.closest('tr').querySelector('td:nth-child(2)').textContent;
                 
-                <td th:text="${#temporals.format(inscripcion.fechaInscripcion, 'dd-MM-yyyy HH:mm')}">14/12/2025</td>
+                Swal.fire({
+                    title: '¿Rechazar inscripción?',
+                    html: `
+                        <div style="text-align: left;">
+                            <p>Estás a punto de rechazar la inscripción de: <strong>${nombreParticipante}</strong></p>
+                            <p style="color: #b71c1c; font-size: 0.9em;">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                El participante será notificado y no podrá participar en esta modalidad.
+                            </p>
+                        </div>
+                    `,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, rechazar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+        
+        // Añadir confirmación antes de aceptar una inscripción
+        const aceptarButtons = document.querySelectorAll('.btn-aceptar');
+        
+        aceptarButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
                 
-                <td>
-                    <form th:action="@{/campeonato/inscripciones/procesar}" method="post" style="display: inline;">
-                        <input type="hidden" name="id_inscripcion" th:value="${inscripcion.idInscripcion}" />
-                        <input type="hidden" name="id_campeonato" th:value="${idCampeonato}" />
-                        <input type="hidden" name="accion" value="aceptar" />
-                        <button type="submit" class="aceptar">Aceptar</button>
-                    </form>
-                    
-                    <form th:action="@{/campeonato/inscripciones/procesar}" method="post" style="display: inline;">
-                        <input type="hidden" name="id_inscripcion" th:value="${inscripcion.idInscripcion}" />
-                        <input type="hidden" name="id_campeonato" th:value="${idCampeonato}" />
-                        <input type="hidden" name="accion" value="rechazar" />
-                        <button type="submit" class="rechazar">Rechazar</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                const form = this.closest('form');
+                const nombreParticipante = this.closest('tr').querySelector('td:nth-child(2)').textContent;
+                
+                Swal.fire({
+                    title: '¿Aceptar inscripción?',
+                    html: `
+                        <div style="text-align: left;">
+                            <p>Estás a punto de aceptar la inscripción de: <strong>${nombreParticipante}</strong></p>
+                            <p style="color: #28a745; font-size: 0.9em;">
+                                <i class="fas fa-check-circle"></i> 
+                                El participante será notificado y podrá participar en esta modalidad.
+                            </p>
+                        </div>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, aceptar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

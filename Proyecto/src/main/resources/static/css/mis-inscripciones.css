@@ -16,6 +16,55 @@
     --sombra-fuerte: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+/* ================= ALERTAS Y MENSAJES (NUEVO) ================= */
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    /* ESTO ES LO CLAVE PARA QUE FUNCIONE TU SCRIPT */
+    opacity: 1;
+    transition: opacity 0.5s ease-out; /* Debe coincidir con los 500ms de tu JS */
+}
+
+/* Esta clase la añade tu JavaScript a los 3 segundos */
+.fade-out {
+    opacity: 0;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+/* Clase para desvanecer (añadida por JS) */
+.fade-out {
+    opacity: 0;
+    pointer-events: none; /* Evita que se pueda clickear mientras desaparece */
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ============================================================ */
+
 /* Contenedor principal */
 .inscripciones-container {
     display: flex;
@@ -250,177 +299,69 @@
     transform: translateY(-2px);
 }
 
-/* Sección de inscripciones en dashboard */
-.inscripciones-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.section-header h2 {
-    margin: 0;
-}
-
-.link-action {
-    color: var(--color-acento);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.3s ease;
-}
-
-.link-action:hover {
-    color: var(--color-hover);
-    gap: 8px;
-}
-
-/* Estado vacío en dashboard */
-.empty-state {
+/* Header de página */
+.page-header.centered {
     text-align: center;
-    padding: 40px 20px;
-    background: var(--color-blanco);
+    margin-bottom: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, var(--color-blanco) 0%, #f9f9f9 100%);
     border-radius: 12px;
-    border: 2px dashed #e0e0e0;
+    border: 1px solid var(--color-borde);
+    box-shadow: var(--sombra-suave);
 }
 
-.empty-state i {
-    color: var(--color-acento);
-    margin-bottom: 15px;
-    opacity: 0.7;
-}
-
-.empty-state h3 {
-    color: var(--color-principal);
-    margin-bottom: 10px;
-    font-size: 1.4rem;
-}
-
-.empty-state p {
-    color: var(--color-texto-secundario);
-    margin-bottom: 20px;
-    font-size: 1rem;
-}
-
-/* Botón de acción */
-.btn-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    background-color: var(--color-acento);
-    color: var(--color-blanco);
-    border-radius: 50px;
-    text-decoration: none;
+.page-header h2 {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    border: 2px solid var(--color-acento);
+    color: var(--color-principal);
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    font-weight: 700;
 }
 
-.btn-action:hover {
-    background-color: var(--color-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(183, 28, 28, 0.2);
-}
-
-/* Estilos para la sección de modalidades */
-.modalidades-section {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.section-title h4 {
-    margin: 0;
-    color: #333;
+.page-header p {
+    color: var(--color-texto-secundario);
     font-size: 1.1rem;
+    margin: 0;
 }
 
-.modalidades-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.modalidad-item {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 12px;
+/* Botón de eliminar modalidad */
+.btn-delete-modalidad {
+    background: none;
+    border: none;
+    color: #d32f2f;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
     transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
-.modalidad-item:hover {
-    background-color: #e9ecef;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.btn-delete-modalidad:hover {
+    color: #b71c1c;
+    background-color: rgba(183, 28, 28, 0.1);
+    transform: scale(1.1);
 }
 
-.modalidad-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 8px;
+/* Clases para estados de inscripción */
+.estado-activa {
+    background-color: #4caf50;
+    color: white;
 }
 
-.modalidad-header strong {
-    font-size: 0.95rem;
-    color: #495057;
-    flex: 1;
+.estado-pendiente {
+    background-color: #ff9800;
+    color: white;
 }
 
-.modalidad-id {
-    font-size: 0.75rem;
-    color: #6c757d;
-    background-color: #e9ecef;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-family: monospace;
+.estado-cancelada {
+    background-color: #f44336;
+    color: white;
 }
 
-.modalidad-desc {
-    font-size: 0.85rem;
-    color: #6c757d;
-    line-height: 1.4;
-    display: block;
-    margin: 5px 0;
+.estado-otro {
+    background-color: #757575;
+    color: white;
 }
-
-.modalidad-extra {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 8px;
-}
-
-.modalidad-extra .badge {
-    background-color: #e7f1ff;
-    color: #0d6efd;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -441,19 +382,5 @@
     .btn-card-action {
         width: 100%;
         justify-content: center;
-    }
-    
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-    
-    .inscripciones-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .modalidades-grid {
-        grid-template-columns: 1fr;
     }
 }

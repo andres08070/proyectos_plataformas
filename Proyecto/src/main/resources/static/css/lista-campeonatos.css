@@ -1,7 +1,3 @@
-/* ==========================================================
-   ESTILOS PARA LISTA DE CAMPEONATOS (estilo DidaMartials)
-========================================================== */
-
 /* ================= VARIABLES ================= */
 :root {
     --color-principal: #1a1a1a;
@@ -12,12 +8,114 @@
     --color-texto: #333333;
     --color-texto-secundario: #666666;
     --color-hover: #8e1515;
-    --color-blanco-hover: #f8f9fa;
     --sombra-suave: 0 2px 8px rgba(0,0,0,0.1);
     --sombra-fuerte: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* ================= BOTONES GENERALES ================= */
+body {
+    background-color: var(--color-fondo);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ================= MENSAJES DE ALERTA (MODIFICADO) ================= */
+.alert-message {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 0 auto 25px auto;
+    max-width: 800px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    /* --- ANIMACIÓN --- */
+    animation: slideIn 0.5s ease;
+    border-left: 4px solid transparent;
+    opacity: 1;
+    transition: opacity 0.5s ease-out; /* Transición suave para desaparecer */
+}
+
+/* Clase que añade JS para ocultar */
+.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.alert-message.success {
+    background-color: #d4edda; /* Verde claro */
+    border-left-color: #28a745;
+    color: #155724;
+}
+
+.alert-message.error {
+    background-color: #f8d7da; /* Rojo claro */
+    border-left-color: #dc3545;
+    color: #721c24;
+}
+
+.alert-message i {
+    font-size: 1.3rem;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* =============================================================== */
+
+/* ================= NAVBAR ================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: var(--color-blanco);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.nav-brand a { text-decoration: none; }
+.nav-logo { height: 50px; width: auto; }
+.brand-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-principal);
+}
+
+/* ================= ENCABEZADO ================= */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-header.centered {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, var(--color-blanco) 0%, #f9f9f9 100%);
+    border-radius: 12px;
+    border: 1px solid var(--color-borde);
+    box-shadow: var(--sombra-suave);
+}
+
+.page-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-principal);
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+}
+
+.page-header p {
+    color: var(--color-texto-secundario);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* ================= BOTONES ================= */
 .btn-primary, .btn-secondary, .btn-card-action {
     display: inline-flex;
     align-items: center;
@@ -40,7 +138,6 @@
     color: var(--color-blanco);
     box-shadow: var(--sombra-suave);
 }
-
 .btn-primary:hover {
     background-color: var(--color-hover);
     transform: translateY(-2px);
@@ -53,62 +150,34 @@
     border: 2px solid var(--color-acento);
     padding: 10px 22px;
 }
-
 .btn-secondary:hover {
     background-color: var(--color-acento);
     color: var(--color-blanco);
     transform: translateY(-2px);
 }
 
-/* ================= ENCABEZADO DE PÁGINA ================= */
-.page-header.centered {
-    text-align: center;
-    margin-bottom: 40px;
-    padding: 20px;
-    background: linear-gradient(135deg, var(--color-blanco) 0%, #f9f9f9 100%);
-    border-radius: 12px;
-    border: 1px solid var(--color-borde);
-}
-
-.page-header h2 {
-    font-family: 'Montserrat', sans-serif;
-    color: var(--color-principal);
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-    font-weight: 700;
-}
-
-.page-header p {
-    color: var(--color-texto-secundario);
-    font-size: 1.1rem;
-    max-width: 700px;
-    margin: 0 auto 20px;
-}
-
-/* ================= GRID LAYOUT ================= */
+/* ================= GRID Y TARJETAS ================= */
 .championship-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 30px;
     padding-bottom: 40px;
 }
 
-/* ================= DISEÑO DE TARJETA ================= */
 .champ-card {
     background: var(--color-blanco);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--sombra-suave);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
     display: flex;
     flex-direction: column;
     border: 1px solid var(--color-borde);
+    height: 100%;
 }
-
 .champ-card:hover {
     transform: translateY(-7px);
-    box-shadow: 0 15px 35px rgba(183, 28, 28, 0.15);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
     border-color: transparent;
 }
 
@@ -118,240 +187,149 @@
     width: 0;
     transition: width 0.4s ease;
 }
-
-.champ-card:hover .champ-card-top-accent {
-    width: 100%;
-}
+.champ-card:hover .champ-card-top-accent { width: 100%; }
 
 .champ-card-body {
     padding: 25px;
     flex-grow: 1;
 }
 
-.champ-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.4rem;
-    color: var(--color-principal);
+/* HEADER DE LA TARJETA CON BOTÓN ELIMINAR */
+.champ-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     margin-bottom: 15px;
-    line-height: 1.4;
-    font-weight: 600;
+    gap: 15px;
 }
 
-.champ-creator {
+.champ-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.35rem;
+    color: var(--color-principal);
+    line-height: 1.3;
+    font-weight: 700;
+    margin: 0;
+    word-break: break-word;
+}
+
+.btn-delete-title {
+    background: transparent;
+    border: none;
+    color: #adb5bd;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-top: -5px;
+}
+.btn-delete-title:hover {
+    background-color: #fee2e2;
+    color: #dc3545;
+    transform: scale(1.1);
+}
+
+/* DETALLES DE TARJETA */
+.champ-creator {
+    display: inline-flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 20px;
-    padding: 10px 12px;
+    padding: 6px 12px;
     background-color: #fef2f2;
     border-radius: 6px;
-    border-left: 4px solid var(--color-acento);
+    border-left: 3px solid var(--color-acento);
 }
-
-.champ-creator i {
-    color: var(--color-acento);
-    font-size: 1rem;
-}
-
-.champ-creator span {
-    color: var(--color-acento);
-    font-size: 0.9rem;
-    font-weight: 600;
-}
+.champ-creator i { color: var(--color-acento); font-size: 0.9rem; }
+.champ-creator span { color: var(--color-acento); font-size: 0.85rem; font-weight: 600; }
 
 .champ-details {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
-
 .detail-item {
     display: flex;
     align-items: flex-start;
     gap: 12px;
 }
-
 .detail-icon {
     color: var(--color-acento);
     font-size: 1.1rem;
-    margin-top: 3px;
-    min-width: 20px;
+    margin-top: 2px;
+    width: 20px;
+    text-align: center;
 }
-
 .detail-label {
     display: block;
     font-size: 0.75rem;
-    color: #999;
-    font-weight: 600;
+    color: #888;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 2px;
 }
-
 .detail-item span:not(.detail-label) {
     color: var(--color-texto);
     font-weight: 500;
     font-size: 0.95rem;
 }
 
-/* ================= PIE DE TARJETA ================= */
+/* FOOTER TARJETA */
 .champ-card-footer {
     padding: 20px 25px;
-    background: #fcfcfc;
+    background: #ffffff;
     border-top: 1px solid #f0f0f0;
 }
-
 .card-footer-buttons {
     display: flex;
-    gap: 12px;
-    justify-content: center;
+    gap: 10px;
+    justify-content: space-between;
 }
-
 .btn-card-action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 20px;
+    flex: 1;
+    padding: 10px 15px;
     background-color: var(--color-acento);
     color: var(--color-blanco);
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    flex: 1;
-    text-align: center;
-    border: 2px solid var(--color-acento);
+    border: 1px solid var(--color-acento);
+    font-size: 0.85rem;
 }
-
 .btn-card-action:hover {
     background-color: var(--color-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(183, 28, 28, 0.2);
+    box-shadow: 0 4px 10px rgba(183, 28, 28, 0.2);
 }
-
 .btn-card-action.btn-manage {
     background-color: var(--color-blanco);
     color: var(--color-acento);
+    border: 1px solid var(--color-borde);
 }
-
 .btn-card-action.btn-manage:hover {
     background-color: var(--color-acento);
     color: var(--color-blanco);
+    border-color: var(--color-acento);
 }
 
-/* ================= ESTADO VACÍO ================= */
+/* ESTADO VACÍO */
 .empty-state-container {
     text-align: center;
     padding: 60px 20px;
     background: var(--color-blanco);
-    border-radius: 16px;
+    border-radius: 12px;
     border: 2px dashed #e0e0e0;
-    max-width: 600px;
-    margin: 40px auto;
+    margin-top: 20px;
 }
+.empty-icon { font-size: 4rem; color: #ccc; margin-bottom: 20px; }
+.empty-state-container h3 { color: var(--color-principal); margin-bottom: 15px; font-size: 1.8rem; }
+.empty-state-container p { color: var(--color-texto-secundario); margin-bottom: 25px; font-size: 1.1rem; }
 
-.empty-icon {
-    font-size: 4rem;
-    color: var(--color-acento);
-    margin-bottom: 20px;
-    opacity: 0.7;
-}
-
-.empty-state-container h3 {
-    color: var(--color-principal);
-    margin-bottom: 15px;
-    font-size: 1.8rem;
-}
-
-.empty-state-container p {
-    color: var(--color-texto-secundario);
-    margin-bottom: 25px;
-    font-size: 1.1rem;
-}
-
-/* ================= NAVBAR ================= */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background-color: var(--color-blanco);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
-}
-
-.nav-brand {
-    display: flex;
-    align-items: center;
-}
-
-.nav-logo {
-    height: 50px;
-    width: auto;
-}
-
-.brand-text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--color-principal);
-}
-
-.nav-user {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-/* ================= AJUSTES RESPONSIVE ================= */
+/* Responsive */
 @media (max-width: 768px) {
-    .championship-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-    }
-    
-    .navbar {
-        padding: 15px;
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .nav-user {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .btn-secondary {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .card-footer-buttons {
-        flex-direction: column;
-    }
-    
-    .page-header h2 {
-        font-size: 1.8rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .championship-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .dashboard-container {
-        padding: 20px 15px;
-    }
-    
-    .champ-title {
-        font-size: 1.2rem;
-    }
-    
-    .page-header h2 {
-        font-size: 1.6rem;
-    }
+    .navbar { flex-direction: column; gap: 15px; }
+    .championship-grid { grid-template-columns: 1fr; }
+    .card-footer-buttons { flex-direction: column; }
+    .btn-card-action { width: 100%; }
 }

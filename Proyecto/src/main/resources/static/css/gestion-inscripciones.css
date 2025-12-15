@@ -1,0 +1,316 @@
+/* gestion-inscripciones.css */
+:root {
+    --color-principal: #1a1a1a;
+    --color-acento: #b71c1c;
+    --color-blanco: #ffffff;
+    --color-fondo: #f8f9fa;
+    --color-borde: #dee2e6;
+    --color-texto: #333333;
+    --color-texto-secundario: #666666;
+    --color-hover: #8e1515;
+    --color-exito: #28a745;
+    --color-pendiente: #ffc107;
+    --sombra-suave: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Estructura principal */
+.gestion-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Encabezado de la página */
+.gestion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+
+.gestion-header h1 {
+    color: var(--color-principal);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* Mensajes de alerta */
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Estado vacío */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-blanco);
+    border-radius: 12px;
+    border: 2px dashed #e0e0e0;
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    color: var(--color-acento);
+    margin-bottom: 20px;
+    opacity: 0.7;
+}
+
+.empty-state h3 {
+    color: var(--color-principal);
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.empty-state p {
+    color: var(--color-texto-secundario);
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+/* Tabla de inscripciones */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: var(--sombra-suave);
+    margin-top: 20px;
+}
+
+.inscripciones-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-blanco);
+}
+
+.inscripciones-table thead {
+    background-color: var(--color-acento);
+    color: var(--color-blanco);
+}
+
+.inscripciones-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.inscripciones-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--color-borde);
+    font-family: 'Roboto', sans-serif;
+    color: var(--color-texto);
+}
+
+.inscripciones-table tbody tr:hover {
+    background-color: rgba(183, 28, 28, 0.05);
+}
+
+/* Badges para estados */
+.badge-masculino {
+    background-color: #2196F3;
+    color: white;
+}
+
+.badge-femenino {
+    background-color: #E91E63;
+    color: white;
+}
+
+/* Badge para edad */
+.edad-badge {
+    display: inline-block;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid #ddd;
+}
+
+/* Badge para cinturón */
+.cinturon-badge {
+    display: inline-block;
+    background-color: #4a148c;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+/* Información del administrador */
+.admin-info {
+    margin-top: 5px;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid var(--color-acento);
+}
+
+/* Estilos para los badges */
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-aceptada {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-rechazada {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Mejora para la tabla */
+.inscripciones-table td {
+    vertical-align: middle;
+}
+
+/* Botones de acción */
+.acciones-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-aceptar {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-aceptar:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-rechazar {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-rechazar:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-volver {
+    background: none;
+    border: 2px solid var(--color-acento);
+    color: var(--color-acento);
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-volver:hover {
+    background-color: var(--color-acento);
+    color: var(--color-blanco);
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .gestion-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .inscripciones-table {
+        font-size: 0.85rem;
+    }
+    
+    .inscripciones-table th,
+    .inscripciones-table td {
+        padding: 10px;
+    }
+    
+    .acciones-container {
+        flex-direction: column;
+    }
+    
+    .btn-aceptar,
+    .btn-rechazar {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .admin-info {
+        font-size: 0.75rem;
+    }
+    
+    .edad-badge, 
+    .cinturon-badge {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+}

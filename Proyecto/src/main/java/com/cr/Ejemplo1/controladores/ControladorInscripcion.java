@@ -229,65 +229,65 @@ public String mostrarDetalleCampeonato(
     }
 
     @PostMapping("/inscripciones/inscribir")
-public String inscribirUsuarioModalidad(
-        @RequestParam("idCampeonato") Long idCampeonato,
-        @RequestParam("idModalidad") String idModalidad,
-        HttpSession session,
-        RedirectAttributes redirectAttributes
-) {
-
-    Object idSesion = session.getAttribute("id");
-
-    if (idSesion == null) {
-        redirectAttributes.addFlashAttribute(
-                "mensajeError",
-                "Debes iniciar sesión para inscribirte."
-        );
-        return "redirect:/auth/inicioSesion";
-    }
-
-    Long idUsuario = Long.valueOf(idSesion.toString());
-
-    System.out.println("📝 INSCRIPCIÓN");
-    System.out.println("Campeonato: " + idCampeonato);
-    System.out.println("Usuario: " + idUsuario);
-    System.out.println("Modalidad: " + idModalidad);
-
-    String sqlInsert = """
-        INSERT INTO campeonatos_inscripcion
-        (id_campeonato, id_usuario, id_modalidad)
-        VALUES (?, ?, ?)
-    """;
-
-    try (
-        Connection con = BD.conexion();
-        PreparedStatement stmt = con.prepareStatement(sqlInsert)
+    public String inscribirUsuarioModalidad(
+            @RequestParam("idCampeonato") Long idCampeonato,
+            @RequestParam("idModalidad") String idModalidad,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
     ) {
 
-        stmt.setLong(1, idCampeonato);
-        stmt.setLong(2, idUsuario);
-        stmt.setString(3, idModalidad);
+        Object idSesion = session.getAttribute("id");
 
-        stmt.executeUpdate();
-        
-        redirectAttributes.addFlashAttribute(
-            "mensajeExito",
-            "¡Inscripción exitosa! Has sido inscrito en la modalidad seleccionada."
-        );
+        if (idSesion == null) {
+            redirectAttributes.addFlashAttribute(
+                    "mensajeError",
+                    "Debes iniciar sesión para inscribirte."
+            );
+            return "redirect:/auth/inicioSesion";
+        }
 
-    } catch (SQLException e) {
-        logger.error("❌ Error al guardar la inscripción", e);
-        redirectAttributes.addFlashAttribute(
-                "mensajeError",
-                "No se pudo completar la inscripción. Inténtalo de nuevo."
-        );
+        Long idUsuario = Long.valueOf(idSesion.toString());
+
+        System.out.println("📝 INSCRIPCIÓN");
+        System.out.println("Campeonato: " + idCampeonato);
+        System.out.println("Usuario: " + idUsuario);
+        System.out.println("Modalidad: " + idModalidad);
+
+        String sqlInsert = """
+            INSERT INTO campeonatos_inscripcion
+            (id_campeonato, id_usuario, id_modalidad)
+            VALUES (?, ?, ?)
+        """;
+
+        try (
+            Connection con = BD.conexion();
+            PreparedStatement stmt = con.prepareStatement(sqlInsert)
+        ) {
+
+            stmt.setLong(1, idCampeonato);
+            stmt.setLong(2, idUsuario);
+            stmt.setString(3, idModalidad);
+
+            stmt.executeUpdate();
+
+            redirectAttributes.addFlashAttribute(
+                "mensajeExito",
+                "¡Inscripción exitosa! Has sido inscrito en la modalidad seleccionada."
+            );
+
+        } catch (SQLException e) {
+            logger.error("Error al guardar la inscripción", e);
+            redirectAttributes.addFlashAttribute(
+                    "mensajeError",
+                    "No se pudo completar la inscripción. Inténtalo de nuevo."
+            );
+        }
+
+        return "redirect:/inscripciones/" + idCampeonato;
     }
 
-    return "redirect:/inscripciones/" + idCampeonato;
-}
-
     
-@GetMapping("/mis-inscripciones")
+    @GetMapping("/mis-inscripciones")
     public String mostrarMisInscripciones(
             Model model,
             HttpSession session,
@@ -307,8 +307,10 @@ public String inscribirUsuarioModalidad(
         System.out.println("👉 ID USUARIO SESIÓN: " + idUsuario);
 
         // CONSULTA: Obtener todas las inscripciones del usuario, con datos del campeonato y la modalidad
+        // En el método mostrarMisInscripciones, cambia la consulta SQL a:
         String sql = """
             SELECT
+                ci.id_inscripcion,
                 ci.id_modalidad,
                 c.id AS id_campeonato,
                 c.nombre AS nombre_campeonato,
@@ -340,6 +342,7 @@ public String inscribirUsuarioModalidad(
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Long idCampeonato = rs.getLong("id_campeonato");
+                    Long idInscripcion = rs.getLong("id_inscripcion");
                     
                     // =======================================================
                     // 1. CREAR EL CAMPEONATO (Solo si no existe en el Map)
@@ -376,6 +379,7 @@ public String inscribirUsuarioModalidad(
                     if (modalidad != null) {
                         // Crear un Map para la modalidad, incluyendo su estado
                         Map<String, Object> modalidadDetalle = new LinkedHashMap<>();
+                        modalidadDetalle.put("idInscripcion", idInscripcion); // ← AGREGAR AL MAP
                         modalidadDetalle.put("idModalidad", modalidad.getIdModalidad());
                         modalidadDetalle.put("nombreModalidad", modalidad.getName());
                         modalidadDetalle.put("descripcionModalidad", modalidad.getDesc());
@@ -404,6 +408,82 @@ public String inscribirUsuarioModalidad(
 
         model.addAttribute("inscripciones", inscripcionesAgrupadas);
         return "campeonato/manage/mis-inscripciones";
+    }
+    
+    // Agrega este método al final de la clase ControladorInscripcion:
+
+    @PostMapping("/mis-inscripciones/eliminar/{idInscripcion}")
+    public String eliminarInscripcion(
+            @PathVariable("idInscripcion") Long idInscripcion,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Object idSesion = session.getAttribute("id");
+
+        if (idSesion == null) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Debes iniciar sesión para realizar esta acción.");
+            return "redirect:/auth/inicioSesion";
+        }
+
+        Long idUsuario = Long.valueOf(idSesion.toString());
+
+        logger.info("Usuario ID: {} intentando eliminar inscripción ID: {}", idUsuario, idInscripcion);
+
+        // Primero verificar que la inscripción pertenece al usuario
+        String sqlVerificar = """
+            SELECT COUNT(*) 
+            FROM campeonatos_inscripcion 
+            WHERE id_inscripcion = ? AND id_usuario = ?
+        """;
+
+        String sqlEliminar = "DELETE FROM campeonatos_inscripcion WHERE id_inscripcion = ? AND id_usuario = ?";
+
+        try (Connection con = BD.conexion()) {
+
+            // Verificar que el usuario es dueño de la inscripción
+            try (PreparedStatement stmtVerificar = con.prepareStatement(sqlVerificar)) {
+                stmtVerificar.setLong(1, idInscripcion);
+                stmtVerificar.setLong(2, idUsuario);
+
+                try (ResultSet rs = stmtVerificar.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        logger.warn("Usuario ID: {} no tiene permiso para eliminar inscripción ID: {}", idUsuario, idInscripcion);
+                        redirectAttributes.addFlashAttribute("mensajeError", 
+                            "No tienes permiso para eliminar esta inscripción o no existe.");
+                        return "redirect:/mis-inscripciones";
+                    }
+                }
+            }
+
+            // Eliminar la inscripción
+            try (PreparedStatement stmtEliminar = con.prepareStatement(sqlEliminar)) {
+                stmtEliminar.setLong(1, idInscripcion);
+                stmtEliminar.setLong(2, idUsuario);
+
+                int filasEliminadas = stmtEliminar.executeUpdate();
+
+                if (filasEliminadas > 0) {
+                    logger.info("Inscripción ID: {} eliminada exitosamente por usuario ID: {}", idInscripcion, idUsuario);
+                    redirectAttributes.addFlashAttribute("mensajeExito", 
+                        "Inscripción eliminada correctamente.");
+                } else {
+                    logger.warn("No se pudo eliminar la inscripción ID: {}", idInscripcion);
+                    redirectAttributes.addFlashAttribute("mensajeError", 
+                        "No se pudo eliminar la inscripción.");
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error SQL al eliminar inscripción ID: {}", idInscripcion, e);
+            redirectAttributes.addFlashAttribute("mensajeError", 
+                "❌ Error de base de datos al eliminar la inscripción.");
+        } catch (Exception e) {
+            logger.error("Error inesperado al eliminar inscripción ID: {}", idInscripcion, e);
+            redirectAttributes.addFlashAttribute("mensajeError", 
+                "❌ Error inesperado. Por favor, contacta al administrador.");
+        }
+
+        return "redirect:/mis-inscripciones";
     }
 
 

@@ -1,17 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Campeonato - DidaMartials</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/inscripciones.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-</head>
+<head th:replace="~{fragments/global :: head(titulo='Campeonato - DidaMartials', archivoCss='/css/inscripciones.css')}"></head>
 
 <body>
     <!-- Botón de retroceso -->
-    <a th:href="@{/campeonato/manage/mis-campeonatos}" class="btn-back" title="Volver a lista">
+    <a href="#" class="btn-back" onclick="window.history.back(); return false;" title="Volver a la página anterior">
         <i class="fas fa-arrow-left fa-2x"></i>
     </a>
 
@@ -76,7 +69,7 @@
                     MODALIDADES
                 </h2>
                 <p th:if="${modalidades != null and !modalidades.isEmpty()}"
-                   th:text="${'Modalidades registradas (' + modalidades.size() + ')'}">
+                   th:text="${'Tus Modalidades Inscritas (' + modalidades.size() + ')'}">
                     Modalidades
                 </p>
             </div>

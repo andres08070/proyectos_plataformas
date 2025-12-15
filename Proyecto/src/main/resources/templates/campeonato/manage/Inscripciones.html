@@ -1,17 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Inscripción - DidaMartials</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/inscripciones.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-</head>
+<head th:replace="~{fragments/global :: head(titulo='Inscripción - DidaMartials', archivoCss='/css/inscripciones.css')}"></head>
 
 <body>
     <!-- Botón de retroceso -->
-    <a th:href="@{/campeonato/lista}" class="btn-back" title="Volver a lista">
+    <a th:href="@{/campeonato/lista}" class="btn-back" title="Volver a la página anterior">
         <i class="fas fa-arrow-left fa-2x"></i>
     </a>
 
@@ -141,20 +134,123 @@
         </div>
     </div>
 
-    <!-- Script para confirmar inscripción -->
+    <!-- Script para confirmar inscripción con SweetAlert2 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const forms = document.querySelectorAll('.inscripcion-form');
+
+            // =======================================================
+            // 1. NUEVO: LÓGICA PARA DESVANECER ALERTAS DE ÉXITO/ERROR
+            // =======================================================
+            // Buscamos cualquier elemento con clase .alert (Bootstrap) o .alert-message (Tu estilo)
+            const alertas = document.querySelectorAll('.alert, .alert-message');
+
+            if (alertas.length > 0) {
+                setTimeout(function() {
+                    alertas.forEach(function(alerta) {
+                        // 1. Añadir clase CSS para bajar la opacidad
+                        alerta.classList.add('fade-out'); // Asegúrate de tener .fade-out en tu CSS
+
+                        // 2. Esperar 500ms (lo que dura la transición) y eliminar del HTML
+                        setTimeout(function() {
+                            alerta.remove();
+                        }, 500); 
+                    });
+                }, 3000); // El mensaje se muestra por 3 segundos
+            }
+
+            // =======================================================
+            // 2. LÓGICA DE CONFIRMACIÓN DE FORMULARIO (Tu código)
+            // =======================================================
+            const forms = document.querySelectorAll('.inscripcion-form'); // Asegúrate que tu <form> tenga esta clase
+
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
-                    const modalidadCard = this.closest('.modalidad-card');
-                    const modalidadNombre = modalidadCard.querySelector('.data-label')?.textContent || 'esta modalidad';
-                    if (!confirm(`¿Confirmas tu inscripción en ${modalidadNombre}?`)) {
-                        e.preventDefault();
-                    }
+                    e.preventDefault(); // Detener el envío automático
+
+                    // Intentar obtener datos visuales para la alerta (opcional)
+                    const modalidadCard = this.closest('.modalidad-card') || this.closest('.card');
+                    // Si no encuentra la tarjeta, usa valores genéricos
+                    const modalidadNombre = modalidadCard ? (modalidadCard.querySelector('.modalidad-title')?.textContent || 'esta modalidad') : 'esta modalidad';
+
+                    // Configurar SweetAlert2
+                    Swal.fire({
+                        title: '¿Confirmar inscripción?',
+                        html: `
+                            <div style="text-align: left;">
+                                <p>Estás a punto de inscribirte en: <strong>${modalidadNombre}</strong></p>
+                                <p style="color: #b71c1c; font-weight: bold; margin-top: 15px;">
+                                    <i class="fas fa-exclamation-triangle"></i> 
+                                    Tu inscripción estará sujeta a verificación.
+                                </p>
+                            </div>
+                        `,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#b71c1c', 
+                        cancelButtonColor: '#6c757d', 
+                        confirmButtonText: '<i class="fas fa-check"></i> Sí, inscribirme',
+                        cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                        backdrop: 'rgba(0,0,0,0.4)',
+                        allowOutsideClick: false,
+                        width: '500px',
+                        customClass: {
+                            popup: 'swal2-custom-popup',
+                            confirmButton: 'swal2-custom-confirm',
+                            cancelButton: 'swal2-custom-cancel'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // AQUÍ SE ENVÍA EL FORMULARIO REALMENTE
+                            this.submit(); 
+                        } else {
+                            // Mensaje de cancelación
+                            Swal.fire({
+                                title: 'Inscripción cancelada',
+                                text: 'No se ha realizado la inscripción.',
+                                icon: 'info',
+                                confirmButtonColor: '#6c757d',
+                                timer: 2000,
+                                timerProgressBar: true
+                            });
+                        }
+                    });
                 });
             });
         });
+
+        // Estilos inyectados para el SweetAlert
+        const style = document.createElement('style');
+        style.textContent = `
+            .swal2-custom-popup {
+                font-family: 'Roboto', sans-serif;
+                border-radius: 12px;
+                border: 2px solid #e0e0e0;
+            }
+            .swal2-custom-confirm {
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 600;
+                padding: 12px 24px;
+                border-radius: 50px;
+            }
+            .swal2-custom-cancel {
+                font-family: 'Roboto', sans-serif;
+                font-weight: 500;
+                padding: 10px 22px;
+                border-radius: 50px;
+            }
+            /* Aseguramos que la clase fade-out exista para las alertas de éxito */
+            .fade-out {
+                opacity: 0 !important;
+                transition: opacity 0.5s ease-out;
+                pointer-events: none;
+            }
+            /* Aseguramos que las alertas tengan transición por defecto */
+            .alert, .alert-message {
+                transition: opacity 0.5s ease-out;
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

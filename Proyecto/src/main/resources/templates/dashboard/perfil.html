@@ -1,15 +1,179 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/global :: head(titulo='Mi Perfil - DidaMartials', archivoCss='/css/perfil.css')}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a th:href="@{/inicio}" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="nav-logo">
+                <span class="brand-text">DidaMartials</span>
+            </a>
+        </div>
+
+        <div class="nav-user">
+            <div class="user-info">
+                <span class="user-name" th:text="${session.usuarioLogueado} ?: 'Bienvenido'">Usuario</span>
+                <span class="user-role">Miembro Activo</span>
+            </div>
+            
+            <a th:href="@{/logout}" class="btn-logout" title="Cerrar Sesión">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        
+        <header class="welcome-header">
+            <h1>Mi <span style="color: var(--color-acento);">Perfil</span></h1>
+            <p>Gestiona tu información personal.</p>
+        </header>
+
+        <div th:if="${mensajeExito}" class="alert-message success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${mensajeExito}"></span>
+        </div>
+
+        <div th:if="${mensajeError}" class="alert-message error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${mensajeError}"></span>
+        </div>
+
+        <section class="profile-section">
+            
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar-large">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-header-info">
+                        <h2 th:text="${perfil.nombreC}">Nombre del Usuario</h2>
+                        <p class="profile-email">
+                            <i class="fas fa-envelope"></i>
+                            <span th:text="${perfil.correo}">correo@ejemplo.com</span>
+                        </p>
+                        <div class="profile-badges">
+                            <span class="badge" th:text="${perfil.sexo} ?: 'No especificado'">Masculino</span>
+                            <span class="badge" th:text="${perfil.nacionalidad} ?: 'No especificado'">Costa Rica</span>
+                            <span class="badge" th:text="${perfil.cinturon_rango} ?: 'Sin cinturón'">Cinturón Negro</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form th:action="@{/perfil/actualizar}" method="post" class="profile-form" id="formPerfil">
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-user-edit"></i> Información Personal</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombre">Nombre Completo</label>
+                                <input type="text" id="nombre" name="nombre" th:value="${perfil.nombreC}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="correo">Correo Electrónico</label>
+                                <input type="email" id="correo" name="correo" th:value="${perfil.correo}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sexo">Género</label>
+                                <select id="sexo" class="text-select" disabled>
+                                    <option value="">Seleccionar</option>
+                                    <option value="Masculino" th:selected="${perfil.sexo == 'Masculino'}">Masculino</option>
+                                    <option value="Femenino" th:selected="${perfil.sexo == 'Femenino'}">Femenino</option>
+                                </select>
+                                <input type="hidden" name="sexo" th:value="${perfil.sexo}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="edad">Edad</label>
+                                <input type="number" id="edad" name="edad" th:value="${perfil.edad}" min="1" max="100" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cinturon_rango">Cinturón / Rango</label>
+                                <input type="text" id="cinturon_rango" name="cinturon_rango" 
+                                       th:value="${perfil.cinturon_rango}" 
+                                       placeholder="Ej: Cinturón Negro 1er Dan" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="nacionalidad">Nacionalidad</label>
+                                <input type="text" id="nacionalidad" name="nacionalidad" 
+                                       th:value="${perfil.nacionalidad}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a th:href="@{/inicio}" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver al Inicio
+                        </a>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. LÓGICA PARA DESVANECER ALERTAS (Auto-dismiss)
+            const alertas = document.querySelectorAll('.alert-message');
+            
+            if (alertas.length > 0) {
+                setTimeout(function() {
+                    alertas.forEach(function(alerta) {
+                        alerta.classList.add('fade-out');
+                        setTimeout(function() {
+                            alerta.remove();
+                        }, 500); 
+                    });
+                }, 3000);
+            }
+
+            // 2. CONFIRMACIÓN DE GUARDADO
+            const formPerfil = document.getElementById('formPerfil');
+            
+            if(formPerfil) {
+                formPerfil.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    Swal.fire({
+                        title: '¿Guardar cambios?',
+                        text: "Se actualizará la información de tu perfil.",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#b71c1c',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sí, guardar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.submit();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+
+</body>
 </html>

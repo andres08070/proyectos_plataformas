@@ -45,6 +45,10 @@ body {
     position: relative;
 }
 
+li {
+    text-align: left;
+}
+
 /* Botón de retroceso */
 .btn-back {
     position: fixed;
