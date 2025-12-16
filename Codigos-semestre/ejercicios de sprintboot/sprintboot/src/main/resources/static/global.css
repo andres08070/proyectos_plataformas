@@ -1,0 +1,226 @@
+/* ---------------------------------- */
+/* 1. Estilos Base y Layout (Oscuro)  */
+/* ---------------------------------- */
+body {
+    /* Fondo Oscuro con textura sutil */
+    font-family: 'Consolas', 'Courier New', monospace; /* Tipografía tecnológica */
+    background-color: #121212; /* Negro profundo */
+    background-image: radial-gradient(circle at center, #1f1f1f 1px, transparent 1px);
+    background-size: 50px 50px;
+    color: #e0e0e0; /* Texto gris claro */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 50px;
+}
+
+.container {
+    /* Contenedor central, con bordes angulares y brillo */
+    background-color: #1f1f1f; /* Gris muy oscuro */
+    padding: 40px;
+    border-radius: 4px; /* Bordes ligeramente angulares */
+    box-shadow: 0 0 20px rgba(255, 0, 100, 0.4), 0 0 5px rgba(255, 0, 100, 0.2); /* Sombra de neón rosa/rojo */
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    border: 1px solid #333;
+}
+
+h1 {
+    /* Título con color neón y subrayado disruptivo */
+    color: #00ffc4; /* Verde Cian Neón */
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    text-shadow: 0 0 10px #00ffc4, 0 0 5px #00ffc4;
+    border-bottom: 3px dashed #00ffc4; /* Subrayado punteado/disruptivo */
+    padding-bottom: 10px;
+    display: inline-block;
+    letter-spacing: 2px;
+}
+
+/* ---------------------------------- */
+/* 2. Estilos de Formulario (Tech)    */
+/* ---------------------------------- */
+.form-standard {
+    text-align: left;
+    display: grid;
+    gap: 15px;
+    padding: 20px 0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #00ffc4; /* Color de etiqueta neón */
+    letter-spacing: 0.5px;
+}
+
+input[type="text"], 
+input[type="number"] {
+    /* Campo de entrada oscuro con borde resaltado */
+    padding: 10px 12px;
+    border: 1px solid #555;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-radius: 2px; /* Más angular */
+    font-size: 1em;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus, 
+input[type="number"]:focus {
+    /* Efecto de foco "hackeando" */
+    border-color: #ff0064; /* Neón Rosa */
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 0, 100, 0.6);
+}
+
+/* ---------------------------------- */
+/* 3. Estilos de Botones (Poder)      */
+/* ---------------------------------- */
+button {
+    cursor: pointer;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-top: 20px;
+    transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease; /* Transiciones rápidas */
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.button-primary {
+    /* Botón de acción principal: Energía Azul */
+    background-color: #00aaff;
+    color: #000;
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+}
+
+.button-primary:hover {
+    background-color: #00c4ff;
+    transform: scale(1.02); /* Efecto de 'clic' */
+    box-shadow: 0 0 15px rgba(0, 196, 255, 0.8);
+}
+
+.button-danger {
+    /* Botón de eliminar: Advertencia Roja */
+    background-color: #ff0064; 
+    color: white;
+    box-shadow: 0 0 10px rgba(255, 0, 100, 0.5);
+}
+
+.button-danger:hover {
+    background-color: #ff3388;
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(255, 51, 136, 0.8);
+}
+
+/* ---------------------------------- */
+/* 4. Estilos de Tabla (Datos HUD)    */
+/* ---------------------------------- */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.95em;
+    text-align: left;
+    background-color: #2a2a2a; /* Fondo oscuro de la tabla */
+    border: 2px solid #00ffc4; /* Borde neón */
+}
+
+.data-table thead tr {
+    background-color: #00ffc4;
+    color: #121212; /* Texto oscuro en encabezado neón */
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.data-table th, 
+.data-table td {
+    padding: 12px 15px;
+    border: 1px solid #444;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid #333;
+}
+
+.data-table tbody tr:nth-of-type(even) {
+    background-color: #222; /* Rayado más oscuro */
+}
+
+.data-table tbody tr:last-of-type {
+    border-bottom: 2px solid #00ffc4;
+}
+
+.data-table tbody tr:hover {
+    background-color: #383838;
+    box-shadow: inset 0 0 5px rgba(0, 170, 255, 0.5); /* Brillo interior al pasar el mouse */
+    cursor: default;
+}
+
+/* ---------------------------------- */
+/* 5. Mensajes y Enlaces (Feedback)   */
+/* ---------------------------------- */
+.message {
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+    border: 1px solid;
+    text-shadow: 0 0 5px;
+}
+/* Por defecto, un color neutro/informativo */
+.message {
+    background-color: #2a2a2a;
+    color: #00ffc4;
+    border-color: #00ffc4;
+    text-shadow: 0 0 5px rgba(0, 255, 196, 0.5);
+}
+
+.result-box {
+    margin-top: 25px;
+    padding: 20px;
+    border: 2px dashed #00aaff; /* Borde azul futurista */
+    border-radius: 4px;
+    text-align: left;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.result-box h3 {
+    color: #00aaff;
+    margin-top: 0;
+    border-bottom: 1px solid #3a3a3a;
+    padding-bottom: 5px;
+    text-shadow: 0 0 5px rgba(0, 170, 255, 0.5);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 30px;
+    color: #ff0064; /* Neón Rosa */
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.back-link:hover {
+    color: #ff3388;
+    text-shadow: 0 0 8px rgba(255, 51, 136, 0.8);
+    text-decoration: none;
+}

@@ -1,0 +1,114 @@
+/* ---------------------------------- */
+/* 1. Estilos Base (Cyber Grid)     */
+/* ---------------------------------- */
+body {
+    /* Fondo oscuro con cuadrícula digital (grid) - Púrpura/Negro */
+    font-family: 'Consolas', 'Lucida Console', monospace;
+    background-color: #0d001a; /* Fondo Púrpura/Negro muy oscuro */
+    color: #e6fffa; /* Texto base muy claro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    /* Efecto de Cuadrícula "Retro Futurista" */
+    background-image: linear-gradient(to right, #330055 1px, transparent 1px),
+                      linear-gradient(to bottom, #330055 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+/* ---------------------------------- */
+/* 2. Contenedor Principal (Reactor)  */
+/* ---------------------------------- */
+.container {
+    /* Fondo muy oscuro, borde neón pulsante, ángulo y sombra intensa */
+    background-color: #1a0033; /* Púrpura oscuro (base) */
+    padding: 50px;
+    border-radius: 2px; /* Angularidad máxima */
+    /* Sombra Verde Neón VIVO pulsante */
+    box-shadow: 0 0 35px rgba(57, 255, 20, 0.8), 
+                0 0 15px rgba(0, 215, 255, 0.5); /* Brillo Azul secundario */
+    width: 95%;
+    max-width: 550px;
+    text-align: center;
+    border: 2px solid #39ff14; /* Borde de marco VERDE NEÓN VIVO */
+    /* Animación de pulso sutil en el borde */
+    animation: neon-pulse 1.5s infinite alternate; 
+}
+
+@keyframes neon-pulse {
+    from {
+        box-shadow: 0 0 30px rgba(57, 255, 20, 0.6);
+    }
+    to {
+        box-shadow: 0 0 45px rgba(57, 255, 20, 1); /* Pulso más brillante */
+    }
+}
+
+
+/* ---------------------------------- */
+/* 3. Título (HUD Display)            */
+/* ---------------------------------- */
+h1 {
+    color: #00d7ff; /* Neón Azul Eléctrico Brillante */
+    margin-bottom: 35px;
+    font-size: 2.5em;
+    text-shadow: 0 0 10px #00d7ff, 0 0 5px #00d7ff;
+    border-bottom: 4px solid #39ff14; /* Línea de separación VERDE NEÓN VIVO */
+    padding-bottom: 15px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* ---------------------------------- */
+/* 4. Lista de Menú y Enlaces         */
+/* ---------------------------------- */
+.main-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-menu li {
+    margin-bottom: 20px;
+}
+
+/* Estilo de los Enlaces (Power Buttons) */
+.main-menu a {
+    text-decoration: none;
+    display: block;
+    padding: 15px 25px;
+    background-color: #003366; /* Fondo de botón Azul Oscuro */
+    color: #e6fffa; /* Color del texto muy claro */
+    border-radius: 4px; 
+    border: 2px solid #00FF00; /* Borde de energía AZUL ELÉCTRICO */
+    transition: background-color 0.1s linear, transform 0.05s, box-shadow 0.1s;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    box-shadow: 0 0 12px rgba(0, 215, 255, 0.6); /* Brillo inicial Azul */
+}
+
+/* Efecto Hover (Activación de Poder) */
+.main-menu a:hover {
+    background-color: #39ff14; /* El botón se inunda de VERDE NEÓN VIVO */
+    color: #1a0033; /* El texto se vuelve oscuro (Púrpura/Negro) */
+    transform: scale(1.03);
+    box-shadow: 0 0 25px #39ff14, 0 0 10px #00d7ff; /* Brillo Verde VIVO + toque Azul */
+}
+
+/* Estilo para Eliminar (Advertencia Crítica - ROJO) */
+.main-menu li:nth-child(3) a { 
+    background-color: #660000; /* Rojo oscuro */
+    border: 2px solid #ff3366; /* Borde Rojo Alerta/Rosa Intenso */
+    color: #ff3366;
+    box-shadow: 0 0 12px rgba(255, 51, 102, 0.7);
+}
+
+.main-menu li:nth-child(3) a:hover {
+    background-color: #ff3366; /* Se inunda de Rojo Alerta */
+    color: #1a0033; /* Texto oscuro (para contraste) */
+    transform: scale(1.03); 
+    box-shadow: 0 0 30px #ff3366, 0 0 10px #00d7ff; /* Advertencia + Brillo Azul */
+}

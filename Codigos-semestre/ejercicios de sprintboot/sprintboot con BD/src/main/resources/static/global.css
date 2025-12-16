@@ -1,0 +1,227 @@
+/* ---------------------------------- */
+/* 1. Estilos Base y Layout (Oscuro Refinado) */
+/* ---------------------------------- */
+body {
+    /* Fondo Oscuro con textura sutil */
+    font-family: 'Consolas', 'Courier New', monospace;
+    background-color: #0d001a; /* Fondo Azul/Púrpura muy oscuro */
+    background-image: radial-gradient(circle at center, #1a0033 1px, transparent 1px);
+    background-size: 50px 50px;
+    color: #e6fffa; /* Texto muy claro (casi blanco/cian) */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 50px;
+}
+
+.container {
+    /* Contenedor central, con bordes angulares y brillo */
+    background-color: #1a0033; /* Púrpura muy oscuro, base */
+    padding: 40px;
+    border-radius: 4px;
+    /* Sombra de neón principal (Verde Intenso) y secundario (Azul Eléctrico) */
+    box-shadow: 0 0 25px rgba(57, 255, 20, 0.6), 0 0 10px rgba(0, 215, 255, 0.4); 
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    border: 1px solid #330055; /* Borde sutil oscuro */
+}
+
+h1 {
+    /* Título con color neón VERDE MÁS VIVO */
+    color: #39ff14; /* ¡VERDE NEÓN EXTREMO! */
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    text-shadow: 0 0 12px #39ff14, 0 0 6px #39ff14;
+    border-bottom: 3px dashed #00d7ff; /* Subrayado punteado Azul Eléctrico */
+    padding-bottom: 10px;
+    display: inline-block;
+    letter-spacing: 2px;
+}
+
+/* ---------------------------------- */
+/* 2. Estilos de Formulario (Tech)    */
+/* ---------------------------------- */
+.form-standard {
+    text-align: left;
+    display: grid;
+    gap: 15px;
+    padding: 20px 0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #00d7ff; /* Color de etiqueta Azul Eléctrico */
+    letter-spacing: 0.5px;
+}
+
+input[type="text"], 
+input[type="number"] {
+    /* Campo de entrada oscuro con borde resaltado */
+    padding: 10px 12px;
+    border: 1px solid #4d0066; /* Borde de contraste */
+    background-color: #0d001a; /* Fondo de input muy oscuro */
+    color: #e6fffa;
+    border-radius: 2px;
+    font-size: 1em;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus, 
+input[type="number"]:focus {
+    /* Efecto de foco "hackeando" con Verde VIVO */
+    border-color: #39ff14; 
+    outline: none;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+}
+
+/* ---------------------------------- */
+/* 3. Estilos de Botones (Poder)      */
+/* ---------------------------------- */
+button {
+    cursor: pointer;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-top: 20px;
+    transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.button-primary {
+    /* Botón de acción principal: Energía Azul */
+    background-color: #00d7ff;
+    color: #0d001a; /* Texto oscuro para contraste */
+    box-shadow: 0 0 12px rgba(0, 215, 255, 0.7);
+}
+
+.button-primary:hover {
+    background-color: #39ff14; /* Se vuelve VERDE VIVO al pasar el ratón */
+    transform: scale(1.02);
+    box-shadow: 0 0 18px rgba(57, 255, 20, 1.0);
+}
+
+.button-danger {
+    /* Botón de eliminar: Advertencia Roja (Crítica) */
+    background-color: #ff3366; 
+    color: white;
+    box-shadow: 0 0 12px rgba(255, 51, 102, 0.7);
+}
+
+.button-danger:hover {
+    background-color: #ff6699;
+    transform: scale(1.02);
+    box-shadow: 0 0 18px rgba(255, 102, 153, 1.0);
+}
+
+/* ---------------------------------- */
+/* 4. Estilos de Tabla (Datos HUD)    */
+/* ---------------------------------- */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.95em;
+    text-align: left;
+    background-color: #140026; /* Fondo oscuro de la tabla */
+    border: 2px solid #39ff14; /* Borde neón VERDE VIVO */
+}
+
+.data-table thead tr {
+    background-color: #00d7ff; /* Encabezado en Azul Eléctrico */
+    color: #0d001a;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.data-table th, 
+.data-table td {
+    padding: 12px 15px;
+    border: 1px solid #330055;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid #2a0040;
+}
+
+.data-table tbody tr:nth-of-type(even) {
+    background-color: #1f003a; /* Rayado más oscuro */
+}
+
+.data-table tbody tr:last-of-type {
+    border-bottom: 2px solid #39ff14;
+}
+
+.data-table tbody tr:hover {
+    background-color: #2a0040;
+    box-shadow: inset 0 0 8px rgba(0, 215, 255, 0.6); /* Brillo interior azul */
+    cursor: default;
+}
+
+/* ---------------------------------- */
+/* 5. Mensajes y Enlaces (Feedback)   */
+/* ---------------------------------- */
+.message {
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+    border: 1px solid;
+    text-shadow: 0 0 5px;
+}
+/* Por defecto, un color neutro/informativo (Verde VIVO) */
+.message {
+    background-color: #1a0033;
+    color: #39ff14;
+    border-color: #39ff14;
+    text-shadow: 0 0 6px rgba(57, 255, 20, 0.7);
+}
+
+.result-box {
+    margin-top: 25px;
+    padding: 20px;
+    border: 2px dashed #00d7ff; /* Borde azul futurista */
+    border-radius: 4px;
+    text-align: left;
+    background-color: #140026;
+    color: #e6fffa;
+}
+
+.result-box h3 {
+    color: #00d7ff;
+    margin-top: 0;
+    border-bottom: 1px solid #2a0040;
+    padding-bottom: 5px;
+    text-shadow: 0 0 6px rgba(0, 215, 255, 0.7);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 30px;
+    color: #ff3366; /* Neón Rojo/Rosa */
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.back-link:hover {
+    color: #ff6699;
+    text-shadow: 0 0 10px rgba(255, 102, 153, 1.0);
+    text-decoration: none;
+}

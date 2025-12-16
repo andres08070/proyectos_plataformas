@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Estudiante</title>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Eliminar Estudiante</h1>
+
+        <form action="/eliminar" method="post" class="form-standard">
+            <input type="hidden" name="_method" value="delete">
+            <div class="form-group">
+                <label for="id">ID a eliminar:</label>
+                <input type="number" id="id" name="id" required>
+            </div>
+
+            <button type="submit" class="button-danger">Eliminar</button>
+        </form>
+
+        <p th:text="${mensaje}" class="message"></p>
+        <a href="/" class="back-link">Volver a las opciones</a>
+    </div>
+</body>
+</html>
