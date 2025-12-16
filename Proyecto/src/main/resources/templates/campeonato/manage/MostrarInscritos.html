@@ -27,7 +27,7 @@
         <div class="gestion-header">
             <div>
                 <h1 th:text="'Gestión de Inscripciones: ' + ${nombreCampeonato}">Gestión de Inscripciones</h1>
-                <!-- Información del perfil del administrador -->
+                
                 <div th:if="${perfilUsuario != null}" class="admin-info">
                     <small style="color: #666; font-size: 0.85rem;">
                         <i class="fas fa-user-shield"></i> Administrador: 
@@ -131,11 +131,11 @@
 
 </main>
 
-<!-- SweetAlert2 para confirmaciones -->
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Añadir confirmación antes de rechazar una inscripción
+       
         const rechazarButtons = document.querySelectorAll('.btn-rechazar');
         
         rechazarButtons.forEach(button => {
@@ -170,7 +170,7 @@
             });
         });
         
-        // Añadir confirmación antes de aceptar una inscripción
+        
         const aceptarButtons = document.querySelectorAll('.btn-aceptar');
         
         aceptarButtons.forEach(button => {

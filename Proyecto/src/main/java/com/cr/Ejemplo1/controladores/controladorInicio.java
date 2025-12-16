@@ -16,9 +16,7 @@ public class controladorInicio {
     
     @GetMapping("/")
     public String inicio() {
-        // CAMBIO IMPORTANTE:
-        // Antes buscaba en templates/index.html
-        // Ahora busca en templates/public/index.html
+        
         return "public/index";
     }
 }

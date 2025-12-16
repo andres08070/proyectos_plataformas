@@ -3,14 +3,14 @@
 <head th:replace="~{fragments/global :: head(titulo='Campeonato - DidaMartials', archivoCss='/css/inscripciones.css')}"></head>
 
 <body>
-    <!-- Botón de retroceso -->
+    
     <a href="#" class="btn-back" onclick="window.history.back(); return false;" title="Volver a la página anterior">
         <i class="fas fa-arrow-left fa-2x"></i>
     </a>
 
     <div class="container">
 
-        <!-- Header del campeonato -->
+        
         <div class="campeonato-header">
             <div class="header">
                 <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="logo-img">
@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <!-- Sección de Modalidades -->
+        
         <section class="modalidades-section">
             <div class="section-header">
                 <h2>
@@ -74,14 +74,14 @@
                 </p>
             </div>
 
-            <!-- Sin modalidades -->
+            
             <div th:if="${modalidades != null and modalidades.isEmpty()}" class="empty-state">
                 <i class="fas fa-clipboard-list fa-3x"></i>
                 <h3>No hay modalidades registradas</h3>
                 <p>Este campeonato no tiene modalidades disponibles.</p>
             </div>
 
-            <!-- Grid -->
+           
             <div class="grid-modalidades" th:if="${modalidades != null and !modalidades.isEmpty()}">
                 <div th:each="modalidad, stat : ${modalidades}"
                      class="modalidad-card"

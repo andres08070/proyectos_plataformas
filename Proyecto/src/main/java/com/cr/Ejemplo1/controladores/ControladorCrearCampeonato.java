@@ -30,21 +30,19 @@ public class ControladorCrearCampeonato {
 
     private static final Logger logger = LoggerFactory.getLogger(ControladorCrearCampeonato.class);
 
-    // =====================================================================
-    // POST - GUARDAR CAMPEONATO
-    // =====================================================================
+    
     @PostMapping("/guardar-campeonato")
     public String guardarCampeonato(@ModelAttribute Campeonato campeonato,
                                     HttpSession session,
                                     HttpServletResponse response,
                                     RedirectAttributes redirectAttributes) {
 
-        // 🔒 PREVENIR CACHE
+       
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
-        // ✅ VERIFICAR SESIÓN (CORRECTO)
+       
         Integer idCreador = (Integer) session.getAttribute("id");
         if (idCreador == null) {
             logger.error("Usuario no logueado. Redirigiendo a login.");
@@ -94,20 +92,18 @@ public class ControladorCrearCampeonato {
         }
     }
 
-    // =====================================================================
-    // GET - LISTA DE CAMPEONATOS
-    // =====================================================================
+    
     @GetMapping("/campeonato/lista")
     public String mostrarCampeonatos(Model model,
                                      HttpServletResponse response,
                                      HttpSession session) {
 
-        // 🔒 PREVENIR CACHE
+       
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
-        // ✅ VERIFICAR SESIÓN (CORRECTO)
+   
         Integer idUsuario = (Integer) session.getAttribute("id");
         if (idUsuario == null) {
             logger.warn("Intento de acceso no autorizado a /campeonato/lista");
@@ -161,20 +157,18 @@ public class ControladorCrearCampeonato {
         return "campeonato/lista-campeonatos";
     }
 
-    // =====================================================================
-    // GET - PÁGINA CREAR CAMPEONATO
-    // =====================================================================
+    
     @GetMapping("/CrearCampeonato")
     public String mostrarFormularioCrear(Model model,
                                          HttpServletResponse response,
                                          HttpSession session) {
 
-        // 🔒 PREVENIR CACHE
+       
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
-        // ✅ VERIFICAR SESIÓN (CORRECTO)
+    
         Integer idUsuario = (Integer) session.getAttribute("id");
         if (idUsuario == null) {
             logger.warn("Intento de acceso no autorizado a /CrearCampeonato");
@@ -193,7 +187,7 @@ public class ControladorCrearCampeonato {
                                      HttpSession session,
                                      RedirectAttributes redirectAttributes) {
 
-        // ✅ Verificar sesión
+        
         Integer idUsuario = (Integer) session.getAttribute("id");
         if (idUsuario == null) {
             redirectAttributes.addFlashAttribute("mensajeError", "Debes iniciar sesión para realizar esta acción.");
@@ -202,23 +196,23 @@ public class ControladorCrearCampeonato {
 
         logger.info("Usuario ID: {} intentando eliminar campeonato ID: {}", idUsuario, idCampeonato);
 
-        // SQL para eliminar primero las inscripciones (debido a la restricción de clave foránea)
+        
         String sqlEliminarInscripciones = "DELETE FROM campeonatos_inscripcion WHERE id_campeonato = ?";
         String sqlEliminarCampeonato = "DELETE FROM campeonato WHERE id = ? AND id_admin = ?";
 
         try (Connection con = BD.conexion()) {
-            // Iniciar transacción
+           
             con.setAutoCommit(false);
 
             try {
-                // 1. Eliminar inscripciones asociadas
+                
                 try (PreparedStatement stmtInscripciones = con.prepareStatement(sqlEliminarInscripciones)) {
                     stmtInscripciones.setLong(1, idCampeonato);
                     int filasInscripciones = stmtInscripciones.executeUpdate();
                     logger.info("Eliminadas {} inscripciones del campeonato ID: {}", filasInscripciones, idCampeonato);
                 }
 
-                // 2. Eliminar campeonato (solo si es del usuario)
+                
                 try (PreparedStatement stmtCampeonato = con.prepareStatement(sqlEliminarCampeonato)) {
                     stmtCampeonato.setLong(1, idCampeonato);
                     stmtCampeonato.setInt(2, idUsuario);

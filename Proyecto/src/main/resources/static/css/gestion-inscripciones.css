@@ -1,4 +1,4 @@
-/* gestion-inscripciones.css */
+
 :root {
     --color-principal: #1a1a1a;
     --color-acento: #b71c1c;
@@ -13,14 +13,14 @@
     --sombra-suave: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Estructura principal */
+
 .gestion-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Encabezado de la página */
+
 .gestion-header {
     display: flex;
     justify-content: space-between;
@@ -37,7 +37,7 @@
     margin: 0;
 }
 
-/* Mensajes de alerta */
+
 .alert {
     padding: 15px;
     border-radius: 8px;
@@ -59,7 +59,7 @@
     border: 1px solid #f5c6cb;
 }
 
-/* Estado vacío */
+
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -89,7 +89,7 @@
     font-size: 1rem;
 }
 
-/* Tabla de inscripciones */
+
 .table-responsive {
     overflow-x: auto;
     border-radius: 8px;
@@ -129,7 +129,7 @@
     background-color: rgba(183, 28, 28, 0.05);
 }
 
-/* Badges para estados */
+
 .badge-masculino {
     background-color: #2196F3;
     color: white;
@@ -140,7 +140,7 @@
     color: white;
 }
 
-/* Badge para edad */
+
 .edad-badge {
     display: inline-block;
     background-color: #f0f0f0;
@@ -152,7 +152,7 @@
     border: 1px solid #ddd;
 }
 
-/* Badge para cinturón */
+
 .cinturon-badge {
     display: inline-block;
     background-color: #4a148c;
@@ -164,7 +164,7 @@
     text-transform: uppercase;
 }
 
-/* Información del administrador */
+
 .admin-info {
     margin-top: 5px;
     padding: 8px 12px;
@@ -173,7 +173,7 @@
     border-left: 3px solid var(--color-acento);
 }
 
-/* Estilos para los badges */
+
 .badge {
     padding: 4px 10px;
     border-radius: 12px;
@@ -198,12 +198,12 @@
     color: #721c24;
 }
 
-/* Mejora para la tabla */
+
 .inscripciones-table td {
     vertical-align: middle;
 }
 
-/* Botones de acción */
+
 .acciones-container {
     display: flex;
     gap: 8px;
@@ -277,7 +277,7 @@
     transform: translateY(-2px);
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .gestion-header {
         flex-direction: column;

@@ -1,8 +1,4 @@
-/* ==========================================================
-   ESTILOS PARA MIS INSCRIPCIONES
-========================================================== */
 
-/* Variables de colores */
 :root {
     --color-principal: #1a1a1a;
     --color-acento: #b71c1c;
@@ -16,7 +12,7 @@
     --sombra-fuerte: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* ================= ALERTAS Y MENSAJES (NUEVO) ================= */
+
 .alert {
     padding: 15px 20px;
     border-radius: 8px;
@@ -25,12 +21,12 @@
     align-items: center;
     gap: 12px;
     
-    /* ESTO ES LO CLAVE PARA QUE FUNCIONE TU SCRIPT */
+
     opacity: 1;
-    transition: opacity 0.5s ease-out; /* Debe coincidir con los 500ms de tu JS */
+    transition: opacity 0.5s ease-out;
 }
 
-/* Esta clase la añade tu JavaScript a los 3 segundos */
+
 .fade-out {
     opacity: 0;
 }
@@ -47,10 +43,10 @@
     color: #721c24;
 }
 
-/* Clase para desvanecer (añadida por JS) */
+
 .fade-out {
     opacity: 0;
-    pointer-events: none; /* Evita que se pueda clickear mientras desaparece */
+    pointer-events: none; 
 }
 
 @keyframes slideDown {
@@ -63,9 +59,7 @@
         transform: translateY(0);
     }
 }
-/* ============================================================ */
 
-/* Contenedor principal */
 .inscripciones-container {
     display: flex;
     flex-direction: column;
@@ -74,7 +68,7 @@
     margin: 0 auto;
 }
 
-/* Tarjeta de inscripción */
+
 .inscripcion-card {
     background: var(--color-blanco);
     border-radius: 12px;
@@ -91,7 +85,7 @@
     border-color: var(--color-acento);
 }
 
-/* Acento superior rojo */
+
 .inscripcion-card::before {
     content: '';
     position: absolute;
@@ -121,7 +115,7 @@
     flex: 1;
 }
 
-/* Estados de inscripción */
+
 .inscripcion-estado {
     padding: 6px 15px;
     border-radius: 20px;
@@ -156,7 +150,7 @@
     border: 1px solid #d6d8db;
 }
 
-/* Detalles de la inscripción */
+
 .inscripcion-details {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -193,7 +187,7 @@
     font-size: 0.95rem;
 }
 
-/* Botones de acción */
+
 .inscripcion-actions {
     display: flex;
     justify-content: center;
@@ -222,7 +216,7 @@
     box-shadow: 0 4px 12px rgba(183, 28, 28, 0.2);
 }
 
-/* Estado vacío */
+
 .empty-state-container {
     text-align: center;
     padding: 60px 20px;
@@ -252,7 +246,7 @@
     font-size: 1.1rem;
 }
 
-/* Botón primario */
+
 .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -276,7 +270,7 @@
     box-shadow: var(--sombra-fuerte);
 }
 
-/* Botón secundario */
+
 .btn-secondary {
     display: inline-flex;
     align-items: center;
@@ -299,7 +293,7 @@
     transform: translateY(-2px);
 }
 
-/* Header de página */
+
 .page-header.centered {
     text-align: center;
     margin-bottom: 40px;
@@ -324,7 +318,7 @@
     margin: 0;
 }
 
-/* Botón de eliminar modalidad */
+
 .btn-delete-modalidad {
     background: none;
     border: none;
@@ -342,7 +336,7 @@
     transform: scale(1.1);
 }
 
-/* Clases para estados de inscripción */
+
 .estado-activa {
     background-color: #4caf50;
     color: white;
@@ -363,7 +357,7 @@
     color: white;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .inscripcion-header {
         flex-direction: column;

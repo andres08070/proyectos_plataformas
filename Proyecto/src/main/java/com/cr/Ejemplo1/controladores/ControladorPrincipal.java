@@ -20,9 +20,7 @@ public class ControladorPrincipal {
     @Autowired
     private HttpSession session; 
 
-    // ==========================================
-    // RUTAS PÚBLICAS (Login y Registro - GET)
-    // ==========================================
+   
 
     @GetMapping("/auth/inicioSesion")
     public String mostrarLogin() {
@@ -34,18 +32,16 @@ public class ControladorPrincipal {
         return "auth/registro";
     }
     
-    // ==========================================
-    // RUTAS PRIVADAS (Protegidas por sesión)
-    // ==========================================
+    
     
     @GetMapping("/inicio")
     public String inicio(HttpServletResponse response, HttpSession session, Model model) {
-        // 🔒 Prevenir cache
+        
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
-        // ✅ Verificar sesión (ID COMO INTEGER)
+        
         Integer idUsuario = (Integer) session.getAttribute("id");
         if (idUsuario == null) {
             return "redirect:/auth/inicioSesion";
@@ -54,9 +50,7 @@ public class ControladorPrincipal {
         return "dashboard/inicio";
     } 
 
-    // ==========================================
-    // RUTAS DE ACCIÓN (POST)
-    // ==========================================
+    
 
     @PostMapping("/iniciarSesion")
     public String procesarLogin(@RequestParam String correo, 
@@ -64,7 +58,7 @@ public class ControladorPrincipal {
                                 Model model,
                                 HttpServletResponse response) {
         
-        // 🔒 PREVENIR CACHE EN LOGIN
+        
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
@@ -80,10 +74,10 @@ public class ControladorPrincipal {
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
-                // ✅ Login Exitoso: Guardar datos en sesión (TIPOS CORRECTOS)
+                
                 session.setAttribute("usuarioLogueado", rs.getString("nombreC"));
                 session.setAttribute("rangoUsuario", rs.getString("cinturon_rango"));
-                session.setAttribute("id", rs.getInt("ID_documento")); // 👈 AQUÍ ESTABA EL ERROR
+                session.setAttribute("id", rs.getInt("ID_documento"));
                 
                 System.out.println("Usuario logueado con ID: " + session.getAttribute("id"));
                 
@@ -102,12 +96,12 @@ public class ControladorPrincipal {
     
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
-        // 🔒 PREVENIR CACHE
+        
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
         
-        // Invalidar toda la sesión
+        
         session.invalidate();
         
         return "redirect:/auth/inicioSesion?logout=true";

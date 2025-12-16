@@ -1,26 +1,21 @@
-/* ========================================================
-   ARCHIVO: wizard.js
-   DESCRIPCIÓN: Lógica Dinámica Completa + Validaciones Pro
-======================================================== */
+
 
 let activeModalities = {}; 
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // 1. INICIALIZAR CALENDARIOS
+ 
     flatpickr(".flatpickr-input", {
         locale: "es", altInput: true, altFormat: "j F, Y", dateFormat: "Y-m-d", minDate: "today", disableMobile: "true"
     });
 
-    // 2. Bloqueo de Enter global
+    
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA' && event.target.type !== 'submit') {
             event.preventDefault(); return false;
         }
     });
-    // ==========================================
-    // 1. ALERTA DE ÉXITO (Con temporizador)
-    // ==========================================
+    
     const mensajeExito = /*[[${mensajeExito}]]*/ null;
     
     if (mensajeExito) {
@@ -33,23 +28,21 @@ document.addEventListener('DOMContentLoaded', function() {
             allowOutsideClick: false,
             allowEscapeKey: false,
             
-            // --- NUEVAS LÍNEAS AGREGADAS ---
+            
             timer: 3000, // 3000ms = 3 segundos
             timerProgressBar: true
             // -------------------------------
 
         }).then((result) => {
-            // Verificamos si se cerró por el botón "Ver" O por el temporizador
+            
             if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                // Recargamos la página
+                
                 window.location.reload();
             }
         });
     }
     
-    // ==========================================
-    // 2. ALERTA DE ERROR (Con temporizador)
-    // ==========================================
+    
     const mensajeError = /*[[${mensajeError}]]*/ null;
     
     if (mensajeError) {
@@ -62,16 +55,14 @@ document.addEventListener('DOMContentLoaded', function() {
             allowOutsideClick: false,
             allowEscapeKey: false,
 
-            // --- NUEVAS LÍNEAS AGREGADAS ---
+            
             timer: 4000, // Le damos un segundo más al error para leerlo bien
             timerProgressBar: true
             // -------------------------------
         });
     }
 
-    // ==========================================
-    // 3. LÓGICA DE ELIMINACIÓN (Sin cambios)
-    // ==========================================
+    
     const deleteButtons = document.querySelectorAll('.btn-delete-title');
     
     deleteButtons.forEach(button => {
@@ -123,35 +114,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-/* ========================================================
-   VALIDACIONES DE ENTRADA (NO + - e)
-======================================================== */
-// Esta función impide que el usuario presione teclas inválidas en inputs numéricos
+
 function blockInvalidChars(e) {
-    // Permitir: backspace, delete, tab, escape, enter y flechas
+   
     if ([46, 8, 9, 27, 13, 110].indexOf(e.keyCode) !== -1 ||
-        // Permitir: Ctrl+A, Command+A
+        
         (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
-        // Permitir: home, end, left, right, down, up
+       
         (e.keyCode >= 35 && e.keyCode <= 40)) {
              return;
     }
-    // Bloquear 'e', 'E', '+', '-'
+   
     if (['e', 'E', '+', '-'].includes(e.key)) {
         e.preventDefault();
     }
 }
 
-/* ========================================================
-   GESTIÓN DE MODALIDADES DINÁMICAS
-======================================================== */
+
 function addNewModality() {
     const container = document.getElementById('modalities-container-dynamic');
     const uniqueId = 'mod_' + Date.now(); 
     
     activeModalities[uniqueId] = { name: '', desc: '', peso: [], rango: [], edad: [], genero: null };
 
-    // NOTA: Se agregan onkeydown="blockInvalidChars(event)" y min="0" a todos los inputs numéricos
+    
     const cardHTML = `
         <div class="modality-card" id="card-${uniqueId}">
             <div class="modality-header-edit">
@@ -286,16 +272,14 @@ function removeModality(id) {
 function updateModName(id, val) { activeModalities[id].name = val; }
 function updateModDesc(id, val) { activeModalities[id].desc = val; }
 
-// --- TOGGLES VISUALES ---
+
 function toggleConfigPanel(id, checkbox) { const panel = document.getElementById(`panel-${id}`); checkbox.checked ? panel.classList.add('open') : panel.classList.remove('open'); }
 function toggleCriteriaBody(checkbox) { const wrapper = checkbox.closest('.criteria-wrapper'); const body = wrapper.querySelector('.criteria-body'); checkbox.checked ? body.classList.add('open') : body.classList.remove('open'); }
 function triggerSwitch(header) { if (event.target.closest('.switch')) return; const checkbox = header.querySelector('input[type="checkbox"]'); checkbox.checked = !checkbox.checked; checkbox.dispatchEvent(new Event('change')); }
 function toggleBeltMode(id, mode) { const rS = document.getElementById(`belt-single-row-${id}`); const rR = document.getElementById(`belt-range-row-${id}`); if(mode==='single'){rS.style.display='flex';rR.style.display='none';}else{rS.style.display='none';rR.style.display='flex';} }
 function toggleAgeMode(id, mode) { const rS = document.getElementById(`age-single-row-${id}`); const rR = document.getElementById(`age-range-row-${id}`); if(mode==='single'){rS.style.display='flex';rR.style.display='none';}else{rS.style.display='none';rR.style.display='flex';} }
 
-/* ========================================================
-   LÓGICA DE AGREGAR ITEMS (CON VALIDACIÓN DE RANGOS)
-======================================================== */
+
 function handleEnter(e, id, type) { if(e.key === 'Enter') { e.preventDefault(); if(type==='peso') addWeight(id); if(type==='rango') addBelt(id); if(type==='edad') addAge(id); } }
 
 function addWeight(id) {
@@ -305,7 +289,7 @@ function addWeight(id) {
 
     if(!input.value.trim()) return;
     
-    // Validación de Peso Lógico
+  
     if (val <= 0 || val > 300) {
         Swal.fire({icon:'warning', title:'Peso inválido', text:'Ingresa un peso entre 1 y 300 Kg.', confirmButtonColor: '#b71c1c'});
         return;
@@ -342,7 +326,7 @@ function addAge(id) {
         const val = parseInt(input.value);
         if (!input.value) return;
         
-        // Validación Edad Lógica
+        
         if (val <= 0 || val > 120) {
             Swal.fire({icon:'warning', title:'Edad inválida', text:'Ingresa una edad realista.', confirmButtonColor: '#b71c1c'});
             return;
@@ -357,7 +341,7 @@ function addAge(id) {
         
         if(!minInput.value || !maxInput.value) return;
 
-        // Validaciones Rango
+        
         if(min <= 0 || max > 120) {
             Swal.fire({icon:'warning', title:'Edad fuera de rango', text:'Edades deben ser entre 1 y 120.', confirmButtonColor: '#b71c1c'});
             return; 
@@ -386,9 +370,7 @@ function renderTags(id, type) {
 }
 function removeTag(id, type, index) { activeModalities[id][type].splice(index, 1); renderTags(id, type); }
 
-/* ========================================================
-   NAVEGACIÓN
-======================================================== */
+
 function showStep(step) {
     document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active-step'));
     document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
@@ -407,7 +389,7 @@ function nextStep(target) {
 }
 function prevStep(step) { showStep(step); }
 
-// Generate Summary: Mismo de antes (ya está correcto)
+
 function generateSummary() {
     const div = document.getElementById('summary-content');
     const nombre = document.getElementById('nombre').value || "Sin Nombre";

@@ -117,28 +117,24 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        // ==========================================
-        // 1. LÓGICA PARA DESVANECER ALERTAS (DOM)
-        // ==========================================
+        
         const alertas = document.querySelectorAll('.alert-message');
         
         if (alertas.length > 0) {
             setTimeout(function() {
                 alertas.forEach(function(alerta) {
-                    // Añadir clase fade-out para iniciar transición CSS
+                   
                     alerta.classList.add('fade-out');
                     
-                    // Esperar 500ms (tiempo de la transición) y eliminar del DOM
+                    
                     setTimeout(function() {
                         alerta.remove();
                     }, 500); 
                 });
-            }, 3000); // 3 segundos de lectura
+            }, 3000); 
         }
 
-        // ==========================================
-        // 2. LÓGICA DE CONFIRMACIÓN DE ELIMINAR (SweetAlert)
-        // ==========================================
+       
         const deleteButtons = document.querySelectorAll('.btn-delete-title');
         
         deleteButtons.forEach(button => {

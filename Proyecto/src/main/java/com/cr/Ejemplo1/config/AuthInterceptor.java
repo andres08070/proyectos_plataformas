@@ -17,12 +17,12 @@ public class AuthInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         String requestURI = request.getRequestURI();
         
-        // 🔒 PREVENIR CACHE EN TODAS LAS RUTAS PRIVADAS
+        
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
         
-        // Rutas públicas que no requieren autenticación
+        
         String[] publicPaths = {
             "/login", 
             "/registro", 
@@ -38,14 +38,14 @@ public class AuthInterceptor implements HandlerInterceptor {
             "/"
         };
         
-        // Verificar si la ruta es pública
+        
         for (String path : publicPaths) {
             if (requestURI.startsWith(path)) {
                 return true;
             }
         }
         
-        // Si no hay sesión y es ruta privada, redirigir a login
+       
         if (session == null || session.getAttribute("id") == null) {
             response.sendRedirect("/login");
             return false;

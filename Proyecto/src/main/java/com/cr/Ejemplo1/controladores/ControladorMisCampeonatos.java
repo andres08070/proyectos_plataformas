@@ -26,12 +26,12 @@ public class ControladorMisCampeonatos {
                                         HttpServletResponse response,
                                         HttpSession session) {
 
-        // 🔒 PREVENIR CACHE
+        
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
-        // ✅ VERIFICAR SESIÓN (ID COMO INTEGER)
+        
         Integer idUsuario = (Integer) session.getAttribute("id");
 
         if (idUsuario == null) {
@@ -42,7 +42,7 @@ public class ControladorMisCampeonatos {
 
         logger.info("Usuario ID: {} accediendo a sus campeonatos", idUsuario);
 
-        // ✅ CONSULTA: SOLO CAMPEONATOS DEL USUARIO ACTUAL
+        
         String sqlSelect = """
             SELECT
                 c.id,

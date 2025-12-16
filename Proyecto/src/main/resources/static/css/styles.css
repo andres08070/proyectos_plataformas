@@ -1,33 +1,29 @@
-/* ========================================================
-    RESET GLOBAL (CRUCIAL PARA RESPONSIVE)
-======================================================== */
+
 * {
-    box-sizing: border-box; /* Evita que el padding deforme el ancho */
+    box-sizing: border-box; 
 }
 
-/* Variables de Colores (Sincronizadas con index.css) */
+
 :root {
-    --color-principal: #1a1a1a;  /* Negro suave profesional */
-    --color-texto: #555555;      /* Gris para lectura */
-    --color-fondo: #f4f6f8;      /* Gris muy claro de fondo */
+    --color-principal: #1a1a1a;  
+    --color-texto: #555555;     
+    --color-fondo: #f4f6f8;      
     
-    --color-acento: #b71c1c;     /* Rojo Dida Oscuro */
+    --color-acento: #b71c1c;     
     --color-acento-hover: #8e0000;
-    --color-alerta: #d32f2f;     /* Rojo para errores */
+    --color-alerta: #d32f2f;     
     
     --color-card: #ffffff;
     --color-borde: #e0e0e0;
 }
 
-/* ========================================================
---- Estilos Globales & Centrado Total ---
-======================================================== */
+
 body {
-    font-family: 'Roboto', sans-serif; /* Texto limpio */
+    font-family: 'Roboto', sans-serif; 
     background-color: var(--color-fondo);
     color: var(--color-principal);
     
-    /* CENTRADO PERFECTO */
+  
     display: flex;
     justify-content: center;
     align-items: center;    
@@ -38,21 +34,21 @@ body {
     line-height: 1.5;
 }
 
-/* Tarjeta Principal */
+
 .container {
     background-color: var(--color-card);
-    padding: 40px 50px; /* Más aire interno para elegancia */
-    border-radius: 20px; /* Bordes un poco más suaves */
-    box-shadow: 0 10px 40px rgba(0,0,0,0.08); /* Sombra difuminada moderna */
+    padding: 40px 50px; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
     
     width: 100%; 
-    max-width: 480px; /* Un poco más ancho para comodidad */
+    max-width: 480px;
     
     text-align: center;
     position: relative; 
 }
 
-/* --- HEADER DEL FORMULARIO --- */
+
 .header {
     display: flex;
     flex-direction: column;
@@ -60,39 +56,37 @@ body {
     margin-bottom: 30px;
 }
 
-/* ========================================================
-   FLECHA DE RETROCESO (ANIMACIÓN CORREGIDA) ⬅️
-======================================================== */
+
 .header a[title="Volver al inicio"] {
     position: absolute;
     top: 50%;
-    left: -20px; /* Posición ajustada a la izquierda */
-    transform: translateY(-50%); /* Centrado vertical exacto */
+    left: -20px; 
+    transform: translateY(-50%); 
     
-    color: var(--color-principal); /* Color inicial (Negro) */
+    color: var(--color-principal); 
     
-    /* Animación suave para el color y el movimiento */
+    
     transition: color 0.3s ease, transform 0.3s ease; 
     z-index: 10;
 }
 
-/* Estado HOVER: Cambio de color a Rojo y pequeño Zoom */
+
 .header a[title="Volver al inicio"]:hover {
-    color: var(--color-acento) !important; /* Forzamos el rojo */
-    transform: translateY(-50%) scale(1.1); /* Efecto de "latido" leve */
+    color: var(--color-acento) !important; 
+    transform: translateY(-50%) scale(1.1); 
 }
 
-/* ======================================================== */
+
 
 .logo-img {
-    width: 160px; /* Logo con más presencia */
+    width: 160px; 
     height: auto;       
     display: block;
     margin: 0 auto 15px auto; 
 }
 
 .header h2 { 
-    font-family: 'Montserrat', sans-serif; /* Tipografía Marcial */
+    font-family: 'Montserrat', sans-serif; 
     color: var(--color-principal); 
     font-weight: 700; 
     text-transform: uppercase;
@@ -101,33 +95,30 @@ body {
     font-size: 1.5rem; 
 }
 
-/* ========================================================
-   FLECHA DE RETROCESO (ESQUINA SUPERIOR IZQUIERDA) ↖️
-======================================================== */
-/* Usaremos una clase específica para control total */
+
 .btn-back {
     position: absolute;
-    top: 25px;  /* Distancia desde el borde superior de la tarjeta */
-    left: 30px; /* Distancia desde el borde izquierdo de la tarjeta */
+    top: 25px;  
+    left: 30px; 
     
-    color: var(--color-principal); /* Color inicial (Negro) */
+    color: var(--color-principal); 
     
-    /* Animación suave */
+    
     transition: all 0.3s ease; 
     z-index: 10;
     
-    /* Asegura que el ícono no tenga decoración de enlace */
+    
     text-decoration: none;
     line-height: 0;
 }
 
-/* Estado HOVER: Cambio de color a Rojo y pequeño Zoom */
+
 .btn-back:hover {
     color: var(--color-acento) !important; 
-    transform: scale(1.15); /* Efecto de acercamiento */
+    transform: scale(1.15); 
 }
 
-/* --- FORMULARIO --- */
+
 .form-group { text-align: left; margin-bottom: 20px; }
 
 .form-group label {
@@ -137,14 +128,14 @@ body {
     color: var(--color-principal);
     font-weight: 600;
     font-size: 0.9rem;
-    text-transform: uppercase; /* Etiquetas en mayúscula estilo ficha técnica */
+    text-transform: uppercase; 
     letter-spacing: 0.5px;
 }
 
 .form-group input {
     width: 100%;
     padding: 14px 16px; 
-    border: 2px solid var(--color-borde); /* Borde sólido */
+    border: 2px solid var(--color-borde); 
     border-radius: 10px;
     background-color: #fcfcfc;
     font-size: 1rem;
@@ -157,10 +148,10 @@ body {
     border-color: var(--color-acento);
     background-color: #fff;
     outline: none;
-    box-shadow: 0 4px 10px rgba(183, 28, 28, 0.1); /* Resplandor rojo suave */
+    box-shadow: 0 4px 10px rgba(183, 28, 28, 0.1);
 }
 
-/* --- DROPDOWN PERSONALIZADO --- */
+
 .custom-dropdown { position: relative; width: 100%; }
 .custom-dropdown select { 
     display: none !important; 
@@ -220,7 +211,7 @@ body {
 .dropdown-options li:hover { background-color: #fff5f5; color: var(--color-acento); }
 .dropdown-options li.selected { background-color: var(--color-acento); color: #fff; }
 
-/* Flecha del dropdown (Chevron) */
+
 .fa-chevron-down {
     transition: transform 0.3s;
     font-size: 0.9rem;
@@ -232,14 +223,14 @@ body {
     color: var(--color-acento); 
 }
 
-/* --- BOTONES (Estilo "Pill" Marcial) --- */
+
 .btn-submit {
     background-color: var(--color-acento); 
     color: #fff;
     border: none;
     padding: 15px; 
     width: 100%;
-    border-radius: 50px; /* Botón redondeado moderno */
+    border-radius: 50px; 
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 700;
@@ -257,7 +248,7 @@ body {
     box-shadow: 0 6px 20px rgba(183, 28, 28, 0.4);
 }
 
-/* Enlaces inferiores */
+
 a[style*="color: #e74c3c"] {
     color: var(--color-acento) !important;
     font-family: 'Montserrat', sans-serif;
@@ -277,7 +268,7 @@ small {
     font-family: 'Roboto', sans-serif;
 }
 
-/* Quitar flechas inputs numéricos */
+
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -285,20 +276,16 @@ input[type=number]::-webkit-inner-spin-button {
 }
 input[type=number] { -moz-appearance: textfield; }
 
-/* ========================================================
-   ESTILOS ESPECÍFICOS PARA VERIFICACIÓN (OTP)
-======================================================== */
 
-/* Input gigante y centrado para el código */
 .input-codigo {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 2rem !important; /* Texto muy grande */
+    font-size: 2rem !important; 
     text-align: center;
-    letter-spacing: 10px; /* Separación entre números */
+    letter-spacing: 10px; 
     padding: 15px !important;
     font-weight: 700;
-    color: var(--color-acento) !important; /* Los números serán rojos */
-    width: 80% !important; /* No ocupa todo el ancho para verse mejor */
+    color: var(--color-acento) !important; 
+    width: 80% !important; 
     margin: 0 auto;
     display: block;
     border: 2px solid var(--color-borde);
@@ -313,20 +300,20 @@ input[type=number] { -moz-appearance: textfield; }
     outline: none;
 }
 
-/* Estilo para el placeholder del código */
+
 .input-codigo::placeholder {
     color: #ddd;
     letter-spacing: 5px;
     font-weight: 400;
 }
 
-/* Texto pequeño auxiliar */
+
 .text-small {
     font-family: 'Roboto', sans-serif;
 }
 
 .link-reenviar {
-    color: var(--color-acento); /* Rojo */
+    color: var(--color-acento); 
     font-weight: 700;
     text-decoration: none;
     transition: color 0.3s ease, text-decoration 0.3s ease;
@@ -334,17 +321,15 @@ input[type=number] { -moz-appearance: textfield; }
 }
 
 .link-reenviar:hover {
-    color: var(--color-acento-hover) !important; /* Rojo más oscuro */
+    color: var(--color-acento-hover) !important; 
     text-decoration: underline;
     cursor: pointer;
 }
 
-/* ========================================================
-    RESPONSIVE: Ajustes para Móviles
-======================================================== */
+
 @media (max-width: 600px) {
     
-    /* Fondo blanco "App Nativa" */
+    
     body {
         background-color: var(--color-card); 
         padding: 0;
@@ -357,7 +342,7 @@ input[type=number] { -moz-appearance: textfield; }
         width: 100%; 
         max-width: 100%;
         
-        /* Permite que el contenido determine la altura y se centre */
+        
         min-height: auto; 
     }
 
@@ -370,7 +355,7 @@ input[type=number] { -moz-appearance: textfield; }
         font-size: 1.3rem;
     }
     
-    /* Ajuste para que la flecha no se salga en pantallas muy angostas */
+    
     .header a[title="Volver al inicio"] {
         left: 0; 
     }

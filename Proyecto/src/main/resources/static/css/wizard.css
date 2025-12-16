@@ -1,8 +1,6 @@
-/* ==========================================================
-   WIZARD.CSS - ESTILOS DEFINITIVOS & PREMIUM
-========================================================== */
 
-/* --- HEADER Y PROGRESO --- */
+
+
 .wizard-header { text-align: center; margin-bottom: 30px; }
 .wizard-header h2 { font-family: 'Montserrat', sans-serif; color: var(--color-principal); margin-bottom: 25px; }
 .progress-container { display: flex; justify-content: space-between; position: relative; max-width: 600px; margin: 0 auto; }
@@ -13,7 +11,7 @@
 .step.active .step-circle { background: var(--color-acento); box-shadow: 0 0 0 5px rgba(183, 28, 28, 0.1); }
 .step.active .step-label { color: var(--color-acento); font-weight: 700; }
 
-/* --- CONTENEDOR DEL PASO --- */
+
 .wizard-step {
     display: none;
     background: white;
@@ -32,7 +30,7 @@
 .step-title { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; margin-bottom: 15px; color: var(--color-principal); border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
 .step-desc { color: #666; margin-bottom: 25px; font-size: 0.95rem; }
 
-/* --- TARJETAS DE MODALIDAD --- */
+
 .modality-card {
     background: #fff;
     border: 1px solid #e0e0e0;
@@ -69,7 +67,7 @@
     background: white; border-bottom: 1px solid transparent;
 }
 
-/* --- PANEL DE CONFIGURACIÓN --- */
+
 .config-panel {
     max-height: 0;
     opacity: 0;
@@ -86,7 +84,7 @@
     overflow-y: auto;
 }
 
-/* --- CRITERIOS --- */
+
 .criteria-wrapper { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
 .criteria-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #fafafa; transition: 0.3s; cursor: pointer; }
 .criteria-header span { font-weight: 600; color: #444; }
@@ -98,7 +96,7 @@
     max-height: 500px; opacity: 1; padding: 15px; overflow: visible;
 }
 
-/* Switches */
+
 .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
@@ -106,15 +104,13 @@
 input:checked + .slider { background-color: var(--color-acento); }
 input:checked + .slider:before { transform: translateX(18px); }
 
-/* ==========================================================
-   INPUTS Y SELECTORES PREMIUM ("Dida Style")
-========================================================== */
 
-/* 1. INPUTS GENERALES */
+
+
 .input-with-label { 
     width: 100%; 
     padding: 18px 10px 6px 10px; 
-    border: 1px solid #ccc; /* Borde más visible */
+    border: 1px solid #ccc; 
     border-radius: 6px; 
     font-size: 0.95rem; 
     background: white; 
@@ -123,18 +119,18 @@ input:checked + .slider:before { transform: translateX(18px); }
 }
 
 .input-with-label:focus {
-    border-color: var(--color-acento); /* Rojo al foco */
-    box-shadow: 0 0 0 3px rgba(183, 28, 28, 0.05); /* Halo rojo suave */
+    border-color: var(--color-acento);
+    box-shadow: 0 0 0 3px rgba(183, 28, 28, 0.05); 
     outline: none;
 }
 
-/* 2. SELECTS ESTILIZADOS (Adiós flecha nativa fea) */
+
 .text-select {
-    appearance: none; /* Quitar flecha del navegador */
+    appearance: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
     
-    padding: 12px 35px 12px 15px; /* Espacio extra a la derecha para la flecha */
+    padding: 12px 35px 12px 15px;
     border: 1px solid #ccc;
     border-radius: 6px;
     background-color: #fff;
@@ -144,8 +140,7 @@ input:checked + .slider:before { transform: translateX(18px); }
     min-width: 130px;
     font-family: inherit;
     transition: all 0.2s;
-    
-    /* Flecha Roja SVG Personalizada */
+ 
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b71c1c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 10px center;
@@ -158,34 +153,34 @@ input:checked + .slider:before { transform: translateX(18px); }
     outline: none;
 }
 
-/* 3. FILAS Y WRAPPERS */
+
 .intuitive-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 8px; }
 .input-wrapper { position: relative; flex-grow: 1; }
 .input-wrapper label { font-size: 0.75rem; color: #888; position: absolute; top: 4px; left: 10px; pointer-events: none; }
 
 .radio-group { display: flex; gap: 20px; margin: 10px 0 15px 0; padding-left: 5px; }
 .radio-label { font-size: 0.9rem; display: flex; align-items: center; gap: 6px; cursor: pointer; color: #555; font-weight: 500; }
-/* Personalizar color del radio button nativo */
+
 .radio-label input[type="radio"] {
     accent-color: var(--color-acento);
     width: 18px; height: 18px;
     cursor: pointer;
 }
 
-/* Tags */
+
 .tags-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; min-height: 10px; }
 .tag-item { background: #fff5f5; border: 1px solid #ffcccc; color: #b71c1c; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 10px; animation: popIn 0.3s; }
 @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .tag-remove { cursor: pointer; font-size: 1.1rem; line-height: 1; opacity: 0.7; }
 .tag-remove:hover { opacity: 1; color: black; }
 
-/* Botones */
+
 .btn-add-modality { width: 100%; padding: 18px; border: 2px dashed #ccc; background: #fafafa; color: #777; font-weight: bold; font-size: 1rem; border-radius: 12px; cursor: pointer; transition: 0.2s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 .btn-add-modality:hover { border-color: var(--color-principal); color: var(--color-principal); background: #f0f7ff; }
 .btn-add-item { background: var(--color-principal); color: white; border: none; border-radius: 6px; width: 42px; height: 42px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
 .btn-add-item:hover { background: var(--color-acento); }
 
-/* Footer */
+
 .wizard-footer { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
 .btn-nav { padding: 12px 35px; border-radius: 50px; font-weight: 600; border: none; cursor: pointer; transition: 0.3s; font-family: inherit; font-size: 0.95rem; }
 .btn-prev { background: transparent; border: 2px solid #ccc; color: #666; }
@@ -194,7 +189,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 .btn-next:hover { background: black; }
 .btn-submit-final { background: var(--color-acento); color: white; padding: 12px 45px; border-radius: 50px; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; }
 
-/* ESTILOS DEL RESUMEN */
+
 .summary-container { color: #333; }
 .summary-header-block { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--color-principal); }
 .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
@@ -206,7 +201,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 .summary-cat-list li { margin-bottom: 5px; font-size: 0.9rem; border-bottom: 1px dashed #f0f0f0; padding-bottom: 5px; }
 .summary-cat-label { font-weight: bold; color: #333; }
 
-/* Personalización Calendario Flatpickr */
+
 .flatpickr-calendar { font-family: 'Montserrat', sans-serif !important; border: none !important; box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important; }
 .flatpickr-calendar .flatpickr-months { background: var(--color-acento) !important; color: white !important; fill: white !important; }
 .flatpickr-calendar .flatpickr-weekdays { background: var(--color-acento) !important; border-bottom: 1px solid #a31818; }

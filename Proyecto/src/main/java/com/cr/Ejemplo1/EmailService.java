@@ -23,11 +23,11 @@ public class EmailService {
 
         SimpleMailMessage mensaje = new SimpleMailMessage();
         
-        // Asunto claro e informativo
+       
         mensaje.setTo(correo);
         mensaje.setSubject("Verificación de cuenta - DidaMartials");
         
-        // Construcción del cuerpo del mensaje con formato profesional
+        
         String cuerpoMensaje = "¡Bienvenido a DidaMartials!\n\n" +
                 "Gracias por registrarte en nuestra plataforma de gestión de artes marciales.\n" +
                 "Para completar tu registro y verificar tu identidad, por favor utiliza el siguiente código de seguridad:\n\n" +

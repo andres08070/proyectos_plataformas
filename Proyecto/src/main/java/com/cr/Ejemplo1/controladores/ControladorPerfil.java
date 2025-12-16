@@ -22,21 +22,18 @@ public class ControladorPerfil {
 
     private static final Logger logger = LoggerFactory.getLogger(ControladorPerfil.class);
 
-    // =====================================================================
-    // 1. MOSTRAR PERFIL DEL USUARIO
-    // =====================================================================
+    
     @GetMapping("/perfil")
     public String mostrarPerfil(Model model,
                                 HttpServletResponse response,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
 
-        // 🔒 PREVENIR CACHE
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
-        // ✅ VERIFICAR SESIÓN
+        
         Integer idUsuario = (Integer) session.getAttribute("id");
         if (idUsuario == null) {
             logger.warn("Intento de acceso no autorizado a /perfil");
@@ -46,7 +43,7 @@ public class ControladorPerfil {
 
         logger.info("Usuario ID: {} accediendo a su perfil", idUsuario);
 
-        // ✅ CONSULTA: OBTENER DATOS DEL USUARIO
+        
         String sqlSelect = """
             SELECT 
                 ID_documento,
@@ -94,9 +91,7 @@ public class ControladorPerfil {
         return "dashboard/perfil";
     }
 
-    // =====================================================================
-    // 2. ACTUALIZAR PERFIL DEL USUARIO
-    // =====================================================================
+    
     @PostMapping("/perfil/actualizar")
     public String actualizarPerfil(@RequestParam("nombre") String nombre,
                                    @RequestParam("correo") String correo,
@@ -109,7 +104,7 @@ public class ControladorPerfil {
                                    HttpSession session,
                                    RedirectAttributes redirectAttributes) {
 
-        // ✅ VERIFICAR SESIÓN
+        
         Integer idUsuario = (Integer) session.getAttribute("id");
         if (idUsuario == null) {
             redirectAttributes.addFlashAttribute("mensajeError", "Debes iniciar sesión para actualizar tu perfil.");
@@ -118,7 +113,7 @@ public class ControladorPerfil {
 
         logger.info("Usuario ID: {} actualizando su perfil", idUsuario);
 
-        // ✅ VALIDACIÓN DE CONTRASEÑAS (si se proporcionaron)
+        
         if (contraseña != null && !contraseña.trim().isEmpty()) {
             if (!contraseña.equals(confirmarContraseña)) {
                 redirectAttributes.addFlashAttribute("mensajeError", "Las contraseñas no coinciden.");
@@ -126,7 +121,7 @@ public class ControladorPerfil {
             }
         }
 
-        // ✅ CONSTRUIR CONSULTA SQL DINÁMICAMENTE
+       
         StringBuilder sqlUpdate = new StringBuilder("UPDATE usuarios SET ");
         sqlUpdate.append("nombreC = ?, ");
         sqlUpdate.append("correo = ?, ");
@@ -135,7 +130,7 @@ public class ControladorPerfil {
         sqlUpdate.append("cinturon_rango = ?, ");
         sqlUpdate.append("nacionalidad = ?");
         
-        // Agregar contraseña si se proporcionó
+        
         boolean actualizarContraseña = (contraseña != null && !contraseña.trim().isEmpty());
         if (actualizarContraseña) {
             sqlUpdate.append(", contraseña = ?");
@@ -146,7 +141,7 @@ public class ControladorPerfil {
         try (Connection con = BD.conexion();
              PreparedStatement stmt = con.prepareStatement(sqlUpdate.toString())) {
 
-            // Establecer parámetros
+            
             stmt.setString(1, nombre);
             stmt.setString(2, correo);
             stmt.setString(3, sexo);
@@ -165,7 +160,7 @@ public class ControladorPerfil {
             int filasActualizadas = stmt.executeUpdate();
 
             if (filasActualizadas > 0) {
-                // Actualizar nombre en sesión si cambió
+                
                 session.setAttribute("usuarioLogueado", nombre);
                 
                 logger.info("Perfil actualizado exitosamente para usuario ID: {}", idUsuario);
@@ -178,7 +173,7 @@ public class ControladorPerfil {
         } catch (SQLException e) {
             logger.error("Error SQL al actualizar perfil del usuario ID: {}", idUsuario, e);
             
-            // Verificar si el error es por correo duplicado
+            
             if (e.getMessage().contains("Duplicate entry") || e.getMessage().contains("correo")) {
                 redirectAttributes.addFlashAttribute("mensajeError", "El correo electrónico ya está en uso por otro usuario.");
             } else {

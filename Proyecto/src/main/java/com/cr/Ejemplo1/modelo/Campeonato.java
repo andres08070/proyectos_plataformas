@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Campeonato {
 
-    // Campos del Step 1
+   
     private long id;
     private String nombre;
     private String descripcion; 
@@ -15,9 +15,7 @@ public class Campeonato {
     private int numAreas;
     private String nombreCreador;
 
-    // --- Getters y Setters (Necesarios para el mapeo de Spring) ---
-
-    // Getters para campos básicos
+   
     public String getNombre() {
         return nombre;
     }
@@ -26,7 +24,7 @@ public class Campeonato {
         this.nombre = nombre;
     }
 
-    // --- Getter y Setter para Descripcion Añadidos ---
+    
     public String getDescripcion() {
         return descripcion;
     }
@@ -34,8 +32,7 @@ public class Campeonato {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    // ------------------------------------------------
-
+   
     public LocalDate getFechaInicio() {
         return fechaInicio;
     }
@@ -43,8 +40,7 @@ public class Campeonato {
     public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
-    // ... (El resto de getters/setters y toString permanecen iguales) ...
-
+    
     public LocalDate getFechaFin() {
         return fechaFin;
     }
@@ -94,12 +90,12 @@ public class Campeonato {
     
     
 
-    // Opcional: Para ver todos los datos en la consola
+   
     @Override
     public String toString() {
         return "Campeonato{" +
                 "nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' + // Añadido al toString
+                ", descripcion='" + descripcion + '\'' +
                 ", fechaInicio=" + fechaInicio +
                 ", fechaFin=" + fechaFin +
                 ", ubicacion='" + ubicacion + '\'' +

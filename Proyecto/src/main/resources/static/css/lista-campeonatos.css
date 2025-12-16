@@ -1,4 +1,4 @@
-/* ================= VARIABLES ================= */
+
 :root {
     --color-principal: #1a1a1a;
     --color-acento: #b71c1c;
@@ -19,7 +19,7 @@ body {
     padding: 0;
 }
 
-/* ================= MENSAJES DE ALERTA (MODIFICADO) ================= */
+
 .alert-message {
     padding: 15px 20px;
     border-radius: 10px;
@@ -29,27 +29,27 @@ body {
     align-items: center;
     gap: 12px;
     
-    /* --- ANIMACIÓN --- */
+   
     animation: slideIn 0.5s ease;
     border-left: 4px solid transparent;
     opacity: 1;
-    transition: opacity 0.5s ease-out; /* Transición suave para desaparecer */
+    transition: opacity 0.5s ease-out; 
 }
 
-/* Clase que añade JS para ocultar */
+
 .fade-out {
     opacity: 0;
     pointer-events: none;
 }
 
 .alert-message.success {
-    background-color: #d4edda; /* Verde claro */
+    background-color: #d4edda; 
     border-left-color: #28a745;
     color: #155724;
 }
 
 .alert-message.error {
-    background-color: #f8d7da; /* Rojo claro */
+    background-color: #f8d7da;
     border-left-color: #dc3545;
     color: #721c24;
 }
@@ -62,9 +62,7 @@ body {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-/* =============================================================== */
 
-/* ================= NAVBAR ================= */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -84,7 +82,7 @@ body {
     color: var(--color-principal);
 }
 
-/* ================= ENCABEZADO ================= */
+
 .dashboard-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -115,7 +113,7 @@ body {
     margin: 0;
 }
 
-/* ================= BOTONES ================= */
+
 .btn-primary, .btn-secondary, .btn-card-action {
     display: inline-flex;
     align-items: center;
@@ -156,7 +154,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* ================= GRID Y TARJETAS ================= */
+
 .championship-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -194,7 +192,7 @@ body {
     flex-grow: 1;
 }
 
-/* HEADER DE LA TARJETA CON BOTÓN ELIMINAR */
+
 .champ-header-row {
     display: flex;
     justify-content: space-between;
@@ -234,7 +232,7 @@ body {
     transform: scale(1.1);
 }
 
-/* DETALLES DE TARJETA */
+
 .champ-creator {
     display: inline-flex;
     align-items: center;
@@ -279,7 +277,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* FOOTER TARJETA */
+
 .champ-card-footer {
     padding: 20px 25px;
     background: #ffffff;
@@ -313,7 +311,7 @@ body {
     border-color: var(--color-acento);
 }
 
-/* ESTADO VACÍO */
+
 .empty-state-container {
     text-align: center;
     padding: 60px 20px;
@@ -326,7 +324,7 @@ body {
 .empty-state-container h3 { color: var(--color-principal); margin-bottom: 15px; font-size: 1.8rem; }
 .empty-state-container p { color: var(--color-texto-secundario); margin-bottom: 25px; font-size: 1.1rem; }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .navbar { flex-direction: column; gap: 15px; }
     .championship-grid { grid-template-columns: 1fr; }

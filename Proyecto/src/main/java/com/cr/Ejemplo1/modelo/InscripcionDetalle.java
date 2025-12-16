@@ -2,31 +2,28 @@ package com.cr.Ejemplo1.modelo;
 
 import java.time.LocalDateTime;
 
-/**
- * Clase para transportar la información combinada de la inscripción 
- * y los detalles del participante a la capa de vista.
- */
+
 public class InscripcionDetalle {
 
-    // Datos de campeonatos_inscripcion
+    
     private Long idInscripcion;
     private String idModalidad;    
     private LocalDateTime fechaInscripcion;
     
-    // Datos de usuarios (JOIN)
+    
     private String nombreParticipante;
     private String sexo;
     private int edad;
     private String cinturonRango;
     
-    // Dato calculado/mapeado (usando json_modalidades)
+    
     private String nombreModalidad; 
     
-    // Constructor vacío
+    
     public InscripcionDetalle() {
     }
 
-    // --- Getters y Setters ---
+   
 
     public Long getIdInscripcion() {
         return idInscripcion;
@@ -76,12 +73,12 @@ public class InscripcionDetalle {
         this.idModalidad = idModalidad;
     }
     
-    // Nuevo Getter para el nombre legible de la modalidad
+    
     public String getNombreModalidad() {
         return nombreModalidad;
     }
     
-    // Nuevo Setter para el nombre legible de la modalidad
+    
     public void setNombreModalidad(String nombreModalidad) {
         this.nombreModalidad = nombreModalidad;
     }
@@ -94,7 +91,7 @@ public class InscripcionDetalle {
         this.fechaInscripcion = fechaInscripcion;
     }
 
-    // Opcional: Para facilitar la depuración
+    
     @Override
     public String toString() {
         return "InscripcionDetalle{" +

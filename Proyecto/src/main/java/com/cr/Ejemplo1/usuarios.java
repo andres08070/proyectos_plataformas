@@ -10,12 +10,12 @@ public class usuarios {
     protected String sexo;
     protected String nacionalidad;
 
-    // CONSTRUCTOR VACÍO - CORREGIDO (sin excepción)
+    
     public usuarios() {
-        // Constructor vacío para Spring/Jackson
+        
     }
 
-    // Constructor con parámetros
+    
     public usuarios(int ID_documento, String nombreC, String cinturon_rango, int edad, 
                    String contraseña, String correo, String sexo, String nacionalidad) {
         this.ID_documento = ID_documento;
@@ -28,7 +28,7 @@ public class usuarios {
         this.nacionalidad = nacionalidad;
     }
 
-    // Getters y Setters
+    
     public int getID_documento() {
         return ID_documento;
     }

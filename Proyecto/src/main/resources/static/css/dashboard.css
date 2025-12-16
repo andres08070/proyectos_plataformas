@@ -1,6 +1,4 @@
-/* ========================================================
-   CONFIGURACIÓN BASE Y VARIABLES
-======================================================== */
+
 * {
     box-sizing: border-box;
 }
@@ -8,9 +6,9 @@
 :root {
     --color-principal: #1a1a1a;
     --color-texto: #555555;
-    --color-fondo: #f4f6f8; /* Gris muy suave */
+    --color-fondo: #f4f6f8;
     
-    --color-acento: #b71c1c; /* Rojo Dida */
+    --color-acento: #b71c1c; 
     --color-acento-hover: #8e0000;
     
     --color-card: #ffffff;
@@ -18,11 +16,8 @@
     --sombra-suave: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-/* --- FIX CRÍTICO PARA LA BARRA --- 
-   El !important en display: block asegura que el navegador ignore
-   el estilo 'flex' que viene heredado del Login. 
-   Esto hace que la barra suba y el contenido baje.
-*/
+
+
 body {
     margin: 0;
     padding: 0;
@@ -30,13 +25,11 @@ body {
     font-family: 'Roboto', sans-serif;
     color: var(--color-principal);
     
-    display: block !important; /* <--- AQUÍ ESTÁ LA SOLUCIÓN */
-    height: auto !important;   /* Permite que la página crezca con el scroll */
+    display: block !important; 
+    height: auto !important;   
 }
 
-/* ========================================================
-   NAVBAR (Barra Superior)
-======================================================== */
+
 .navbar {
     background-color: #ffffff;
     height: 70px;
@@ -46,7 +39,7 @@ body {
     align-items: center;
     padding: 0 40px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    position: sticky; /* Se queda pegada al hacer scroll */
+    position: sticky; 
     top: 0;
     z-index: 1000;
 }
@@ -64,7 +57,7 @@ body {
 }
 
 .nav-logo {
-    height: 45px; /* Ajustado ligeramente */
+    height: 45px; 
     width: auto;
 }
 
@@ -113,9 +106,7 @@ body {
     color: var(--color-acento-hover);
 }
 
-/* ========================================================
-   CONTENEDOR DASHBOARD
-======================================================== */
+
 .dashboard-container {
     max-width: 1200px;
     margin: 40px auto;
@@ -144,9 +135,7 @@ body {
     font-size: 1.1rem;
 }
 
-/* ========================================================
-   GRID DE ACCIONES (Tarjetas)
-======================================================== */
+
 .actions-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -164,7 +153,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    height: 100%; /* Para que todas tengan la misma altura */
+    height: 100%; 
 }
 
 .action-card:hover {
@@ -173,10 +162,10 @@ body {
     border-color: var(--color-borde);
 }
 
-/* Estilo especial para la tarjeta de CREAR (Destacada) */
+
 .card-create {
     border-top: 5px solid var(--color-acento);
-    background-color: #fffbfb; /* Fondo sutilmente rojizo */
+    background-color: #fffbfb; 
 }
 
 .card-icon {
@@ -208,11 +197,11 @@ body {
     color: var(--color-texto);
     font-size: 0.9rem;
     margin-bottom: 25px;
-    flex-grow: 1; /* Empuja el botón hacia abajo para alinearlos */
+    flex-grow: 1; 
     line-height: 1.5;
 }
 
-/* Botones de las tarjetas */
+
 .btn-action {
     background-color: var(--color-principal);
     color: white;
@@ -254,13 +243,11 @@ body {
 }
 
 .link-action:hover {
-    gap: 10px; /* Pequeña animación de la flecha */
+    gap: 10px; 
     transition: 0.2s;
 }
 
-/* ========================================================
-   LISTA DE EVENTOS (Estilo tabla simple)
-======================================================== */
+
 .upcoming-section h2 {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.5rem;
@@ -355,7 +342,7 @@ body {
     border-color: var(--color-borde);
 }
 
-/* Ícono */
+
 .card-icon-horizontal {
     font-size: 2.5rem;
     color: var(--color-acento);
@@ -369,10 +356,10 @@ body {
     flex-shrink: 0;
 }
 
-/* Contenido principal */
+
 .card-content-horizontal {
     flex: 1;
-    min-width: 0; /* Evita desbordamiento */
+    min-width: 0;
 }
 
 .card-content-horizontal h3 {
@@ -390,7 +377,7 @@ body {
     line-height: 1.5;
 }
 
-/* Estadísticas */
+
 .inscripcion-stats {
     display: flex;
     align-items: center;
@@ -431,7 +418,7 @@ body {
     background: #e0e0e0;
 }
 
-/* Estado vacío */
+
 .inscripcion-empty p {
     color: #999;
     font-style: italic;
@@ -439,7 +426,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* Acción */
+
 .card-action-horizontal {
     flex-shrink: 0;
 }
@@ -466,18 +453,16 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* ========================================================
-   RESPONSIVE
-======================================================== */
+
 @media (max-width: 768px) {
     .navbar {
         padding: 0 20px;
     }
     .brand-text {
-        display: none; /* En móviles pequeños solo el logo */
+        display: none; 
     }
     .actions-grid {
-        grid-template-columns: 1fr; /* Una sola columna en móvil */
+        grid-template-columns: 1fr; 
     }
     
     .inscripcion-card-horizontal {

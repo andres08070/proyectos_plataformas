@@ -144,23 +144,23 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         
-        // 1. LÓGICA MANUAL PARA DESVANECER ALERTAS (CSS .fade-out requerido)
+       
         const alertas = document.querySelectorAll('.alert');
         if (alertas.length > 0) {
             setTimeout(function() {
                 alertas.forEach(function(alerta) {
-                    // Añadir clase de CSS que tiene opacity: 0
+                   
                     alerta.classList.add('fade-out');
                     
-                    // Esperar 500ms (tiempo de la transición CSS) para borrarlo del HTML
+                    
                     setTimeout(function() {
                         alerta.remove();
                     }, 500); 
                 });
-            }, 3000); // El mensaje se lee por 3 segundos
+            }, 3000); 
         }
 
-        // 2. LÓGICA DE ELIMINACIÓN CON SWEETALERT
+       
         const deleteButtons = document.querySelectorAll('.btn-delete-modalidad');
         
         deleteButtons.forEach(button => {
@@ -201,7 +201,7 @@
         }
         
         function eliminarInscripcion(idInscripcion) {
-            // Crear formulario invisible
+            
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `/mis-inscripciones/eliminar/${idInscripcion}`;

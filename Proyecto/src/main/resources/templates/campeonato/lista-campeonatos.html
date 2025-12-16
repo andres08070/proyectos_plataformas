@@ -26,7 +26,7 @@
             <h2>Campeonatos Abiertos de Otros Usuarios</h2>
             <p>Explora los próximos eventos creados por otros usuarios y asegura tu lugar en el tatami.</p>
             
-            <!-- Botón para crear nuevo campeonato -->
+           
             <div class="action-buttons" style="margin-top: 20px;">
                 <a th:href="@{/CrearCampeonato}" class="btn-primary">
                     <i class="fas fa-plus"></i> Crear Nuevo Campeonato
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <!-- Resto de tu HTML permanece igual -->
+        
         <div th:if="${#lists.isEmpty(campeonatos)}" class="empty-state-container">
             <div class="empty-icon">
                 <i class="fas fa-users"></i>

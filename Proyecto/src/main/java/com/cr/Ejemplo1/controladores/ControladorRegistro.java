@@ -56,19 +56,19 @@ public class ControladorRegistro {
         try (Connection con = BD.conexion();
         PreparedStatement verificar = con.prepareStatement(verificarBD)) {
             
-                // Verificar si el ID ya existe
+                
                 verificar.setInt(1,ID_documento);  
                 verificar.setString(2,correo);
                 var rs = verificar.executeQuery();
                 if (rs.next() && rs.getInt(1) > 0) {
                     model.addAttribute("msg", "Numero de documento ya registrado o correo ya registrado");
-                    // CAMBIO: Ahora está en la carpeta 'auth'
+                   
                     return "auth/registro";
                 }
         } catch (SQLException e) {
                e.printStackTrace();
                model.addAttribute("msg", "Error con la BD");
-               // CAMBIO: Ahora está en la carpeta 'auth'
+               
                return "auth/registro";
         }
         
@@ -76,11 +76,11 @@ public class ControladorRegistro {
         if (contraseña.equals(Confirmar)){
             usuario.add(new usuarios(ID_documento,nombreC,null,0,contraseña,correo,sexo,nacionalidad));
             model.addAttribute("msg", "Se envió un código a: " + correo);
-            // CAMBIO: Ahora está en la carpeta 'auth'
+            
             return "auth/verificar";
         }
         model.addAttribute("msg","La contraseña no coincide");
-        // CAMBIO: Ahora está en la carpeta 'auth'
+        
         return "auth/registro";
     }
     
@@ -98,7 +98,7 @@ public class ControladorRegistro {
             try (Connection con = BD.conexion();
                  PreparedStatement insertar = con.prepareStatement(insertarBD)) {
 
-                // Solo toma un usuario (según tu intención)
+                
                 usuarios e = usuario.get(0);
 
                 insertar.setInt(1, e.getID_documento());
@@ -115,18 +115,16 @@ public class ControladorRegistro {
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 model.addAttribute("msg", "Error al guardar en la base de datos.");
-                // CAMBIO: Si falla, vuelve a verificar dentro de 'auth'
+                
                 return "auth/verificar";
             }
 
             model.addAttribute("msg", "Registro verificado e ingresado exitosamente.");
             usuario.clear();
-            // CAMBIO: Al terminar, va al dashboard privado
             return "dashboard/inicio";
         }
 
         model.addAttribute("msg", "Código incorrecto.");
-        // CAMBIO: Código mal, se queda en verificar
         return "auth/verificar";
     }
 

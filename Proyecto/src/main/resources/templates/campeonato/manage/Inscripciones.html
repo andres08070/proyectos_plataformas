@@ -3,13 +3,13 @@
 <head th:replace="~{fragments/global :: head(titulo='Inscripción - DidaMartials', archivoCss='/css/inscripciones.css')}"></head>
 
 <body>
-    <!-- Botón de retroceso -->
+    
     <a th:href="@{/campeonato/lista}" class="btn-back" title="Volver a la página anterior">
         <i class="fas fa-arrow-left fa-2x"></i>
     </a>
 
     <div class="container">
-        <!-- Alertas -->
+      
         <div th:if="${mensajeExito}" class="alert alert-success">
             <i class="fas fa-check-circle"></i>
             <p th:text="${mensajeExito}"></p>
@@ -20,7 +20,6 @@
             <p th:text="${mensajeError}"></p>
         </div>
 
-        <!-- Header del campeonato -->
         <div class="campeonato-header">
             <div class="header">
                 <img th:src="@{/imgs/logo2.png}" alt="DidaMartials Logo" class="logo-img">
@@ -39,7 +38,7 @@
                         </div>
                     </div>
                     
-                    <!-- Fechas - usando camelCase como en Campeonato.java -->
+                    
                     <div class="info-item" th:if="${campeonato.fechaInicio != null}">
                         <i class="fas fa-calendar-alt"></i>
                         <div>
@@ -58,7 +57,7 @@
                         </div>
                     </div>
                     
-                    <!-- Número de áreas -->
+                    
                     <div class="info-item" th:if="${campeonato.numAreas > 0}">
                         <i class="fas fa-th-large"></i>
                         <div>
@@ -70,7 +69,7 @@
             </div>
         </div>
 
-        <!-- Sección de Modalidades -->
+        
         <section class="modalidades-section">
             <div class="section-header">
                 <h2><i class="fas fa-list-alt"></i> MODALIDADES DISPONIBLES</h2>
@@ -80,7 +79,7 @@
                 </p>
             </div>
 
-            <!-- Mensaje si no hay modalidades -->
+            
             <div th:if="${modalidades != null and modalidades.isEmpty()}" class="empty-state">
                 <i class="fas fa-clipboard-list fa-3x"></i>
                 <h3>No hay modalidades activas</h3>
@@ -88,15 +87,15 @@
                 <a th:href="@{/campeonato/lista}" class="btn-outline">Ver otros campeonatos</a>
             </div>
 
-            <!-- Grid de Modalidades -->
+            
             <div class="grid-modalidades" th:if="${modalidades != null and !modalidades.isEmpty()}">
                 <div th:each="modalidad, stat : ${modalidades}" class="modalidad-card" 
                      th:classappend="${stat.index % 2 == 0} ? 'card-primary' : 'card-secondary'">
                     
-                    <!-- Contenido de la tarjeta - SIN mostrar idModalidad -->
+                    
                     <div class="modalidad-content">
                         <div class="data-grid">
-                            <!-- Mostrar todas las entradas excepto 'idModalidad' -->
+                            
                             <div th:each="entry : ${modalidad}" class="data-row"
                                  th:if="${entry.key != 'idModalidad' and entry.value != null and !entry.value.toString().isEmpty()}">
                                 <span class="data-label" th:text="${entry.key} + ':'">[Clave]:</span>
@@ -105,7 +104,7 @@
                         </div>
                     </div>
 
-                    <!-- Formulario de inscripción -->
+                    
                     <div class="modalidad-footer">
                         <form th:action="@{/inscripciones/inscribir}" method="post" class="inscripcion-form">
                             <input type="hidden" name="idCampeonato" th:value="${campeonato.id}" />
@@ -125,7 +124,7 @@
             </div>
         </section>
 
-        <!-- Información adicional -->
+        
         <div class="disclaimer">
             <h4><i class="fas fa-exclamation-circle"></i> IMPORTANTE</h4>
             <ul>
@@ -134,45 +133,40 @@
         </div>
     </div>
 
-    <!-- Script para confirmar inscripción con SweetAlert2 -->
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // =======================================================
-            // 1. NUEVO: LÓGICA PARA DESVANECER ALERTAS DE ÉXITO/ERROR
-            // =======================================================
-            // Buscamos cualquier elemento con clase .alert (Bootstrap) o .alert-message (Tu estilo)
+            
             const alertas = document.querySelectorAll('.alert, .alert-message');
 
             if (alertas.length > 0) {
                 setTimeout(function() {
                     alertas.forEach(function(alerta) {
-                        // 1. Añadir clase CSS para bajar la opacidad
-                        alerta.classList.add('fade-out'); // Asegúrate de tener .fade-out en tu CSS
+                        
+                        alerta.classList.add('fade-out'); 
 
-                        // 2. Esperar 500ms (lo que dura la transición) y eliminar del HTML
+                        
                         setTimeout(function() {
                             alerta.remove();
                         }, 500); 
                     });
-                }, 3000); // El mensaje se muestra por 3 segundos
+                }, 3000); 
             }
 
-            // =======================================================
-            // 2. LÓGICA DE CONFIRMACIÓN DE FORMULARIO (Tu código)
-            // =======================================================
-            const forms = document.querySelectorAll('.inscripcion-form'); // Asegúrate que tu <form> tenga esta clase
+            
+            const forms = document.querySelectorAll('.inscripcion-form'); 
 
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
-                    e.preventDefault(); // Detener el envío automático
+                    e.preventDefault(); 
 
-                    // Intentar obtener datos visuales para la alerta (opcional)
+                
                     const modalidadCard = this.closest('.modalidad-card') || this.closest('.card');
-                    // Si no encuentra la tarjeta, usa valores genéricos
+                   
                     const modalidadNombre = modalidadCard ? (modalidadCard.querySelector('.modalidad-title')?.textContent || 'esta modalidad') : 'esta modalidad';
 
-                    // Configurar SweetAlert2
+                   
                     Swal.fire({
                         title: '¿Confirmar inscripción?',
                         html: `
@@ -200,10 +194,10 @@
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // AQUÍ SE ENVÍA EL FORMULARIO REALMENTE
+                            
                             this.submit(); 
                         } else {
-                            // Mensaje de cancelación
+                            
                             Swal.fire({
                                 title: 'Inscripción cancelada',
                                 text: 'No se ha realizado la inscripción.',
@@ -218,7 +212,7 @@
             });
         });
 
-        // Estilos inyectados para el SweetAlert
+        
         const style = document.createElement('style');
         style.textContent = `
             .swal2-custom-popup {

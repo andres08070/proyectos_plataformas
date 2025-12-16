@@ -1,6 +1,4 @@
-/* ========================================================
-   PERFIL.CSS - ESTILOS PARA PÁGINA DE PERFIL DE USUARIO
-======================================================== */
+
 
 :root {
     --color-principal: #1a1a1a;
@@ -22,7 +20,7 @@ body {
     display: block;
 }
 
-/* Navbar styles */
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -59,7 +57,7 @@ body {
 }
 .btn-logout:hover { color: var(--color-acento); }
 
-/* Contenedor Principal */
+
 .dashboard-container {
     max-width: 1000px;
     margin: 30px auto;
@@ -80,7 +78,7 @@ body {
     color: var(--color-texto);
 }
 
-/* ================= ALERTAS ================= */
+
 .alert-message {
     padding: 15px 20px;
     border-radius: 10px;
@@ -119,7 +117,7 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================= PERFIL CARD ================= */
+
 .profile-section {
     margin-top: 30px;
 }
@@ -138,7 +136,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* Header del perfil */
+
 .profile-header {
     display: flex;
     align-items: center;
@@ -207,7 +205,7 @@ body {
     gap: 5px;
 }
 
-/* ================= FORMULARIO ================= */
+
 .profile-form {
     margin-top: 30px;
 }
@@ -218,12 +216,12 @@ body {
     border-bottom: 1px solid #eee;
 }
 
-/* Estilo para los inputs BLOQUEADOS (readonly / disabled) */
+
 .form-group input[readonly],
 .form-group select:disabled {
-    background-color: #e9ecef; /* Fondo gris claro */
-    color: #6c757d;           /* Texto gris oscuro */
-    cursor: not-allowed;      /* Cursor de prohibido */
+    background-color: #e9ecef; 
+    color: #6c757d;           
+    cursor: not-allowed;      
     border-color: #dee2e6;
 }
 
@@ -273,7 +271,7 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Solo aplicamos foco y hover si NO están bloqueados */
+
 .form-group input:not([readonly]):focus,
 .form-group select:not(:disabled):focus {
     border-color: var(--color-acento);
@@ -337,7 +335,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .profile-header {
         flex-direction: column;

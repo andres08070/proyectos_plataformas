@@ -1,13 +1,8 @@
-/* ========================================================
-   ARCHIVO: script.js
-   DESCRIPCIÓN: Lógica general, Registro y Dropdowns UI
-======================================================== */
+
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // ----------------------------------------------------
-    // A. LÓGICA DE MENÚS DESPLEGABLES (UI General)
-    // ----------------------------------------------------
+  
     const customDropdowns = document.querySelectorAll('.custom-dropdown');
 
     customDropdowns.forEach(dropdown => {
@@ -15,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedDisplay = dropdown.querySelector('.dropdown-selected span');
         const optionsList = dropdown.querySelector('.dropdown-options');
         
-        // Crear lista visual basada en el select original
+        
         Array.from(select.options).forEach(option => {
             if (option.disabled) return;
 
@@ -49,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Cerrar dropdown si se hace clic fuera
+    
     document.addEventListener('click', function(e) {
         customDropdowns.forEach(dropdown => {
             if (!dropdown.contains(e.target)) {
@@ -59,9 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // ----------------------------------------------------
-    // B. VALIDACIÓN DEL DOCUMENTO (FORMULARIO REGISTRO)
-    // ----------------------------------------------------
+   
     const formulario = document.getElementById('formularioRegistro');
     
     if (formulario) {
@@ -70,9 +63,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const docError = document.getElementById('docError');
             
             if (docInput && docInput.value.length < 6) {
-                event.preventDefault(); // Evitar envío
+                event.preventDefault();
                 if(docError) docError.style.display = 'block';
-                docInput.style.borderColor = '#b71c1c'; // Rojo alerta
+                docInput.style.borderColor = '#b71c1c'; 
                 docInput.focus();
             } else {
                 if(docError) docError.style.display = 'none';
@@ -83,10 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-/* ========================================================
-   FUNCIONES GLOBALES DE VALIDACIÓN (REGISTRO)
-   (Se dejan fuera para que el HTML pueda llamarlas con onkeyup)
-======================================================== */
+
 function validarContrasenas() {
     const pass1 = document.getElementById('contraseña');
     const pass2 = document.getElementById('Confirmar');
@@ -103,7 +93,7 @@ function validarContrasenas() {
             boton.style.opacity = '0.5';
         } else {
             mensaje.style.display = 'none';
-            pass2.style.borderColor = '#2ecc71'; // Verde
+            pass2.style.borderColor = '#2ecc71'; 
             boton.disabled = false;
             boton.style.opacity = '1';
         }

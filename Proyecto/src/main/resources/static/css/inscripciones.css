@@ -1,13 +1,11 @@
-/* ========================================================
-    RESET GLOBAL
-======================================================== */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-/* Variables de Colores (Coherente con el proyecto) */
+
 :root {
     --color-principal: #1a1a1a;
     --color-texto: #555555;
@@ -23,9 +21,7 @@
     --color-card-alt: #f9f9f9;
 }
 
-/* ========================================================
-    ESTILOS GLOBALES
-======================================================== */
+
 body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--color-fondo);
@@ -49,7 +45,7 @@ li {
     text-align: left;
 }
 
-/* Botón de retroceso */
+
 .btn-back {
     position: fixed;
     top: 30px;
@@ -74,9 +70,7 @@ li {
     transform: translateX(-3px) scale(1.05);
 }
 
-/* ========================================================
-    ALERTAS
-======================================================== */
+
 .alert {
     padding: 15px 20px;
     border-radius: 10px;
@@ -108,9 +102,6 @@ li {
     font-size: 1.3rem;
 }
 
-/* ========================================================
-    HEADER DEL CAMPEONATO
-======================================================== */
 .campeonato-header {
     margin-bottom: 40px;
     padding-bottom: 25px;
@@ -196,9 +187,7 @@ li {
     font-size: 0.95rem;
 }
 
-/* ========================================================
-    SECCIÓN MODALIDADES
-======================================================== */
+
 .modalidades-section {
     margin: 40px 0;
 }
@@ -228,7 +217,7 @@ li {
     font-size: 1rem;
 }
 
-/* Estado vacío */
+
 .empty-state {
     text-align: center;
     padding: 60px 30px;
@@ -273,9 +262,7 @@ li {
     color: white;
 }
 
-/* ========================================================
-    GRID DE MODALIDADES
-======================================================== */
+
 .grid-modalidades {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -307,7 +294,7 @@ li {
     border-top: 4px solid #555;
 }
 
-/* Contenido de tarjeta */
+
 .modalidad-content {
     padding: 25px;
     flex-grow: 1;
@@ -341,7 +328,7 @@ li {
     max-width: 60%;
 }
 
-/* Footer de tarjeta */
+
 .modalidad-footer {
     padding: 20px;
     background: var(--color-card-alt);
@@ -393,9 +380,7 @@ li {
     margin-right: 5px;
 }
 
-/* ========================================================
-    DISCLAIMER
-======================================================== */
+
 .disclaimer {
     margin-top: 40px;
     padding: 20px;
@@ -437,9 +422,7 @@ li {
     left: 0;
 }
 
-/* ========================================================
-    RESPONSIVE
-======================================================== */
+
 @media (max-width: 768px) {
     body {
         padding: 10px;

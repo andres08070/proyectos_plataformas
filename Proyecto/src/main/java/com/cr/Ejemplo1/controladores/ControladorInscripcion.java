@@ -12,10 +12,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList; // Importación necesaria
-import java.util.LinkedHashMap; // Importación necesaria
-import java.util.List; // Importación necesaria
-import java.util.Map; // Importación necesaria
+import java.util.ArrayList; 
+import java.util.LinkedHashMap; 
+import java.util.List; 
+import java.util.Map; 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -35,8 +35,7 @@ public class ControladorInscripcion {
     private static final Logger logger = LoggerFactory.getLogger(ControladorInscripcion.class);
     private final ObjectMapper objectMapper = new ObjectMapper(); 
 
-    // Métodos auxiliares (se mantienen al final de la clase)
-
+   
     @GetMapping("/inscripciones/{id}")
 public String mostrarDetalleCampeonato(
         @PathVariable("id") Long id,
@@ -47,12 +46,12 @@ public String mostrarDetalleCampeonato(
         HttpServletResponse response
 ) {
 
-        // 🔒 PREVENIR CACHE
+        
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
-        // ✅ VERIFICAR SESIÓN
+        
         Object idSesion = session.getAttribute("id");
         if (idSesion == null) {
             return "redirect:/auth/inicioSesion";
@@ -63,7 +62,7 @@ public String mostrarDetalleCampeonato(
         Campeonato campeonato = null;
         List<Map<String, String>> modalidadesProcesadas = new ArrayList<>();
 
-        // 🔧 CONSULTA DEL CAMPEONATO (Sin cambios)
+        
         String sqlSelect = """
             SELECT
                 c.id,
@@ -79,7 +78,7 @@ public String mostrarDetalleCampeonato(
             WHERE c.id = ?
         """;
 
-        // 🔧 CONSULTA MODALIDADES YA INSCRITAS (Sin cambios)
+        
         String sqlModalidadesInscritas = """
             SELECT id_modalidad
             FROM campeonatos_inscripcion
@@ -89,9 +88,7 @@ public String mostrarDetalleCampeonato(
         try (Connection con = BD.conexion();
                 PreparedStatement stmt = con.prepareStatement(sqlSelect)) {
 
-            // ===========================
-            // 1️⃣ Modalidades ya inscritas (Sin cambios)
-            // ===========================
+            
             Set<String> modalidadesInscritas = new HashSet<>();
 
             try (PreparedStatement ps = con.prepareStatement(sqlModalidadesInscritas)) {
@@ -105,9 +102,7 @@ public String mostrarDetalleCampeonato(
                 }
             }
 
-            // ===========================
-            // 2️⃣ Obtener campeonato (Sin cambios)
-            // ===========================
+            
             stmt.setLong(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
@@ -130,25 +125,21 @@ public String mostrarDetalleCampeonato(
                 if (jsonModalidades != null && !jsonModalidades.trim().isEmpty()) {
                     JsonNode rootNode = objectMapper.readTree(jsonModalidades);
 
-                    // =============================================
-                    // 3️⃣ Procesar modalidades (Lógica Condicional)
-                    // =============================================
+                    
                     rootNode.fields().forEachRemaining(entry -> {
                         String idModalidad = entry.getKey();
                         boolean estaInscrito = modalidadesInscritas.contains(idModalidad);
 
-                        // Lógica de Filtro: 
-                        // Si showInscribed es TRUE, sólo se procesan las inscritas.
-                        // Si showInscribed es FALSE (o no se pasó), sólo se procesan las NO inscritas.
+                        
                         if (showInscribed) {
-                            // Modo: Mostrar INSCRITAS
+                            
                             if (!estaInscrito) {
-                                return; // Saltar (No está inscrito)
+                                return; 
                             }
                         } else {
-                            // Modo: Mostrar DISPONIBLES (Original)
+                           
                             if (estaInscrito) {
-                                return; // Saltar (Ya está inscrito)
+                                return; 
                             }
                         }
 
@@ -181,8 +172,7 @@ public String mostrarDetalleCampeonato(
             }
 
         } catch (Exception e) {
-            // Asegúrate de tener 'logger' definido o usa System.err.println para depuración
-            // logger.error("❌ Error al cargar inscripciones", e); 
+            
             model.addAttribute("errorMsg", "Error al cargar las inscripciones.");
             return "error-page";
         }
@@ -190,16 +180,13 @@ public String mostrarDetalleCampeonato(
         if ("readonly".equals(view)) {
             return "campeonato/manage/detallescreado";
         }
-        // 👉 Vista normal (con inscripción)
+        
         return "campeonato/manage/inscripciones";
     }
 
 
 
-    /**
-     * Función auxiliar para obtener y limpiar valores de cadena (String) de un JsonNode.
-     * Retorna una cadena vacía si el campo es nulo o está vacío.
-     */
+    
     private String getStringValue(JsonNode parentNode, String fieldName) {
         if (parentNode.has(fieldName) && !parentNode.get(fieldName).isNull()) {
             String value = parentNode.get(fieldName).asText();
@@ -208,10 +195,7 @@ public String mostrarDetalleCampeonato(
         return "";
     }
 
-    /**
-     * Función auxiliar para obtener valores de array de un JsonNode solo si el array tiene elementos.
-     * Retorna una cadena vacía si el array no existe o está vacío.
-     */
+    
     private String getArrayValue(JsonNode parentNode, String fieldName) {
         if (parentNode.has(fieldName) && parentNode.get(fieldName).isArray()) {
 
@@ -222,7 +206,7 @@ public String mostrarDetalleCampeonato(
                 valores.add(item.asText());
             }
 
-            // Une los valores con coma y espacio
+           
             return String.join(", ", valores);
         }
         return "";
@@ -306,8 +290,7 @@ public String mostrarDetalleCampeonato(
         Long idUsuario = Long.valueOf(idSesion.toString());
         System.out.println("👉 ID USUARIO SESIÓN: " + idUsuario);
 
-        // CONSULTA: Obtener todas las inscripciones del usuario, con datos del campeonato y la modalidad
-        // En el método mostrarMisInscripciones, cambia la consulta SQL a:
+       
         String sql = """
             SELECT
                 ci.id_inscripcion,
@@ -330,7 +313,7 @@ public String mostrarDetalleCampeonato(
             ORDER BY c.fecha_inicio DESC
             """;
 
-        // Usaremos un Map para agrupar por campeonato
+        
         Map<Long, Map<String, Object>> campeonatosMap = new LinkedHashMap<>();
 
         try (
@@ -344,9 +327,7 @@ public String mostrarDetalleCampeonato(
                     Long idCampeonato = rs.getLong("id_campeonato");
                     Long idInscripcion = rs.getLong("id_inscripcion");
                     
-                    // =======================================================
-                    // 1. CREAR EL CAMPEONATO (Solo si no existe en el Map)
-                    // =======================================================
+                    
                     if (!campeonatosMap.containsKey(idCampeonato)) {
                         Map<String, Object> campeonatoData = new LinkedHashMap<>();
                         campeonatoData.put("idCampeonato", idCampeonato);
@@ -356,37 +337,34 @@ public String mostrarDetalleCampeonato(
                         campeonatoData.put("fechaFin", rs.getDate("fecha_fin"));
                         campeonatoData.put("creadorNombre", rs.getString("creador_nombre"));
                         
-                        // NOTA: 'estado', 'rol', 'nombreParticipante', 'categoriaUsuario'
-                        // se repiten, pero si se necesitan una vez en la vista, se usan los de la primera fila.
+                        
                         campeonatoData.put("nombreParticipante", rs.getString("nombre_participante"));
                         campeonatoData.put("categoriaUsuario", rs.getString("categoria_usuario"));
                         
-                        campeonatoData.put("modalidadesInscritas", new ArrayList<Map<String, Object>>()); // Lista para modalidades
+                        campeonatoData.put("modalidadesInscritas", new ArrayList<Map<String, Object>>()); 
                         
                         campeonatosMap.put(idCampeonato, campeonatoData);
                     }
 
-                    // =======================================================
-                    // 2. PROCESAR LA MODALIDAD Y SU ESTADO
-                    // =======================================================
+                   
                     
                     String idModalidad = rs.getString("id_modalidad");
                     String jsonModalidades = rs.getString("json_modalidades");
-                    String estadoInscripcion = rs.getString("estado_inscripcion"); // <-- EL ESTADO DE ESTA MODALIDAD
+                    String estadoInscripcion = rs.getString("estado_inscripcion"); 
                     
                     ModalidadData modalidad = extractModalidadDetails(jsonModalidades, idModalidad);
                     
                     if (modalidad != null) {
-                        // Crear un Map para la modalidad, incluyendo su estado
+                       
                         Map<String, Object> modalidadDetalle = new LinkedHashMap<>();
-                        modalidadDetalle.put("idInscripcion", idInscripcion); // ← AGREGAR AL MAP
+                        modalidadDetalle.put("idInscripcion", idInscripcion); 
                         modalidadDetalle.put("idModalidad", modalidad.getIdModalidad());
                         modalidadDetalle.put("nombreModalidad", modalidad.getName());
                         modalidadDetalle.put("descripcionModalidad", modalidad.getDesc());
-                        modalidadDetalle.put("estadoInscripcion", estadoInscripcion); // <-- AQUÍ VA EL ESTADO
-                        // Opcional: Agregar otros detalles de la modalidad si la vista los necesita (peso, rango, etc.)
+                        modalidadDetalle.put("estadoInscripcion", estadoInscripcion); 
+                       
                         
-                        // Agregar el Map de modalidad a la lista del campeonato
+                        
                         @SuppressWarnings("unchecked")
                         List<Map<String, Object>> modalidadesList = 
                             (List<Map<String, Object>>) campeonatosMap.get(idCampeonato).get("modalidadesInscritas");
@@ -401,7 +379,7 @@ public String mostrarDetalleCampeonato(
             return "error-page";
         }
 
-        // Convertir el mapa a lista para la vista
+        
         List<Map<String, Object>> inscripcionesAgrupadas = new ArrayList<>(campeonatosMap.values());
         
         System.out.println("📦 TOTAL CAMPEONATOS INSCRITOS: " + inscripcionesAgrupadas.size());
@@ -410,7 +388,7 @@ public String mostrarDetalleCampeonato(
         return "campeonato/manage/mis-inscripciones";
     }
     
-    // Agrega este método al final de la clase ControladorInscripcion:
+   
 
     @PostMapping("/mis-inscripciones/eliminar/{idInscripcion}")
     public String eliminarInscripcion(
@@ -429,7 +407,7 @@ public String mostrarDetalleCampeonato(
 
         logger.info("Usuario ID: {} intentando eliminar inscripción ID: {}", idUsuario, idInscripcion);
 
-        // Primero verificar que la inscripción pertenece al usuario
+        
         String sqlVerificar = """
             SELECT COUNT(*) 
             FROM campeonatos_inscripcion 
@@ -440,7 +418,7 @@ public String mostrarDetalleCampeonato(
 
         try (Connection con = BD.conexion()) {
 
-            // Verificar que el usuario es dueño de la inscripción
+           
             try (PreparedStatement stmtVerificar = con.prepareStatement(sqlVerificar)) {
                 stmtVerificar.setLong(1, idInscripcion);
                 stmtVerificar.setLong(2, idUsuario);
@@ -455,7 +433,7 @@ public String mostrarDetalleCampeonato(
                 }
             }
 
-            // Eliminar la inscripción
+            
             try (PreparedStatement stmtEliminar = con.prepareStatement(sqlEliminar)) {
                 stmtEliminar.setLong(1, idInscripcion);
                 stmtEliminar.setLong(2, idUsuario);
@@ -487,9 +465,7 @@ public String mostrarDetalleCampeonato(
     }
 
 
-    // =====================================================================
-    // MÉTODO AUXILIAR - EXTRAER MODALIDAD (Sin cambios, es correcto)
-    // =====================================================================
+   
     private ModalidadData extractModalidadDetails(
             String jsonModalidades,
             String idModalidad
@@ -513,5 +489,5 @@ public String mostrarDetalleCampeonato(
         return modalidad;
     }
     
-    // ... (Otros métodos auxiliares si existen) ...
+    
 }

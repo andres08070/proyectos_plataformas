@@ -3,7 +3,7 @@ package com.cr.Ejemplo1.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-// Clase para mapear la estructura interna de cada modalidad en el JSON de la BD
+
 public class ModalidadData {
     private String idModalidad = "";
     private String name = "";
@@ -13,12 +13,12 @@ public class ModalidadData {
     private List<String> edad = new ArrayList<>();
     private String genero = "";
 
-    // Constructor vacío (obligatorio para Jackson)
+    
     public ModalidadData() {
-        // Necesario para la deserialización
+        
     }
 
-    // --- Getters y Setters ---
+   
 
     public String getIdModalidad() {
         return idModalidad;
